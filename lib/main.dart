@@ -1,3 +1,4 @@
+import 'package:coffe_app/view/onboarding/onboarding_page.dart';
 import 'package:coffe_app/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
    
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const SplashScreen(),
+      home: const OnboardingPage(),
     );
   }
 }
