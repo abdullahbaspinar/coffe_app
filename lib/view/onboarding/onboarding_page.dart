@@ -1,4 +1,5 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view/auth/auth_choice_page.dart';
 import 'package:coffe_app/view/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -44,7 +45,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const AuthChoicePage()),
       );
     }
   }
@@ -52,7 +53,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   void skipOnboarding() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(builder: (context) => const AuthChoicePage()),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:coffe_app/view/auth/auth_choice_page.dart';
 import 'package:coffe_app/view/onboarding/onboarding_page.dart';
 import 'package:coffe_app/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +13,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        
    
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const OnboardingPage(),
+      home: const AuthChoicePage(),
     );
   }
 }
