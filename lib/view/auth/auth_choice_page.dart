@@ -1,4 +1,5 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view/auth/sign_in_page.dart';
 import 'package:coffe_app/view/widgets/social_login_button.dart';
 import 'package:flutter/material.dart';
 
@@ -70,7 +71,14 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
                   iconPath: "assets/images/inbox.png",
                   backgroundColor: AppColors.primaryColor,
                   textColor: AppColors.backgroundColor,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignInPage(),
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 30),
@@ -82,7 +90,14 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
                   iconPath: "assets/images/logos/facebook_logo_white.png",
                   backgroundColor: AppColors.facebookColor,
                   textColor: AppColors.backgroundColor,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignInPage(),
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 6),
@@ -95,9 +110,15 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
                   iconPath: "assets/images/logos/google_logo.png",
                   backgroundColor: AppColors.backgroundColor,
                   textColor: AppColors.primaryColor,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignInPage(),
+                      ),
+                    );
+                  },
                   borderColor: Colors.grey.shade300,
-                  
                 ),
               ),
             ],

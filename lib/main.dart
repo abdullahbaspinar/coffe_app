@@ -1,4 +1,6 @@
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
+import 'package:coffe_app/view/auth/sign_in_page.dart';
+import 'package:coffe_app/view/auth/sign_up_page.dart';
 import 'package:coffe_app/view/onboarding/onboarding_page.dart';
 import 'package:coffe_app/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
    
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const AuthChoicePage(),
+      home: const SignUpPage(),
     );
   }
 }
