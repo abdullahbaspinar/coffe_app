@@ -27,10 +27,11 @@ class ProductCard extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Positioned(
-              top: 60,
+              top: 70,
               left: 0,
               right: 0,
               child: Container(
+                height: 180,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: const Color(0xFF0A8A5B),
