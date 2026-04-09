@@ -55,21 +55,71 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      appBar: _buildAppBar,
-      body: _buildBody,
+      body: SafeArea(child: Padding(padding: EdgeInsetsGeometry.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader,
+          SizedBox(height: 24,),
+          _buildBody
+        ],
+      ),),)
+      
+      
     );
   }
 
   AppBar get _buildAppBar {
-    return AppBar(
-      title: const Text("Anasayfa"),
+    return AppBar(title: const Text("Anasayfa", textAlign: TextAlign.start));
+  }
+
+  Widget get _buildHeader {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Good Morning",
+              style: TextStyle(fontSize: 18, color: Colors.black),
+            ),
+            SizedBox(height: 6),
+            Text(
+              "Abdullah",
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.shopping_bag_outlined,
+                size: 28,
+                color: AppColors.primaryColor,
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.menu, 
+              size: 30,
+             color: Colors.black),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   Widget get _buildBody {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: SizedBox(
+    return 
+       SizedBox(
         height: 270,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -89,7 +139,7 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ),
-      ),
-    );
+      );
+    
   }
 }
