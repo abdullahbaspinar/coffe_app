@@ -1,5 +1,7 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,7 +25,47 @@ class Product {
   });
 }
 
+class Category {
+  final String title;
+  final String menu_count;
+  final IconData icon_name;
+  final VoidCallback onTap;
+
+  const Category({
+    required this.title,
+    required this.menu_count,
+    required this.icon_name,
+    required this.onTap,
+  });
+}
+
 class _HomePageState extends State<HomePage> {
+  final List<Category> category = [
+    Category(
+      title: "Beverages",
+      menu_count: "67",
+      icon_name: Icons.coffee_outlined,
+      onTap: () {},
+    ),
+    Category(
+      title: "Foods",
+      menu_count: "23",
+      icon_name: Icons.food_bank_outlined,
+      onTap: () {},
+    ),
+    Category(
+      title: "Pizza",
+      menu_count: "28",
+      icon_name: Icons.local_pizza_outlined,
+      onTap: () {},
+    ),
+    Category(
+      title: "Drink",
+      menu_count: "12",
+      icon_name: Icons.local_drink_outlined,
+      onTap: () {},
+    ),
+  ];
   final List<Product> products = [
     Product(
       imagePath: "assets/product/product1.png",
@@ -66,6 +108,9 @@ class _HomePageState extends State<HomePage> {
               _buildSearchbar,
               SizedBox(height: 12),
               _buildBody,
+              SizedBox(height: 12),
+              _buildCategories,
+              SizedBox(height: 12),
             ],
           ),
         ),
@@ -157,11 +202,48 @@ class _HomePageState extends State<HomePage> {
               title: product.title,
               price: product.price,
               oldPrice: product.oldPrice,
-              onTap: () {},
+              onTap: () {
+                print("product card tıklandı");
+              },
             ),
           );
         },
       ),
+    );
+  }
+
+  Widget get _buildCategories {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Categories",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 12),
+
+        SizedBox(
+          height: 50,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: category.length,
+            itemBuilder: (context, index) {
+              final item = category[index];
+              return Padding(padding: EdgeInsets.all(2),child: CategoriesCard(
+                title: item.title,
+                menu_count: item.menu_count,
+                icon_name: item.icon_name,
+                onTap: () {
+                  print("categoryCard tıkladnı");
+                },
+              ),);
+              
+            },
+          ),
+
+          
+        ),
+      ],
     );
   }
 }
