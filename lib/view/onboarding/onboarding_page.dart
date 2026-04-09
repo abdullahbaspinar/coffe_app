@@ -1,5 +1,6 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
+import 'package:coffe_app/view/auth/sign_in_page.dart';
 import 'package:coffe_app/view/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -75,7 +76,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
               Align(
                 alignment: .topEnd,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    MaterialPageRoute(builder: (_) => const SignInPage());
+                  },
                   child: Text(
                     "Skip",
                     style: TextStyle(
@@ -110,26 +113,31 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             fit: BoxFit.fill,
                           ),
                         ),
-                        const SizedBox(height: 40,),
-                        Text(item["title"]!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColor,
-                        ),),
-                        const SizedBox(height: 16,),
-                        Text(item["description"]!,textAlign: TextAlign.center,
-                        style: TextStyle(color: AppColors.primaryColor,
-                        fontSize: 16,
-                        )
-                      ),
-                    ],
+                        const SizedBox(height: 40),
+                        Text(
+                          item["title"]!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          item["description"]!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),
               ),
-             Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
                   onboardingData.length,
@@ -147,22 +155,30 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 32,),
+              const SizedBox(height: 32),
               SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: ElevatedButton(onPressed: nextPage,style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadiusGeometry.circular(18),  
-                )), child: Text(currentPage ==onboardingData.length-1
-                ?"Get started"
-                :"Next",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white
-                ),)),
-              )
+                child: ElevatedButton(
+                  onPressed: nextPage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(18),
+                    ),
+                  ),
+                  child: Text(
+                    currentPage == onboardingData.length - 1
+                        ? "Get started"
+                        : "Next",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
