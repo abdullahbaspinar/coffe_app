@@ -1,8 +1,11 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view_model/home_view_model.dart';
+import 'package:coffe_app/model/entity/category_entity.dart';
+import 'package:coffe_app/model/entity/featured_beverage_entity.dart';
+import 'package:coffe_app/model/entity/product_entity.dart';
 import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,120 +15,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class Product {
-  final String imagePath;
-  final String title;
-  final String price;
-  final String oldPrice;
-
-  Product({
-    required this.imagePath,
-    required this.title,
-    required this.price,
-    required this.oldPrice,
-  });
-}
-
-class Category {
-  final String title;
-  final String menu_count;
-  final IconData icon_name;
-  final VoidCallback onTap;
-
-  const Category({
-    required this.title,
-    required this.menu_count,
-    required this.icon_name,
-    required this.onTap,
-  });
-}
-
-class FeaturedBeverages {
-  String imagePath;
-  String title;
-  String price;
-  String points;
-  String ratings;
-
-  FeaturedBeverages({
-    required this.imagePath,
-    required this.title,
-    required this.price,
-    required this.points,
-    required this.ratings,
-  });
-}
-
 class _HomePageState extends State<HomePage> {
-  final List<Category> category = [
-    Category(
-      title: "Beverages",
-      menu_count: "67",
-      icon_name: Icons.coffee_outlined,
-      onTap: () {},
-    ),
-    Category(
-      title: "Foods",
-      menu_count: "23",
-      icon_name: Icons.food_bank_outlined,
-      onTap: () {},
-    ),
-    Category(
-      title: "Pizza",
-      menu_count: "28",
-      icon_name: Icons.local_pizza_outlined,
-      onTap: () {},
-    ),
-    Category(
-      title: "Drink",
-      menu_count: "12",
-      icon_name: Icons.local_drink_outlined,
-      onTap: () {},
-    ),
-  ];
-  final List<Product> products = [
-    Product(
-      imagePath: "assets/product/product1.png",
-      title: "Ice Latte",
-      price: "\$5.8",
-      oldPrice: "\$9.9",
-    ),
-    Product(
-      imagePath: "assets/product/product2.png",
-      title: "Caramel Latte",
-      price: "\$6.2",
-      oldPrice: "\$8.5",
-    ),
-    Product(
-      imagePath: "assets/product/product1.png",
-      title: "Mocha Frappe",
-      price: "\$7.1",
-      oldPrice: "\$10.0",
-    ),
-    Product(
-      imagePath: "assets/product/product2.png",
-      title: "Mocha Frappe",
-      price: "\$7.1",
-      oldPrice: "\$10.0",
-    ),
-  ];
-
-  final List<FeaturedBeverages> featuredBeveerages = [
-    FeaturedBeverages(
-      imagePath: "assets/product/product2/tea.png",
-      title: "Hot Creamy Cappucccino Latte Ombe",
-      price: "\$12.6",
-      points: "50",
-      ratings: "3.8",
-    ),
-    FeaturedBeverages(
-      imagePath: "assets/product/product2/mocha.png",
-      title: "Creamy Mocha Ombe Coffe",
-      price: "\$12.6",
-      points: "50",
-      ratings: "3.8",
-    ),
-  ];
+  final HomeViewModel viewModel = HomeViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -134,23 +25,23 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-          padding: EdgeInsetsGeometry.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader,
-              SizedBox(height: 12),
-              _buildSearchbar,
-              SizedBox(height: 12),
-              _buildBody,
-              SizedBox(height: 12),
-              _buildCategories,
-              SizedBox(height: 12),
-              _buildFeaturedBeverages,
-            ],
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader,
+                const SizedBox(height: 12),
+                _buildSearchbar,
+                const SizedBox(height: 12),
+                _buildBody,
+                const SizedBox(height: 12),
+                _buildCategories,
+                const SizedBox(height: 12),
+                _buildFeaturedBeverages,
+              ],
+            ),
           ),
         ),
-        ) 
       ),
     );
   }
@@ -164,7 +55,10 @@ class _HomePageState extends State<HomePage> {
           children: [
             Text(
               "Good Morning",
-              style: TextStyle(fontSize: 18, color: Colors.black),
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+              ),
             ),
             SizedBox(height: 6),
             Text(
@@ -189,7 +83,11 @@ class _HomePageState extends State<HomePage> {
             ),
             IconButton(
               onPressed: () {},
-              icon: const Icon(Icons.menu, size: 30, color: Colors.black),
+              icon: const Icon(
+                Icons.menu,
+                size: 30,
+                color: Colors.black,
+              ),
             ),
           ],
         ),
@@ -200,11 +98,14 @@ class _HomePageState extends State<HomePage> {
   Widget get _buildSearchbar {
     return Container(
       height: 58,
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.black, width: 1),
+        border: Border.all(
+          color: Colors.black,
+          width: 1,
+        ),
       ),
       child: const Row(
         children: [
@@ -213,11 +114,18 @@ class _HomePageState extends State<HomePage> {
               decoration: InputDecoration(
                 hintText: "Search",
                 border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: 16, color: Colors.black),
+                hintStyle: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
-          Icon(Icons.search, color: Colors.black, size: 30),
+          Icon(
+            Icons.search,
+            color: Colors.black,
+            size: 30,
+          ),
         ],
       ),
     );
@@ -228,9 +136,9 @@ class _HomePageState extends State<HomePage> {
       height: 270,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: products.length,
+        itemCount: viewModel.products.length,
         itemBuilder: (context, index) {
-          final product = products[index];
+          final product = viewModel.products[index];
 
           return Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -240,7 +148,7 @@ class _HomePageState extends State<HomePage> {
               price: product.price,
               oldPrice: product.oldPrice,
               onTap: () {
-                print("product card tıklandı");
+                debugPrint("product card tıklandı");
               },
             ),
           );
@@ -253,7 +161,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "Categories",
           style: TextStyle(
             fontSize: 16,
@@ -261,23 +169,23 @@ class _HomePageState extends State<HomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 12),
-
+        const SizedBox(height: 12),
         SizedBox(
           height: 50,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: category.length,
+            itemCount: viewModel.categories.length,
             itemBuilder: (context, index) {
-              final item = category[index];
+              final item = viewModel.categories[index];
+
               return Padding(
-                padding: EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
                 child: CategoriesCard(
                   title: item.title,
                   menu_count: item.menu_count,
                   icon_name: item.icon_name,
                   onTap: () {
-                    print("categoryCard tıkladnı");
+                    debugPrint("category card tıklandı");
                   },
                 ),
               );
@@ -320,15 +228,16 @@ class _HomePageState extends State<HomePage> {
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: featuredBeveerages.length,
+          itemCount: viewModel.featuredBeverages.length,
           separatorBuilder: (context, index) => const SizedBox(height: 18),
           itemBuilder: (context, index) {
-            final item = featuredBeveerages[index];
+            final item = viewModel.featuredBeverages[index];
+
             return FeaturedBeverageItem(
               imagePath: item.imagePath,
               title: item.title,
               price: item.price,
-              points: "${item.points} pts ",
+              points: "${item.points} pts",
               rating: item.ratings,
               onTap: () {},
             );
@@ -338,3 +247,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
