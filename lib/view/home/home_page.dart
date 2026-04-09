@@ -55,40 +55,112 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      appBar: _buildAppBar,
-      body: _buildBody,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader,
+              SizedBox(height: 12),
+              _buildSearchbar,
+              SizedBox(height: 12),
+              _buildBody,
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  AppBar get _buildAppBar {
-    return AppBar(
-      title: const Text("Anasayfa"),
+  Widget get _buildHeader {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Good Morning",
+              style: TextStyle(fontSize: 18, color: Colors.black),
+            ),
+            SizedBox(height: 6),
+            Text(
+              "Abdullah",
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.shopping_bag_outlined,
+                size: 28,
+                color: AppColors.primaryColor,
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.menu, size: 30, color: Colors.black),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget get _buildSearchbar {
+    return Container(
+      height: 58,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.black, width: 1),
+      ),
+      child: const Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "Search",
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+            ),
+          ),
+          Icon(Icons.search, color: Colors.black, size: 30),
+        ],
+      ),
     );
   }
 
   Widget get _buildBody {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: SizedBox(
-        height: 270,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            final product = products[index];
+    return SizedBox(
+      height: 270,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
 
-            return Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: ProductCard(
-                imagePath: product.imagePath,
-                title: product.title,
-                price: product.price,
-                oldPrice: product.oldPrice,
-                onTap: () {},
-              ),
-            );
-          },
-        ),
+          return Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: ProductCard(
+              imagePath: product.imagePath,
+              title: product.title,
+              price: product.price,
+              oldPrice: product.oldPrice,
+              onTap: () {},
+            ),
+          );
+        },
       ),
     );
   }
