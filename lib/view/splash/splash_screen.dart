@@ -22,9 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => const OnboardingPage(),
-        ),
+        MaterialPageRoute(builder: (context) => const OnboardingPage()),
       );
     });
   }
@@ -37,27 +35,30 @@ class _SplashScreenState extends State<SplashScreen> {
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(
-                  Icons.coffee,
-                  size: 70,
-                  color: AppColors.primaryColor,
-                ),
+              children:  [
+                _buildSplashScreen,
                 SizedBox(height: 16),
-                Text(
-                  'Ombre',
-                  style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                  ),
-                ),
-              ],
+                _buildSplashText],
             ),
           ),
         ],
       ),
     );
   }
+}
+
+Widget get _buildSplashScreen {
+  return Icon(Icons.coffee, size: 70, color: AppColors.primaryColor);
+}
+
+Widget get _buildSplashText {
+  return Text(
+    'Ombe',
+    style: TextStyle(
+      color: AppColors.primaryColor,
+      fontSize: 36,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 2,
+    ),
+  );
 }
