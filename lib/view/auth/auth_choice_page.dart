@@ -22,108 +22,133 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(),
-              ClipRRect(
-                borderRadius: BorderRadiusGeometry.circular(24),
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.contain,
-                ),
-              ),
+              _buildAuthChoiceLogo,
               const SizedBox(height: 8),
-
-              Text(
-                "Ombe",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
+              _buildAuthChoiceAppName,
               const SizedBox(height: 8),
-              Text(
-                "Coffe Shop App",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                "Morning begins with ombe coffee",
-                textAlign: .center,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  height: 1.2,
-                ),
-              ),
+              _buildAuthChoiceAppDescription,
+              const SizedBox(height: 20),
+              _buildAuthChoiceTitle,
               const Spacer(),
-
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: SocialLoginButton(
-                  text: "Login with Email",
-                  iconPath: "assets/images/inbox.png",
-                  backgroundColor: AppColors.primaryColor,
-                  textColor: AppColors.backgroundColor,
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignInPage(),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              _buildAuthChoiceEmailButton,
               const SizedBox(height: 30),
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: SocialLoginButton(
-                  text: "Login with Facebook",
-                  iconPath: "assets/images/logos/facebook_logo_white.png",
-                  backgroundColor: AppColors.facebookColor,
-                  textColor: AppColors.backgroundColor,
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignInPage(),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              _buildAuthChoiceFacebookButton,
               const SizedBox(height: 6),
-
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: SocialLoginButton(
-                  text: "Login with Google",
-                  iconPath: "assets/images/logos/google_logo.png",
-                  backgroundColor: AppColors.backgroundColor,
-                  textColor: AppColors.primaryColor,
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignInPage(),
-                      ),
-                    );
-                  },
-                  borderColor: Colors.grey.shade300,
-                ),
-              ),
+              _buildAuthChoiceGoogleButton,
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget get _buildAuthChoiceLogo {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: Image.asset(
+        "assets/images/logo.png",
+        height: 200,
+        width: double.infinity,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Widget get _buildAuthChoiceAppName {
+    return const Text(
+      "Ombe",
+      style: TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  Widget get _buildAuthChoiceAppDescription {
+    return const Text(
+      "Coffe Shop App",
+      style: TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: Colors.grey,
+      ),
+    );
+  }
+
+  Widget get _buildAuthChoiceTitle {
+    return const Text(
+      "Morning begins with ombe coffee",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+        height: 1.2,
+      ),
+    );
+  }
+
+  Widget get _buildAuthChoiceEmailButton {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: SocialLoginButton(
+        text: "Login with Email",
+        iconPath: "assets/images/inbox.png",
+        backgroundColor: AppColors.primaryColor,
+        textColor: AppColors.backgroundColor,
+        onTap: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignInPage(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget get _buildAuthChoiceFacebookButton {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: SocialLoginButton(
+        text: "Login with Facebook",
+        iconPath: "assets/images/logos/facebook_logo_white.png",
+        backgroundColor: AppColors.facebookColor,
+        textColor: AppColors.backgroundColor,
+        onTap: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignInPage(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget get _buildAuthChoiceGoogleButton {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: SocialLoginButton(
+        text: "Login with Google",
+        iconPath: "assets/images/logos/google_logo.png",
+        backgroundColor: AppColors.backgroundColor,
+        textColor: AppColors.primaryColor,
+        onTap: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignInPage(),
+            ),
+          );
+        },
+        borderColor: Colors.grey.shade300,
       ),
     );
   }
