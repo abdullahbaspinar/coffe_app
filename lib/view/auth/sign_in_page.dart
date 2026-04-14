@@ -1,6 +1,7 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/reset_password_page.dart';
 import 'package:coffe_app/view/auth/sign_up_page.dart';
+import 'package:coffe_app/view/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
@@ -190,7 +191,11 @@ class _SignInPageState extends State<SignInPage> {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    MaterialPageRoute(
+                      builder: (_) => const HomePage(),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
                     shape: RoundedRectangleBorder(
@@ -259,9 +264,7 @@ class _SignInPageState extends State<SignInPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const SignUpPage(),
-                        ),
+                        MaterialPageRoute(builder: (_) => const SignUpPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

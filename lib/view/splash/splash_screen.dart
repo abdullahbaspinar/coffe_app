@@ -22,9 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => const OnboardingPage(),
-        ),
+        MaterialPageRoute(builder: (context) => const OnboardingPage()),
       );
     });
   }
@@ -32,32 +30,36 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(
-                  Icons.coffee,
-                  size: 70,
-                  color: AppColors.primaryColor,
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Ombre',
-                  style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                  ),
-                ),
-              ],
-            ),
+      backgroundColor: AppColors.backgroundColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [_buildSplahLogo, const SizedBox(height: 16),_buildSplashText],
           ),
-        ],
+        ),
       ),
     );
   }
+}
+
+Widget get _buildSplahLogo {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [Image.asset("assets/images/logo.png",)],
+  );
+}
+
+Widget get _buildSplashText {
+  return Text(
+    "OMBE",
+    style: TextStyle(
+      fontSize: 48,
+      fontWeight: FontWeight.bold,
+      color: AppColors.primaryColor,
+    ),
+  );
 }
