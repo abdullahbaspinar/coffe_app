@@ -66,6 +66,7 @@ class _SignInPageState extends State<SignInPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset("assets/images/logo.png", width: 48, height: 48),
+        const SizedBox(width: 8),
         const Text(
           "Ombe",
           style: TextStyle(
@@ -136,7 +137,10 @@ class _SignInPageState extends State<SignInPage> {
               hintText: "Email Address",
               filled: true,
               fillColor: Colors.grey.shade100,
-              contentPadding: const EdgeInsets.symmetric(vertical: 18),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 18,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -145,9 +149,9 @@ class _SignInPageState extends State<SignInPage> {
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(color: Colors.grey.shade300),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                borderSide: BorderSide(
                   color: AppColors.primaryColor,
                   width: 1.5,
                 ),
@@ -183,6 +187,12 @@ class _SignInPageState extends State<SignInPage> {
             obscureText: isPasswordHidden,
             decoration: InputDecoration(
               hintText: "Password",
+              filled: true,
+              fillColor: Colors.grey.shade100,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 18,
+              ),
               suffixIcon: IconButton(
                 onPressed: () {
                   setState(() {
@@ -194,9 +204,6 @@ class _SignInPageState extends State<SignInPage> {
                   color: AppColors.primaryColor,
                 ),
               ),
-              filled: true,
-              fillColor: Colors.grey.shade100,
-              contentPadding: const EdgeInsets.symmetric(vertical: 18),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -205,9 +212,9 @@ class _SignInPageState extends State<SignInPage> {
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(color: Colors.grey.shade300),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                borderSide: BorderSide(
                   color: AppColors.primaryColor,
                   width: 1.5,
                 ),
@@ -238,6 +245,82 @@ class _SignInPageState extends State<SignInPage> {
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppColors.secondaryColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget get _buildResetPasswordRow {
+    return Row(
+      children: [
+        const Text(
+          "Forgot password ? ",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+            color: Colors.grey,
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ResetPasswordPage(),
+              ),
+            );
+          },
+          child: const Text(
+            "Reset Password",
+            style: TextStyle(
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.normal,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget get _buildCreateAccountText {
+    return const Center(
+      child: Text(
+        "Don't have any account ? ",
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
+
+  Widget get _buildCreateAccountButton {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const SignUpPage()),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.createAccountBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+          elevation: 0,
+        ),
+        child: const Text(
+          "CREATE ACCOUNT",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
           ),
         ),
       ),
