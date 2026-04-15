@@ -68,10 +68,11 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 16),
               _buildSignUpPasswordField,
               SizedBox(height: 20),
-              _buildSignUpTermsText,
+              _buildSignUpButton,
               SizedBox(height: 16),
+              _buildSignUpTermsText,
 
-              Spacer(),
+
             ],
           ),
         ),
