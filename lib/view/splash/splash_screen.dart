@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
           Center(
             child: Column(
@@ -41,9 +41,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 _buildSplashText],
             ),
           ),
-        ),
-      ),
-    );
+        ]),
+      );
   }
 }
 
