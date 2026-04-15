@@ -30,14 +30,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [_buildSplahLogo, const SizedBox(height: 16),_buildSplashText],
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:  [
+                _buildSplashScreen,
+                SizedBox(height: 16),
+                _buildSplashText],
+            ),
           ),
         ),
       ),
@@ -45,21 +47,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-Widget get _buildSplahLogo {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [Image.asset("assets/images/logo.png",)],
-  );
+Widget get _buildSplashScreen {
+  return Icon(Icons.coffee, size: 70, color: AppColors.primaryColor);
 }
 
 Widget get _buildSplashText {
   return Text(
-    "OMBE",
+    'Ombe',
     style: TextStyle(
-      fontSize: 48,
-      fontWeight: FontWeight.bold,
       color: AppColors.primaryColor,
+      fontSize: 36,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 2,
     ),
   );
 }
