@@ -1,6 +1,7 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/reset_password_page.dart';
 import 'package:coffe_app/view/auth/sign_up_page.dart';
+import 'package:coffe_app/view/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
