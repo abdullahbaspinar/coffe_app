@@ -17,15 +17,21 @@ class AuthService {
     );
   }
 
-  Future<UserCredential> signUp({
-    required String email,
-    required String password,
-  }) async {
-    return await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-  }
+Future<UserCredential> signUp({
+  required String email,
+  required String password,
+  required String name,
+}) async {
+  final userCredential =
+      await _firebaseAuth.createUserWithEmailAndPassword(
+    email: email,
+    password: password,
+  );
+
+  await userCredential.user?.updateDisplayName(name);
+
+  return userCredential;
+}
 
   Future<void> resetPassword({
     required String email,

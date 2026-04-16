@@ -11,6 +11,7 @@ class AuthViewModel extends ChangeNotifier {
   User? get currentUser => _authService.currentUser;
 
   Stream<User?> get authStateChanges => _authService.authStateChanges;
+  
 
   void _setLoading(bool value) {
     _isLoading = value;
@@ -40,6 +41,7 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<String?> signUp({
+    required String name,
     required String email,
     required String password,
   }) async {
@@ -47,6 +49,7 @@ class AuthViewModel extends ChangeNotifier {
       _setLoading(true);
 
       await _authService.signUp(
+        name: name.trim(),
         email: email.trim(),
         password: password.trim(),
       );

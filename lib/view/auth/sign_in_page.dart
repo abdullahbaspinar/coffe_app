@@ -6,7 +6,6 @@ import 'package:coffe_app/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../view_model/auth_view_model.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -83,7 +82,7 @@ class _SignInPageState extends State<SignInPage> {
                 const SizedBox(height: 16),
                 _buildSignInPasswordField,
                 const SizedBox(height: 16),
-_buildLoginButton(authViewModel),
+                _buildLoginButton(authViewModel),
                 const SizedBox(height: 8),
                 _buildResetPasswordRow,
                 const Spacer(),
