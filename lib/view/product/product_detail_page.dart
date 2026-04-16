@@ -17,11 +17,15 @@ class _ProductDetailState extends State<ProductDetail> {
     return Scaffold(
       appBar: _buildAppBar,
       backgroundColor: AppColors.primaryColor,
-      body: SafeArea(
-        child: Stack(
-          children: [_buildTopSection, _buildBottomCard, _buildRatingBadge],
-        ),
-      ),
+      body: Column(children: [_buildTopSection,
+      Expanded(child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          _buildBottomCard,
+
+          Positioned(child: _buildRatingBadge, top: -42 ,right: 24,)
+        ],
+      )), ]),
     );
   }
 
@@ -59,7 +63,7 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget get _buildTopSection {
     return SizedBox(
       width: double.infinity,
-      height: 320,
+      height: 200,
       child: Center(
         child: SizedBox(
           child: Image.asset(
@@ -72,36 +76,31 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Widget get _buildBottomCard {
-    return Positioned(
-      top: 280,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(
-          color: AppColors.backgroundColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(36),
-            topRight: Radius.circular(36),
-          ),
+    return Container(
+      height: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: const BoxDecoration(
+        color: AppColors.backgroundColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(36),
+          topRight: Radius.circular(36),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 30),
-              _buildProductHeader,
-              const SizedBox(height: 16),
-              _buildProductDescription,
-              const SizedBox(height: 24),
-              _buildSizeSelector,
-              const SizedBox(height: 24),
-              _buildPriceAndQuantityRow,
-              const SizedBox(height: 32),
-              _buildOrderButton,
-            ],
-          ),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 30),
+            _buildProductHeader,
+            const SizedBox(height: 16),
+            _buildProductDescription,
+            const SizedBox(height: 24),
+            _buildSizeSelector,
+            const SizedBox(height: 24),
+            _buildPriceAndQuantityRow,
+            const SizedBox(height: 32),
+            _buildOrderButton,
+          ],
         ),
       ),
     );
@@ -262,8 +261,6 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-
-
   Widget get _buildOrderButton {
     return SizedBox(
       width: double.infinity,
@@ -290,31 +287,27 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Widget get _buildRatingBadge {
-    return Positioned(
-      top: 240,
-      right: 24,
-      child: Container(
-        width: 84,
-        height: 84,
-        decoration: BoxDecoration(
-          color: Colors.orange,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.orangeAccent.withValues(alpha: 0.3),
-              blurRadius: 16,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: const Center(
-          child: Text(
-            "4.5",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+    return Container(
+      width: 84,
+      height: 84,
+      decoration: BoxDecoration(
+        color: Colors.orange,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.orangeAccent.withValues(alpha: 0.3),
+            blurRadius: 16,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: const Center(
+        child: Text(
+          "4.5",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
