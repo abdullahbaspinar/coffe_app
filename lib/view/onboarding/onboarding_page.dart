@@ -1,9 +1,8 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
-import 'package:coffe_app/view/auth/sign_in_page.dart';
-import 'package:coffe_app/view/home/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -37,6 +36,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
     },
   ];
 
+  Future<void> _finishOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isFirstLaunch", false);
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const AuthChoicePage()),
+    );
+  }
+
   void nextPage() {
     if (currentPage < onboardingData.length - 1) {
       _pageController.nextPage(
@@ -44,18 +55,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const AuthChoicePage()),
-      );
+      _finishOnboarding();
     }
   }
 
   void skipOnboarding() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const AuthChoicePage()),
-    );
+    _finishOnboarding();
   }
 
   @override
@@ -70,16 +75,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
       backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsetsGeometry.all(30),
+          padding: const EdgeInsets.all(30),
           child: Column(
             children: [
               Align(
-                alignment: .topEnd,
+                alignment: Alignment.topRight,
                 child: TextButton(
-                  onPressed: () {
-                    MaterialPageRoute(builder: (_) => const SignInPage());
-                  },
-                  child: Text(
+                  onPressed: skipOnboarding,
+                  child: const Text(
                     "Skip",
                     style: TextStyle(
                       color: AppColors.primaryColor,
@@ -110,14 +113,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             item["image"]!,
                             height: 300,
                             width: double.infinity,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.contain,
                           ),
                         ),
                         const SizedBox(height: 40),
                         Text(
                           item["title"]!,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                             color: AppColors.primaryColor,
@@ -127,7 +130,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         Text(
                           item["description"]!,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: AppColors.primaryColor,
                             fontSize: 16,
                           ),
@@ -164,14 +167,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(18),
+                      borderRadius: BorderRadius.circular(18),
                     ),
                   ),
                   child: Text(
                     currentPage == onboardingData.length - 1
                         ? "Get started"
                         : "Next",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
