@@ -2,7 +2,11 @@ import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/reset_password_page.dart';
 import 'package:coffe_app/view/auth/sign_up_page.dart';
 import 'package:coffe_app/view/home/home_page.dart';
+import 'package:coffe_app/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../view_model/auth_view_model.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -12,50 +16,82 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isPasswordHidden = true;
 
   @override
   void dispose() {
-    usernameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
 
+  Future<void> _handleSignIn() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final authViewModel = context.read<AuthViewModel>();
+
+    final result = await authViewModel.signIn(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    if (!mounted) return;
+
+    if (result == null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const HomePage()),
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authViewModel = context.watch<AuthViewModel>();
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildSignInLogo,
-              const Spacer(),
-              _buildSignInText,
-              const SizedBox(height: 8),
-              _buildSignInTextDescription,
-              const SizedBox(height: 16),
-              _buildSignInUsernameLabel,
-              const SizedBox(height: 16),
-              _buildSignInUsernameField,
-              const SizedBox(height: 16),
-              _buildSignInPasswordLabel,
-              const SizedBox(height: 16),
-              _buildSignInPasswordField,
-              const SizedBox(height: 16),
-              _buildLoginButton,
-              const SizedBox(height: 8),
-              _buildResetPasswordRow,
-              const Spacer(),
-              _buildCreateAccountText,
-              const SizedBox(height: 16),
-              _buildCreateAccountButton,
-            ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildSignInLogo,
+                const Spacer(),
+                _buildSignInText,
+                const SizedBox(height: 8),
+                _buildSignInTextDescription,
+                const SizedBox(height: 16),
+                _buildSignInUsernameLabel,
+                const SizedBox(height: 16),
+                _buildSignInUsernameField,
+                const SizedBox(height: 16),
+                _buildSignInPasswordLabel,
+                const SizedBox(height: 16),
+                _buildSignInPasswordField,
+                const SizedBox(height: 16),
+_buildLoginButton(authViewModel),
+                const SizedBox(height: 8),
+                _buildResetPasswordRow,
+                const Spacer(),
+                _buildCreateAccountText,
+                const SizedBox(height: 16),
+                _buildCreateAccountButton,
+              ],
+            ),
           ),
         ),
       ),
@@ -132,7 +168,7 @@ class _SignInPageState extends State<SignInPage> {
       children: [
         Expanded(
           child: TextFormField(
-            controller: usernameController,
+            controller: emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               hintText: "Email Address",
@@ -158,6 +194,18 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
             ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return "Email boş bırakılamaz";
+              }
+
+              final email = value.trim();
+              if (!email.contains("@") || !email.contains(".")) {
+                return "geçerli email adresi giriniz";
+              }
+
+              return null;
+            },
           ),
         ),
       ],
@@ -221,25 +269,29 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
             ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return "Şifre boş bırsılmamalı";
+              }
+
+              if (value.trim().length < 6) {
+                return "Şifre en az 6 karekterden oluşmalı";
+              }
+
+              return null;
+            },
           ),
         ),
       ],
     );
   }
 
-  Widget get _buildLoginButton {
+  Widget _buildLoginButton (AuthViewModel authViewModel) {
     return SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const HomePage(),
-              ),
-            );
-        },
+        onPressed: authViewModel.isLoading ? null : _handleSignIn,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryColor,
           shape: RoundedRectangleBorder(
@@ -247,14 +299,20 @@ class _SignInPageState extends State<SignInPage> {
           ),
           elevation: 0,
         ),
-        child: const Text(
-          "LOGIN",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: AppColors.secondaryColor,
-          ),
-        ),
+        child: authViewModel.isLoading
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : const Text(
+                "LOGIN",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.secondaryColor,
+                ),
+              ),
       ),
     );
   }
@@ -274,9 +332,7 @@ class _SignInPageState extends State<SignInPage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const ResetPasswordPage(),
-              ),
+              MaterialPageRoute(builder: (_) => const ResetPasswordPage()),
             );
           },
           child: const Text(
