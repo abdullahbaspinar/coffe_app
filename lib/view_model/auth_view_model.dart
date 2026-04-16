@@ -107,4 +107,8 @@ class AuthViewModel extends ChangeNotifier {
         return e.message ?? 'Bir hata oluştu.';
     }
   }
+  
+  String get currentUserName => currentUser?.displayName ?? "Guest";
+
+
 }
