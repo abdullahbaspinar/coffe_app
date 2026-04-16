@@ -1,5 +1,8 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view/auth/sign_in_page.dart';
+import 'package:coffe_app/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -13,13 +16,17 @@ class _SignUpPageState extends State<SignUpPage> {
   void initState() {
     super.initState();
     nameController.addListener(checkForm);
-    usernameController.addListener(checkForm);
+    emailController.addListener(checkForm);
     passwordController.addListener(checkForm);
   }
 
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 
   bool isPassworHidden = true;
   bool isFormValid = false;
@@ -28,16 +35,35 @@ class _SignUpPageState extends State<SignUpPage> {
     setState(() {
       isFormValid =
           nameController.text.isNotEmpty &&
-          usernameController.text.isNotEmpty &&
+          emailController.text.isNotEmpty &&
           passwordController.text.isNotEmpty;
     });
   }
 
   void dispose() {
     nameController.dispose();
-    usernameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void>_handleSignUp()async{
+    if(!_formKey.currentState!.validate()) return;
+
+    final authViewModel = context.read<AuthViewModel>();
+
+    final result = await authViewModel.signUp(name: nameController.text, email: emailController.text, password: passwordController.text);
+
+    if (!mounted) return;
+
+    if (result == null) {
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const SignInPage()),
+       (route) => false,
+       );
+    }else {
+      ScaffoldMessenger.of(context,
+      ).showSnackBar(SnackBar(content: Text(result)));
+    }
   }
 
   @override
@@ -47,7 +73,9 @@ class _SignUpPageState extends State<SignUpPage> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(24),
-          child: Column(
+          child: Form(
+            key: _formKey,
+            child:  Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildSignUpLogo,
@@ -68,13 +96,16 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 16),
               _buildSignUpPasswordField,
               SizedBox(height: 20),
-              _buildSignUpButton,
+              _buildSignUpButton(AuthViewModel()),
               SizedBox(height: 16),
               _buildSignUpTermsText,
 
 
             ],
-          ),
+          ),)
+          
+          
+         
         ),
       ),
     );
@@ -174,6 +205,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty){
+                return "İsim boş bırakılamaz";
+              }
+              return null;
+            },
           ),
         ),
       ],
@@ -200,7 +237,7 @@ class _SignUpPageState extends State<SignUpPage> {
       children: [
         Expanded(
           child: TextFormField(
-            controller: usernameController,
+            controller: emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               hintText: "example@gmail.com",
@@ -223,6 +260,18 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return "Email boş bırakılamaz";
+              }
+
+              final email = value.trim();
+              if (!email.contains("@") || !email.contains(".")) {
+                return "geçerli email adresi giriniz";
+              }
+
+              return null;
+            },
           ),
         ),
       ],
@@ -284,20 +333,30 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return "Şifre boş bırsılmamalı";
+              }
+
+              if (value.trim().length < 6) {
+                return "Şifre en az 6 karekterden oluşmalı";
+              }
+
+              return null;
+            },
           ),
         ),
       ],
     );
   }
 
-  Widget get _buildSignUpButton {
+  Widget _buildSignUpButton (AuthViewModel authViewModel) {
     return SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: () {
-          isFormValid ? () {} : null;
-        },
+        onPressed: 
+          authViewModel.isLoading ? null :_handleSignUp,        
         style: ElevatedButton.styleFrom(
           backgroundColor: isFormValid ? AppColors.primaryColor : Colors.grey,
           shape: RoundedRectangleBorder(
