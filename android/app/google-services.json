@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "495139000181",
+    "project_id": "ombe-coffe-app",
+    "storage_bucket": "ombe-coffe-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495139000181:android:c2e6237177780cbf8acd3c",
+        "android_client_info": {
+          "package_name": "com.example.coffe_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC12968wqS8cWfSZ7L7B7EQ33aHoexz5wU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

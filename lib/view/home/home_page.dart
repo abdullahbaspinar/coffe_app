@@ -2,8 +2,11 @@ import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
+import 'package:coffe_app/view_model/auth_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -57,6 +60,7 @@ class FeaturedBeverages {
 }
 
 class _HomePageState extends State<HomePage> {
+AuthViewModel get authViewModel => context.watch<AuthViewModel>();
   final List<Category> category = [
     Category(
       title: "Beverages",
@@ -134,23 +138,23 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-          padding: EdgeInsetsGeometry.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader,
-              SizedBox(height: 12),
-              _buildSearchbar,
-              SizedBox(height: 12),
-              _buildBody,
-              SizedBox(height: 12),
-              _buildCategories,
-              SizedBox(height: 12),
-              _buildFeaturedBeverages,
-            ],
+            padding: EdgeInsetsGeometry.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader,
+                SizedBox(height: 12),
+                _buildSearchbar,
+                SizedBox(height: 12),
+                _buildBody,
+                SizedBox(height: 12),
+                _buildCategories,
+                SizedBox(height: 12),
+                _buildFeaturedBeverages,
+              ],
+            ),
           ),
         ),
-        ) 
       ),
     );
   }
@@ -159,17 +163,17 @@ class _HomePageState extends State<HomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Good Morning",
               style: TextStyle(fontSize: 18, color: Colors.black),
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Text(
-              "Abdullah",
-              style: TextStyle(
+              authViewModel.currentUserName,
+              style: const TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
