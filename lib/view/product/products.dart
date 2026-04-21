@@ -12,29 +12,31 @@ class Products extends StatefulWidget {
 class _ProductsState extends State<Products> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: _buildAppBar,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsetsGeometry.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildSearchbar,
-                SizedBox(height: 12),
-                ProductsCard(
-                  imagePath: "assets/product/product2/mocha.png",
-                  title: "deneme",
-                  category: "deneme",
-                  price: 23,
-                  rating: 2.0,
-                  onTap: () {},
-                ),
-              ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        appBar: _buildAppBar,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: _buildSearchBar,
             ),
-          ),
+            const SizedBox(height: 24),
+            _buildTabBar,
+            Expanded(
+              child: TabBarView(
+                children: [
+                  _buildBeverages,
+                  _buildBrewedCoffee,
+                  _buildBlendedCoffee,
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -42,40 +44,43 @@ class _ProductsState extends State<Products> {
 
   PreferredSizeWidget get _buildAppBar {
     return AppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.backgroundColor,
       elevation: 0,
       centerTitle: true,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const Icon(Icons.arrow_back, color: Colors.black),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 12),
+        child: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+        ),
       ),
       title: const Text(
         "Products",
         style: TextStyle(
           color: Colors.black,
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
         ),
       ),
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.more_vert, color: Colors.black),
+          icon: const Icon(Icons.more_horiz, color: Colors.black, size: 28),
         ),
       ],
     );
   }
 
-  Widget get _buildSearchbar {
+  Widget get _buildSearchBar {
     return Container(
-      height: 58,
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      height: 64,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.black, width: 1),
+        color: const Color(0xFFF7F7F7),
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: const Color(0xFFE7E7E7), width: 1),
       ),
       child: const Row(
         children: [
@@ -83,12 +88,90 @@ class _ProductsState extends State<Products> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: "Search beverages or foods",
+                hintStyle: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFFB4B4B4),
+                  fontWeight: FontWeight.w500,
+                ),
                 border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: 16, color: Colors.black),
               ),
             ),
           ),
-          Icon(Icons.search, color: Colors.black, size: 30),
+          Icon(Icons.search, color: Color(0xFFB4B4B4), size: 36),
+        ],
+      ),
+    );
+  }
+
+  Widget get _buildTabBar {
+    return const TabBar(
+      isScrollable: true,
+      tabAlignment: TabAlignment.start,
+      labelColor: Color(0xFF1D2235),
+      unselectedLabelColor: Color(0xFF8F939B),
+      labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+      ),
+      indicatorColor: Color(0xFF0E7A4F),
+      indicatorWeight: 3,
+      indicatorSize: TabBarIndicatorSize.tab,
+      dividerColor: Color(0xFFE9E9E9),
+      tabs: [
+        Tab(text: "Breverages"),
+        Tab(text: "Brewed Coffee"),
+        Tab(text: "Blended Coffee"),
+      ],
+    );
+  }
+
+  Widget get _buildBeverages {
+    return  Center(
+      child: Column(
+        children: [
+          ProductsCard(
+            imagePath: "assets/product/product2/mocha.png",
+            title: "Mocha",
+            category: "Beverages",
+            price: 24,
+            rating: 3.8,
+            onTap: (){},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget get _buildBrewedCoffee {
+    return  Center(
+      child: Column(
+        children: [
+          ProductsCard(
+            imagePath: "assets/product/product2/tea.png",
+            title: "Tea",
+            category: "Brewed Coffe",
+            price: 12,
+            rating: 4.8,
+            onTap: (){},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget get _buildBlendedCoffee {
+    return  Center(
+      child: Column(
+        children: [
+          ProductsCard(
+            imagePath: "assets/product/product2/mocha.png",
+            title: "Mocha",
+            category: "Blended Coffee",
+            price: 24,
+            rating: 3.8,
+            onTap: (){},
+          ),
         ],
       ),
     );
