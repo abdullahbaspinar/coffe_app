@@ -1,4 +1,3 @@
-
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +15,28 @@ class _ProductsState extends State<Products> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: _buildAppBar,
-      body: SafeArea(child: SingleChildScrollView(
-        child: Padding(padding: EdgeInsetsGeometry.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildSearchbar,
-            SizedBox(height: 12,),
-            ProductsCard(imagePath: "assets/product/product1.png", title: "deneme", category: "deneme", price: 23, rating: 2.0, onTap: (){})
-          ],
-        ),),
-      )),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsetsGeometry.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildSearchbar,
+                SizedBox(height: 12),
+                ProductsCard(
+                  imagePath: "assets/product/product2/mocha.png",
+                  title: "deneme",
+                  category: "deneme",
+                  price: 23,
+                  rating: 2.0,
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -35,11 +45,13 @@ class _ProductsState extends State<Products> {
       backgroundColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
-      leading: IconButton(onPressed: (){
-        Navigator.pop(context);
-      }, icon: const Icon(Icons.arrow_back, color: Colors.black,),
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
       ),
-        title: const Text(
+      title: const Text(
         "Products",
         style: TextStyle(
           color: Colors.black,
@@ -50,16 +62,11 @@ class _ProductsState extends State<Products> {
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(
-            Icons.more_vert,
-            color: Colors.black,
-          ),
+          icon: const Icon(Icons.more_vert, color: Colors.black),
         ),
       ],
-
     );
   }
-
 
   Widget get _buildSearchbar {
     return Container(
@@ -86,5 +93,4 @@ class _ProductsState extends State<Products> {
       ),
     );
   }
-
 }
