@@ -9,23 +9,35 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
-  int quantity = 0;
+  int quantity = 1;
   double selectedSize = 1;
+  double productPrice = 5.8;
+  double oldPrice = 8.0;
+
+  double get totalPrice => productPrice * quantity;
+
+  bool isBookMarked = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar,
       backgroundColor: AppColors.primaryColor,
-      body: Column(children: [_buildTopSection,
-      Expanded(child: Stack(
-        clipBehavior: Clip.none,
+      body: Column(
         children: [
-          _buildBottomCard,
+          _buildTopSection,
+          Expanded(
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                _buildBottomCard,
 
-          Positioned(child: _buildRatingBadge, top: -42 ,right: 24,)
+                Positioned(child: _buildRatingBadge, top: -42, right: 24),
+              ],
+            ),
+          ),
         ],
-      )), ]),
+      ),
     );
   }
 
@@ -50,9 +62,13 @@ class _ProductDetailState extends State<ProductDetail> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.bookmark_border,
+          onPressed: () {
+            setState(() {
+              isBookMarked = !isBookMarked;
+            });
+          },
+          icon:  Icon(
+            isBookMarked ? Icons.bookmark : Icons.bookmark_border,
             color: AppColors.backgroundColor,
           ),
         ),
@@ -274,8 +290,8 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
           elevation: 0,
         ),
-        child: const Text(
-          "PLACE ORDER   \$17.4",
+        child: Text(
+          "PLACE ORDER  \$ ${totalPrice.toStringAsFixed(1)}",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
