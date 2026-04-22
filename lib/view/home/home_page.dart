@@ -1,4 +1,6 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view/product/product_detail_page.dart';
+import 'package:coffe_app/view/product/products.dart';
 import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
@@ -60,7 +62,7 @@ class FeaturedBeverages {
 }
 
 class _HomePageState extends State<HomePage> {
-AuthViewModel get authViewModel => context.watch<AuthViewModel>();
+  AuthViewModel get authViewModel => context.watch<AuthViewModel>();
   final List<Category> category = [
     Category(
       title: "Beverages",
@@ -163,24 +165,29 @@ AuthViewModel get authViewModel => context.watch<AuthViewModel>();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Good Morning",
-              style: TextStyle(fontSize: 18, color: Colors.black),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              authViewModel.currentUserName,
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Good Morning",
+                style: TextStyle(fontSize: 14, color: Colors.black),
               ),
-            ),
-          ],
+              const SizedBox(height: 6),
+              Text(
+                authViewModel.currentUserName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
         ),
+
         Row(
           children: [
             IconButton(
@@ -244,7 +251,10 @@ AuthViewModel get authViewModel => context.watch<AuthViewModel>();
               price: product.price,
               oldPrice: product.oldPrice,
               onTap: () {
-                print("product card tıklandı");
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProductDetail()),
+              );
               },
             ),
           );
@@ -281,7 +291,10 @@ AuthViewModel get authViewModel => context.watch<AuthViewModel>();
                   menu_count: item.menu_count,
                   icon_name: item.icon_name,
                   onTap: () {
-                    print("categoryCard tıkladnı");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Products()),
+                    );
                   },
                 ),
               );
@@ -308,7 +321,10 @@ AuthViewModel get authViewModel => context.watch<AuthViewModel>();
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Products()),
+              );},
               child: const Text(
                 "More",
                 style: TextStyle(
@@ -334,7 +350,12 @@ AuthViewModel get authViewModel => context.watch<AuthViewModel>();
               price: item.price,
               points: "${item.points} pts ",
               rating: item.ratings,
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProductDetail()),
+              );
+              },
             );
           },
         ),

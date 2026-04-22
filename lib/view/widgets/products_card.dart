@@ -25,7 +25,7 @@ class ProductsCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F7F7),
+          color:  Colors.transparent,
           borderRadius: BorderRadius.circular(28),
         ),
         child: Row(
@@ -58,7 +58,6 @@ class ProductsCard extends StatelessWidget {
           ),
         ),
 
-        // ⭐ Rating (yarısı dışarda)
         Positioned(
           bottom: -12,
           left: 16,

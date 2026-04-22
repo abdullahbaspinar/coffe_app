@@ -1,4 +1,5 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view/product/product_detail_page.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class _ProductsState extends State<Products> {
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: _buildSearchBar,
+              child: _buildSearchbar,
             ),
             const SizedBox(height: 24),
             _buildTabBar,
@@ -73,31 +74,27 @@ class _ProductsState extends State<Products> {
     );
   }
 
-  Widget get _buildSearchBar {
+  Widget get _buildSearchbar {
     return Container(
-      height: 64,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      height: 58,
+      padding: EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F7F7),
-        borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: const Color(0xFFE7E7E7), width: 1),
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.black, width: 1),
       ),
       child: const Row(
         children: [
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                hintText: "Search beverages or foods",
-                hintStyle: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFFB4B4B4),
-                  fontWeight: FontWeight.w500,
-                ),
+                hintText: "Search",
                 border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: 16, color: Colors.black),
               ),
             ),
           ),
-          Icon(Icons.search, color: Color(0xFFB4B4B4), size: 36),
+          Icon(Icons.search, color: Colors.black, size: 30),
         ],
       ),
     );
@@ -117,7 +114,7 @@ class _ProductsState extends State<Products> {
       indicatorColor: Color(0xFF0E7A4F),
       indicatorWeight: 3,
       indicatorSize: TabBarIndicatorSize.tab,
-      dividerColor: Color(0xFFE9E9E9),
+      dividerColor: Colors.transparent,
       tabs: [
         Tab(text: "Breverages"),
         Tab(text: "Brewed Coffee"),
@@ -127,7 +124,7 @@ class _ProductsState extends State<Products> {
   }
 
   Widget get _buildBeverages {
-    return  Center(
+    return Center(
       child: Column(
         children: [
           ProductsCard(
@@ -136,7 +133,12 @@ class _ProductsState extends State<Products> {
             category: "Beverages",
             price: 24,
             rating: 3.8,
-            onTap: (){},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProductDetail()),
+              );
+            },
           ),
         ],
       ),
@@ -144,7 +146,7 @@ class _ProductsState extends State<Products> {
   }
 
   Widget get _buildBrewedCoffee {
-    return  Center(
+    return Center(
       child: Column(
         children: [
           ProductsCard(
@@ -153,7 +155,12 @@ class _ProductsState extends State<Products> {
             category: "Brewed Coffe",
             price: 12,
             rating: 4.8,
-            onTap: (){},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProductDetail()),
+              );
+            },
           ),
         ],
       ),
@@ -161,7 +168,7 @@ class _ProductsState extends State<Products> {
   }
 
   Widget get _buildBlendedCoffee {
-    return  Center(
+    return Center(
       child: Column(
         children: [
           ProductsCard(
@@ -170,7 +177,12 @@ class _ProductsState extends State<Products> {
             category: "Blended Coffee",
             price: 24,
             rating: 3.8,
-            onTap: (){},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProductDetail()),
+              );
+            },
           ),
         ],
       ),
