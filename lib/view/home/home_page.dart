@@ -2,6 +2,7 @@ import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
 import 'package:coffe_app/view/product/product_detail_page.dart';
 import 'package:coffe_app/view/product/products.dart';
+import 'package:coffe_app/view/profile/profile_page.dart';
 import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
@@ -316,11 +317,6 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               selectedIndex = 1;
             });
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Products()),
-            );
           },
         ),
 
@@ -360,11 +356,21 @@ class _HomePageState extends State<HomePage> {
                   : FontWeight.normal,
             ),
           ),
-          onTap: () {
+          onTap: () async {
             setState(() {
               selectedIndex = 3;
             });
+
             Navigator.pop(context);
+
+            await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
+            );
+
+            setState(() {
+              selectedIndex = 0;
+            });
           },
         ),
 
