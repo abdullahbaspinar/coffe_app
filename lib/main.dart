@@ -5,6 +5,7 @@ import 'package:coffe_app/view/home/home_page.dart';
 import 'package:coffe_app/view/onboarding/onboarding_page.dart';
 import 'package:coffe_app/view/product/product_detail_page.dart';
 import 'package:coffe_app/view/product/products.dart';
+import 'package:coffe_app/view/profile/profile_page.dart';
 import 'package:coffe_app/view/splash/splash_screen.dart';
 import 'package:coffe_app/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Coffe App',
-        home: const HomePage(),
+        home: const SplashScreen(),
       ),
     );
   }
