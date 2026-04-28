@@ -1,5 +1,6 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
+import 'package:coffe_app/view/orders/orders.dart';
 import 'package:coffe_app/view/product/product_detail_page.dart';
 import 'package:coffe_app/view/product/products.dart';
 import 'package:coffe_app/view/profile/profile_page.dart';
@@ -198,7 +199,12 @@ class _HomePageState extends State<HomePage> {
         Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Orders()),
+                );
+              },
               icon: const Icon(
                 Icons.shopping_bag_outlined,
                 size: 28,
