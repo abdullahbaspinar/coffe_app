@@ -1,4 +1,5 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view/orders/orders.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -282,7 +283,10 @@ class _ProductDetailState extends State<ProductDetail> {
       width: double.infinity,
       height: 60,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> Orders())
+          );
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryColor,
           shape: RoundedRectangleBorder(

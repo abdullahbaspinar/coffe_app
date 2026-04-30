@@ -1,4 +1,7 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view/product/product_detail_page.dart';
+import 'package:coffe_app/view/widgets/complete_orders_button.dart';
+import 'package:coffe_app/view/widgets/orders_card.dart';
 import 'package:flutter/material.dart';
 
 class Orders extends StatefulWidget {
@@ -16,8 +19,16 @@ class _OrdersState extends State<Orders> {
       appBar: _buildAppBar,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(12),
-          child: Column(children: [_buildSearchBar, SizedBox(height: 8)]),
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              _buildSearchBar,
+              const SizedBox(height: 8),
+              _buildProducts,
+              Spacer(),
+              CompleteOrdersButton()
+            ],
+          ),
         ),
       ),
     );
@@ -57,7 +68,7 @@ class _OrdersState extends State<Orders> {
   Widget get _buildSearchBar {
     return Container(
       height: 58,
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(30),
@@ -77,6 +88,49 @@ class _OrdersState extends State<Orders> {
           Icon(Icons.search, color: Colors.black, size: 30),
         ],
       ),
+    );
+  }
+
+  Widget get _buildProducts {
+    return Column(
+      children: [
+        OrdersCard(
+          imagePath: "assets/product/product2/tea.png",
+          title: "Turkish Tea",
+          price: 1.5,
+          count: 3,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProductDetail()),
+            );
+          },
+        ),
+        OrdersCard(
+          imagePath: "assets/product/product2/mocha.png",
+          title: "Mocha",
+          price: 3.2,
+          count: 2,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProductDetail()),
+            );
+          },
+        ),
+        OrdersCard(
+          imagePath: "assets/product/product2/tea.png",
+          title: "Turkish Tea",
+          price: 1.5,
+          count: 7,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProductDetail()),
+            );
+          },
+        ),
+      ],
     );
   }
 }
