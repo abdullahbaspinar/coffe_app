@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ProductsCard extends StatelessWidget {
   final String imagePath;
+  final String imageUrl;
   final double rating;
   final String title;
   final String category;
@@ -11,6 +12,7 @@ class ProductsCard extends StatelessWidget {
   const ProductsCard({
     super.key,
     required this.imagePath,
+    required this.imageUrl,
     required this.title,
     required this.category,
     required this.price,
@@ -25,7 +27,7 @@ class ProductsCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color:  Colors.transparent,
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(28),
         ),
         child: Row(
@@ -33,9 +35,7 @@ class ProductsCard extends StatelessWidget {
           children: [
             _buildImageSection(),
             const SizedBox(width: 16),
-            Expanded(
-              child: _buildRightSection(),
-            ),
+            Expanded(child: _buildRightSection()),
           ],
         ),
       ),
@@ -43,6 +43,9 @@ class ProductsCard extends StatelessWidget {
   }
 
   Widget _buildImageSection() {
+    final ImageProvider imageProvider = imageUrl.isNotEmpty
+        ? NetworkImage(imageUrl)
+        : AssetImage(imagePath);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -51,10 +54,7 @@ class ProductsCard extends StatelessWidget {
           height: 110,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            image: DecorationImage(
-              image: AssetImage(imagePath),
-              fit: BoxFit.cover,
-            ),
+            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
           ),
         ),
 
@@ -105,10 +105,7 @@ class ProductsCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(
-                category,
-                style: const TextStyle(color: Colors.grey),
-              ),
+              Text(category, style: const TextStyle(color: Colors.grey)),
               const Spacer(),
               Text(
                 "\$${price.toStringAsFixed(1)}",
@@ -123,8 +120,7 @@ class ProductsCard extends StatelessWidget {
             bottom: 0,
             right: 0,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
               decoration: BoxDecoration(
                 color: const Color(0xFFDDEDE6),
                 borderRadius: BorderRadius.circular(24),

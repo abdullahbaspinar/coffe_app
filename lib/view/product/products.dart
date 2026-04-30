@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view/product/product_detail_page.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
-import 'package:flutter/material.dart';
 
 class Products extends StatefulWidget {
   const Products({super.key});
@@ -11,6 +15,52 @@ class Products extends StatefulWidget {
 }
 
 class _ProductsState extends State<Products> {
+List<Product> beverages = [];
+List<Product> brewedCoffee = [];
+List<Product> blendedCoffee = [];
+
+bool isLoading = true;
+String? errorMessage; 
+
+ @override
+void initState() {
+  super.initState();
+  fetchAllTabs();
+}
+
+  Future<List<Product>> fetchProducts({required int offset, required int limit}) async {
+  final url = Uri.parse(
+    "https://api.escuelajs.co/api/v1/products?offset=$offset&limit=$limit",
+  );
+
+  final response = await http.get(url);
+
+  if (response.statusCode != 200) {
+    throw Exception("Server error: ${response.statusCode}");
+  }
+
+  final List data = jsonDecode(response.body);
+  return data.map((e) => Product.fromJson(e)).toList();
+}
+
+  Future<void> fetchAllTabs() async { try { final results = await Future.wait([
+    fetchProducts(offset: 0, limit: 10),
+    fetchProducts(offset: 10, limit: 10),
+    fetchProducts(offset: 20, limit: 10),
+  ]);
+  setState(() {
+    beverages = results[0];
+    brewedCoffee = results[1];
+    blendedCoffee = results[2];
+    isLoading = false;
+  });
+} catch (e) {
+  setState(() {
+    errorMessage = e.toString();
+    isLoading = false;
+  });
+}
+}
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -124,68 +174,98 @@ class _ProductsState extends State<Products> {
   }
 
   Widget get _buildBeverages {
-    return Center(
-      child: Column(
-        children: [
-          ProductsCard(
-            imagePath: "assets/product/product2/mocha.png",
-            title: "Mocha",
-            category: "Beverages",
-            price: 24,
-            rating: 3.8,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProductDetail()),
-              );
-            },
-          ),
-        ],
-      ),
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (errorMessage != null) {
+      return Center(child: Text(errorMessage!));
+    }
+    if (beverages.isEmpty) {
+      return const Center(child: Text("No products found"));
+    }
+    return ListView.builder(
+      itemCount: beverages.length,
+      itemBuilder: (context, index) {
+        final p = beverages[index];
+        return ProductsCard(
+          imagePath: "assets/product/product2/mocha.png",
+          imageUrl: p.imageUrl,
+          title: p.title,
+          category: p.category,
+          price: p.price,
+          rating: 3.8,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProductDetail()),
+            );
+          },
+        );
+      },
     );
   }
 
   Widget get _buildBrewedCoffee {
-    return Center(
-      child: Column(
-        children: [
-          ProductsCard(
-            imagePath: "assets/product/product2/tea.png",
-            title: "Tea",
-            category: "Brewed Coffe",
-            price: 12,
-            rating: 4.8,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProductDetail()),
-              );
-            },
-          ),
-        ],
-      ),
+     if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (errorMessage != null) {
+      return Center(child: Text(errorMessage!));
+    }
+    if (brewedCoffee.isEmpty) {
+      return const Center(child: Text("No products found"));
+    }
+    return ListView.builder(
+      itemCount:  brewedCoffee.length,
+      itemBuilder: (context, index) {
+        final p = brewedCoffee[index];
+        return ProductsCard(
+          imagePath: "assets/product/product2/mocha.png",
+          imageUrl: p.imageUrl,
+          title: p.title,
+          category: p.category,
+          price: p.price,
+          rating: 3.8,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProductDetail()),
+            );
+          },
+        );
+      },
     );
   }
 
   Widget get _buildBlendedCoffee {
-    return Center(
-      child: Column(
-        children: [
-          ProductsCard(
-            imagePath: "assets/product/product2/mocha.png",
-            title: "Mocha",
-            category: "Blended Coffee",
-            price: 24,
-            rating: 3.8,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProductDetail()),
-              );
-            },
-          ),
-        ],
-      ),
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (errorMessage != null) {
+      return Center(child: Text(errorMessage!));
+    }
+    if (blendedCoffee.isEmpty) {
+      return const Center(child: Text("No products found"));
+    }
+    return ListView.builder(
+      itemCount: blendedCoffee.length,
+      itemBuilder: (context, index) {
+        final p = blendedCoffee[index];
+        return ProductsCard(
+          imagePath: "assets/product/product2/mocha.png",
+          imageUrl: p.imageUrl,
+          title: p.title,
+          category: p.category,
+          price: p.price,
+          rating: 3.8,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProductDetail()),
+            );
+          },
+        );
+      },
     );
   }
 }
