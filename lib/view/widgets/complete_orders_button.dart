@@ -1,5 +1,7 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/view_model/card_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CompleteOrdersButton extends StatelessWidget {
   const CompleteOrdersButton({super.key});
@@ -78,7 +80,10 @@ class CompleteOrdersButton extends StatelessWidget {
       color: AppColors.primaryColor,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
-        onTap: () => _showSuccessDialog(context),
+        onTap: ()  =>{
+          context.read<CardViewModel>().clearCart(),
+          _showSuccessDialog(context)
+        } ,
         borderRadius: BorderRadius.circular(16),
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 16),

@@ -30,7 +30,7 @@ class OrdersCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
+                child: Image.network(
                   imagePath,
                   width: 70,
                   height: 70,
