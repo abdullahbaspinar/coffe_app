@@ -172,49 +172,60 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Good Morning",
-                style: TextStyle(fontSize: 14, color: Colors.black),
-              ),
+              _goodMorningText,
               const SizedBox(height: 6),
-              Text(
-                authViewModel.currentUserName,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
+              _usernameText,
             ],
           ),
         ),
 
-        Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Orders()),
-                );
-              },
-              icon: const Icon(
-                Icons.shopping_bag_outlined,
-                size: 28,
-                color: AppColors.primaryColor,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                _scaffoldKey.currentState?.openDrawer();
-              },
-              icon: const Icon(Icons.menu, size: 30, color: Colors.black),
-            ),
-          ],
-        ),
+        Row(children: [_ordersIcon, _sideBarIcon]),
       ],
+    );
+  }
+
+  Widget get _goodMorningText {
+    return const Text(
+      "Good Morning",
+      style: TextStyle(fontSize: 14, color: Colors.black),
+    );
+  }
+
+  Widget get _usernameText {
+    return Text(
+      authViewModel.currentUserName,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  Widget get _ordersIcon {
+    return IconButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Orders()),
+        );
+      },
+      icon: const Icon(
+        Icons.shopping_bag_outlined,
+        size: 28,
+        color: AppColors.primaryColor,
+      ),
+    );
+  }
+
+  Widget get _sideBarIcon {
+    return IconButton(
+      onPressed: () {
+        _scaffoldKey.currentState?.openDrawer();
+      },
+      icon: const Icon(Icons.menu, size: 30, color: Colors.black),
     );
   }
 
@@ -246,152 +257,167 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            children: [
-              Image.asset(
-                "assets/images/logo.png",
-                width: 50,
-                height: 50,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(width: 10),
-              const Text(
-                "Ombe",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ],
+            children: [_sideBarLogo, const SizedBox(width: 10), _sideBarText],
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.close, color: Colors.grey, size: 28),
-          ),
+          _sidebarCloseIcon,
         ],
       ),
+    );
+  }
+
+  Widget get _sideBarLogo {
+    return Image.asset(
+      "assets/images/logo.png",
+      width: 50,
+      height: 50,
+      fit: BoxFit.contain,
+    );
+  }
+
+  Widget get _sideBarText {
+    return const Text(
+      "Ombe",
+      style: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  Widget get _sidebarCloseIcon {
+    return IconButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      icon: const Icon(Icons.close, color: Colors.grey, size: 28),
     );
   }
 
   Widget get _buildMenuItems {
     return Column(
       children: [
-        ListTile(
-          leading: Icon(
-            Icons.home_outlined,
-            color: selectedIndex == 0 ? AppColors.primaryColor : Colors.grey,
-          ),
-          title: Text(
-            "Home",
-            style: TextStyle(
-              color: selectedIndex == 0 ? AppColors.primaryColor : Colors.grey,
-              fontWeight: selectedIndex == 0
-                  ? FontWeight.bold
-                  : FontWeight.normal,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              selectedIndex = 0;
-            });
-            Navigator.pop(context);
-          },
-        ),
-
-        ListTile(
-          leading: Icon(
-            Icons.shopping_bag_outlined,
-            color: selectedIndex == 1 ? AppColors.primaryColor : Colors.grey,
-          ),
-          title: Text(
-            "My Order",
-            style: TextStyle(
-              color: selectedIndex == 1 ? AppColors.primaryColor : Colors.grey,
-              fontWeight: selectedIndex == 1
-                  ? FontWeight.bold
-                  : FontWeight.normal,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              selectedIndex = 1;
-            });
-          },
-        ),
-
-        ListTile(
-          leading: Icon(
-            Icons.store_outlined,
-            color: selectedIndex == 2 ? AppColors.primaryColor : Colors.grey,
-          ),
-          title: Text(
-            "Store Location",
-            style: TextStyle(
-              color: selectedIndex == 2 ? AppColors.primaryColor : Colors.grey,
-              fontWeight: selectedIndex == 2
-                  ? FontWeight.bold
-                  : FontWeight.normal,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              selectedIndex = 2;
-            });
-            Navigator.pop(context);
-          },
-        ),
-
-        ListTile(
-          leading: Icon(
-            Icons.person_outline,
-            color: selectedIndex == 3 ? AppColors.primaryColor : Colors.grey,
-          ),
-          title: Text(
-            "Profile",
-            style: TextStyle(
-              color: selectedIndex == 3 ? AppColors.primaryColor : Colors.grey,
-              fontWeight: selectedIndex == 3
-                  ? FontWeight.bold
-                  : FontWeight.normal,
-            ),
-          ),
-          onTap: () async {
-            setState(() {
-              selectedIndex = 3;
-            });
-
-            Navigator.pop(context);
-
-            await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfilePage()),
-            );
-
-            setState(() {
-              selectedIndex = 0;
-            });
-          },
-        ),
-
+        _menuItemHome,
+        _menuItemOrders,
+        _menuItemStoreLocation,
+        _menuItemProfile,
         const Divider(color: Colors.black12),
-
-        ListTile(
-          leading: const Icon(Icons.logout, color: Colors.red),
-          title: const Text(
-            "Log Out",
-            style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
-          ),
-          onTap: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const AuthChoicePage()),
-              (route) => false,
-            );
-          },
-        ),
+        _menuItemLogOut,
       ],
+    );
+  }
+
+  Widget get _menuItemHome {
+    return ListTile(
+      leading: Icon(
+        Icons.home_outlined,
+        color: selectedIndex == 0 ? AppColors.primaryColor : Colors.grey,
+      ),
+      title: Text(
+        "Home",
+        style: TextStyle(
+          color: selectedIndex == 0 ? AppColors.primaryColor : Colors.grey,
+          fontWeight: selectedIndex == 0 ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          selectedIndex = 0;
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  Widget get _menuItemOrders {
+    return ListTile(
+      leading: Icon(
+        Icons.shopping_bag_outlined,
+        color: selectedIndex == 1 ? AppColors.primaryColor : Colors.grey,
+      ),
+      title: Text(
+        "My Order",
+        style: TextStyle(
+          color: selectedIndex == 1 ? AppColors.primaryColor : Colors.grey,
+          fontWeight: selectedIndex == 1 ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          selectedIndex = 1;
+        });
+      },
+    );
+  }
+
+  Widget get _menuItemStoreLocation {
+    return ListTile(
+      leading: Icon(
+        Icons.store_outlined,
+        color: selectedIndex == 2 ? AppColors.primaryColor : Colors.grey,
+      ),
+      title: Text(
+        "Store Location",
+        style: TextStyle(
+          color: selectedIndex == 2 ? AppColors.primaryColor : Colors.grey,
+          fontWeight: selectedIndex == 2 ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          selectedIndex = 2;
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  Widget get _menuItemProfile {
+    return ListTile(
+      leading: Icon(
+        Icons.person_outline,
+        color: selectedIndex == 3 ? AppColors.primaryColor : Colors.grey,
+      ),
+      title: Text(
+        "Profile",
+        style: TextStyle(
+          color: selectedIndex == 3 ? AppColors.primaryColor : Colors.grey,
+          fontWeight: selectedIndex == 3 ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      onTap: () async {
+        setState(() {
+          selectedIndex = 3;
+        });
+
+        Navigator.pop(context);
+
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfilePage()),
+        );
+
+        setState(() {
+          selectedIndex = 0;
+        });
+      },
+    );
+  }
+
+  Widget get _menuItemLogOut {
+    return ListTile(
+      leading: const Icon(Icons.logout, color: Colors.red),
+      title: const Text(
+        "Log Out",
+        style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+      ),
+      onTap: () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const AuthChoicePage()),
+          (route) => false,
+        );
+      },
     );
   }
 
@@ -524,36 +550,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Featured Beverages",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextButton(
-              onPressed: _categories.isEmpty
-                  ? null
-                  : () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => Products(category: _categories.first),
-                        ),
-                      );
-                    },
-              child: const Text(
-                "More",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.primaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+          children: [_featuredBeveragesText, _featuredBeverageasTextButton],
         ),
         const SizedBox(height: 12),
         ListView.separated(
@@ -579,6 +576,40 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ],
+    );
+  }
+
+  Widget get _featuredBeveragesText {
+    return const Text(
+      "Featured Beverages",
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget get _featuredBeverageasTextButton {
+    return TextButton(
+      onPressed: _categories.isEmpty
+          ? null
+          : () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => Products(category: _categories.first),
+                ),
+              );
+            },
+      child: const Text(
+        "More",
+        style: TextStyle(
+          fontSize: 16,
+          color: AppColors.primaryColor,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }
