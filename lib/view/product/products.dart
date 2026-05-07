@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:coffe_app/view/product/product_detail_page_api.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -197,7 +198,7 @@ void initState() {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProductDetail()),
+              MaterialPageRoute(builder: (context) => ProductDetailPageApi(product:p)),
             );
           },
         );
@@ -229,7 +230,7 @@ void initState() {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProductDetail()),
+              MaterialPageRoute(builder: (context) => ProductDetailPageApi(product: p,)),
             );
           },
         );
@@ -261,7 +262,7 @@ void initState() {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProductDetail()),
+              MaterialPageRoute(builder: (context) => ProductDetailPageApi(product: p,)),
             );
           },
         );

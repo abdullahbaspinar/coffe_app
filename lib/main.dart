@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Coffe App',
-        home: const SplashScreen(),
+        home: const HomePage(),
       ),
     );
   }
