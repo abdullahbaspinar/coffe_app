@@ -1,4 +1,6 @@
 import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/model/category.dart';
+import 'package:coffe_app/core/services/product_service.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
 import 'package:coffe_app/view/orders/orders.dart';
 import 'package:coffe_app/view/product/product_detail_page.dart';
@@ -8,11 +10,8 @@ import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
 import 'package:coffe_app/view_model/auth_view_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sidebarx/sidebarx.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,20 +34,6 @@ class Product {
   });
 }
 
-class Category {
-  final String title;
-  final String menu_count;
-  final IconData icon_name;
-  final VoidCallback onTap;
-
-  const Category({
-    required this.title,
-    required this.menu_count,
-    required this.icon_name,
-    required this.onTap,
-  });
-}
-
 class FeaturedBeverages {
   String imagePath;
   String title;
@@ -66,34 +51,44 @@ class FeaturedBeverages {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ProductService _productService = ProductService();
+  List<Category> _categories = [];
+  bool _categoriesLoading = true;
+  String? _categoriesError;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    setState(() {
+      _categoriesLoading = true;
+      _categoriesError = null;
+    });
+
+    try {
+      final categories = await _productService.fetchCategories();
+      setState(() {
+        _categories = categories.take(8).toList();
+      });
+    } catch (e) {
+      setState(() {
+        _categoriesError = e.toString();
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _categoriesLoading = false;
+        });
+      }
+    }
+  }
+
   int selectedIndex = 0;
   AuthViewModel get authViewModel => context.watch<AuthViewModel>();
-  final List<Category> category = [
-    Category(
-      title: "Beverages",
-      menu_count: "67",
-      icon_name: Icons.coffee_outlined,
-      onTap: () {},
-    ),
-    Category(
-      title: "Foods",
-      menu_count: "23",
-      icon_name: Icons.food_bank_outlined,
-      onTap: () {},
-    ),
-    Category(
-      title: "Pizza",
-      menu_count: "28",
-      icon_name: Icons.local_pizza_outlined,
-      onTap: () {},
-    ),
-    Category(
-      title: "Drink",
-      menu_count: "12",
-      icon_name: Icons.local_drink_outlined,
-      onTap: () {},
-    ),
-  ];
+
   final List<Product> products = [
     Product(
       imagePath: "assets/product/product1.png",
@@ -459,7 +454,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "Categories",
           style: TextStyle(
             fontSize: 16,
@@ -467,32 +462,58 @@ class _HomePageState extends State<HomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
 
-        SizedBox(
-          height: 50,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: category.length,
-            itemBuilder: (context, index) {
-              final item = category[index];
-              return Padding(
-                padding: EdgeInsets.all(2),
-                child: CategoriesCard(
-                  title: item.title,
-                  menu_count: item.menu_count,
-                  icon_name: item.icon_name,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Products()),
-                    );
-                  },
+        if (_categoriesLoading)
+          const SizedBox(
+            height: 60,
+            child: Center(child: CircularProgressIndicator()),
+          )
+        else if (_categoriesError != null)
+          SizedBox(
+            height: 60,
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    "Kategoriler yüklenemedi.",
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ),
-              );
-            },
+                TextButton(
+                  onPressed: _loadCategories,
+                  child: const Text("Tekrar Dene"),
+                ),
+              ],
+            ),
+          )
+        else
+          SizedBox(
+            height: 70,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _categories.length,
+              itemBuilder: (context, index) {
+                final item = _categories[index];
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: CategoriesCard(
+                    title: item.name,
+                    imageUrl: item.image,
+                    menuCount: null,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => Products(category: item),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
           ),
-        ),
       ],
     );
   }
@@ -513,12 +534,16 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Products()),
-                );
-              },
+              onPressed: _categories.isEmpty
+                  ? null
+                  : () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => Products(category: _categories.first),
+                        ),
+                      );
+                    },
               child: const Text(
                 "More",
                 style: TextStyle(
