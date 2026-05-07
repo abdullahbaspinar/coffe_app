@@ -1,12 +1,13 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/model/product.dart';
+import 'package:coffe_app/view/orders/orders.dart';
+import 'package:coffe_app/view_model/card_view_model.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 
 class ProductDetailPageApi extends StatefulWidget {
   final Product product;
-  const ProductDetailPageApi({super.key,
-  required this.product});
+  const ProductDetailPageApi({super.key, required this.product});
 
   @override
   State<ProductDetailPageApi> createState() => _ProductDetailPageApiState();
@@ -14,7 +15,6 @@ class ProductDetailPageApi extends StatefulWidget {
 
 class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
   int quantity = 1;
-
 
   final double rating = 4.8;
 
@@ -24,13 +24,8 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       backgroundColor: AppColors.primaryColor,
       appBar: _buildAppBar,
       body: SingleChildScrollView(
-        child:Column(
-        children: [
-          _buildTopSection,
-          _buildBottomSection,
-        ],
-      ) ,
-      ) 
+        child: Column(children: [_buildTopSection, _buildBottomSection]),
+      ),
     );
   }
 
@@ -43,9 +38,9 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         onPressed: () {
           Navigator.pop(context);
         },
-        icon:  Icon(Icons.arrow_back_ios_new, color: Colors.white),
+        icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
       ),
-      title:  Text(
+      title: Text(
         "Details",
         style: TextStyle(
           color: Colors.white,
@@ -56,7 +51,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       actions: [
         IconButton(
           onPressed: () {},
-          icon:  Icon(Icons.favorite_border, color: Colors.white),
+          icon: Icon(Icons.favorite_border, color: Colors.white),
         ),
       ],
     );
@@ -103,7 +98,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           _buildDescription,
           const SizedBox(height: 24),
           _buildQuantitySelector,
-          const SizedBox(height: 24,),
+          const SizedBox(height: 24),
           _buildAddToCartButton,
         ],
       ),
@@ -263,7 +258,13 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       width: double.infinity,
       height: 58,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          context.read<CardViewModel>().addToCard(
+            widget.product,
+            quantity: quantity,
+          );
+          Navigator.push(context, MaterialPageRoute(builder: (_) => Orders()));
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryColor,
           shape: RoundedRectangleBorder(
