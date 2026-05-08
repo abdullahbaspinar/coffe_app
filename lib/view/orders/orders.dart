@@ -1,5 +1,4 @@
 import 'package:coffe_app/constants/app_colors.dart';
-import 'package:coffe_app/view/product/product_detail_page.dart';
 import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/orders_card.dart';
 import 'package:flutter/material.dart';
@@ -109,6 +108,9 @@ class _OrdersState extends State<Orders> {
           price: item.product.price,
           count: item.quantity,
           onTap: () {},
+          onIncrease: () => cart.increaseQuantity(item.product),
+          onDecrease: () => cart.decreaseQuantity(item.product),
+          onDelete: () => cart.removeFromCard(item.product),
         );
       },
     );
