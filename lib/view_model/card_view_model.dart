@@ -42,6 +42,35 @@ class CardViewModel extends ChangeNotifier {
     await _saveCart();
   }
 
+  Future<void> increaseQuantity(Product product) async {
+    final index = _items.indexWhere((e) => e.product.id == product.id);
+    if (index < 0) return;
+
+    _items[index].quantity++;
+    notifyListeners();
+    await _saveCart();
+  }
+
+  Future<void> decreaseQuantity(Product product) async {
+    final index = _items.indexWhere((e) => e.product.id == product.id);
+    if (index < 0) return;
+
+    if (_items[index].quantity > 1) {
+      _items[index].quantity--;
+    } else {
+      _items.removeAt(index);
+    }
+
+    notifyListeners();
+    await _saveCart();
+  }
+
+  Future<void> removeFromCard(Product product) async {
+    _items.removeWhere((e) => e.product.id == product.id);
+    notifyListeners();
+    await _saveCart();
+  }
+
   Future<void> clearCart() async {
     _items.clear();
     notifyListeners();
