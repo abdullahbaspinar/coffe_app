@@ -1,6 +1,7 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/orders_card.dart';
+import 'package:coffe_app/view/widgets/total_amount.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:coffe_app/view_model/card_view_model.dart';
@@ -28,6 +29,8 @@ class _OrdersState extends State<Orders> {
               _buildSearchBar,
               const SizedBox(height: 8),
               Expanded(child: _buildProducts(cart)),
+              const SizedBox(height: 8,),
+              TotalAmount(),
               const SizedBox(height: 8),
               CompleteOrdersButton(),
             ],
