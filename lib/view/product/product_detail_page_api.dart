@@ -1,6 +1,5 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/model/product.dart';
-import 'package:coffe_app/view/orders/orders.dart';
 import 'package:coffe_app/view_model/card_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,76 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
   int quantity = 1;
 
   final double rating = 4.8;
+
+  void _showAddedToCartDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.check, color: Colors.white, size: 42),
+                ),
+                const SizedBox(height: 18),
+                const Text(
+                  "Successfully Added to Cart",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "${widget.product.title} successfully added to cart.",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.black54,
+                    fontSize: 14,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 22),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: Text(
+                        "OK",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +206,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: AppColors.primaryColor.withOpacity(0.12),
+            color: AppColors.primaryColor.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
@@ -258,12 +327,14 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       width: double.infinity,
       height: 58,
       child: ElevatedButton(
-        onPressed: () {
-          context.read<CardViewModel>().addToCard(
+        onPressed: () async {
+          await context.read<CardViewModel>().addToCard(
             widget.product,
             quantity: quantity,
           );
-          Navigator.push(context, MaterialPageRoute(builder: (_) => Orders()));
+
+          if (!mounted) return;
+          _showAddedToCartDialog();
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryColor,
