@@ -59,4 +59,21 @@ class ProductService {
     final List data = jsonDecode(response.body);
     return data.map((e) => Product.fromJson(e)).toList();
   }
+
+  Future<List<Product>> searchAllProducts({
+    required String query,
+    required int offset,
+    required int limit,
+  }) async {
+    final uri = Uri.parse("$_baseUrl/products/").replace(
+      queryParameters: {"title": query, "offset": "$offset", "limit": "$limit"},
+    );
+    final response = await http.get(uri);
+
+    if (response.statusCode != 200) {
+      throw Exception("Arama başarısız ${response.statusCode}");
+    }
+    final List data = jsonDecode(response.body);
+    return data.map((e) => Product.fromJson(e)).toList();
+  }
 }
