@@ -1,7 +1,7 @@
 import 'package:coffe_app/constants/app_colors.dart';
-import 'package:coffe_app/view_model/card_view_model.dart';
+import 'package:coffe_app/view_model/cart/cart_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class TotalAmount extends StatelessWidget {
   final double? amount;
@@ -11,7 +11,7 @@ class TotalAmount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = amount ?? context.watch<CardViewModel>().grandTotal;
+    final total = amount ?? context.watch<CartCubit>().state.grandTotal;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),

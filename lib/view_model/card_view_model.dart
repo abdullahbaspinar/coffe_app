@@ -5,6 +5,7 @@ import 'package:coffe_app/model/product.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class CardViewModel extends ChangeNotifier {
   static const _cartKey = "cart_items";
   final List<CardItem> _items = [];
