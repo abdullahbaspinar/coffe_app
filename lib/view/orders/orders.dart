@@ -3,8 +3,9 @@ import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/orders_card.dart';
 import 'package:coffe_app/view/widgets/total_amount.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:coffe_app/view_model/card_view_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:coffe_app/view_model/cart/cart_cubit.dart';
+import 'package:coffe_app/view_model/cart/cart_state.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -14,10 +15,10 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
-  CardViewModel get cart => context.watch<CardViewModel>();
-
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -35,11 +36,17 @@ class _OrdersState extends State<Orders> {
             children: [
               _buildSearchBar,
               const SizedBox(height: 8),
-              Expanded(child: _buildProducts(cart)),
+              Expanded(
+                child: BlocBuilder<CartCubit, CartState>(
+                  builder: (context, state) {
+                    return _buildProducts(state);
+                  },
+                ),
+              ),
               const SizedBox(height: 8),
-              TotalAmount(),
+              const TotalAmount(),
               const SizedBox(height: 8),
-              CompleteOrdersButton(),
+              const CompleteOrdersButton(),
             ],
           ),
         ),
@@ -97,33 +104,35 @@ class _OrdersState extends State<Orders> {
                   _searchQuery = value;
                 });
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "Search",
                 border: InputBorder.none,
                 hintStyle: TextStyle(fontSize: 16, color: Colors.black),
               ),
             ),
           ),
-          Icon(Icons.search, color: Colors.black, size: 30),
+          const Icon(Icons.search, color: Colors.black, size: 30),
         ],
       ),
     );
   }
 
-  Widget _buildProducts(CardViewModel cart) {
+  Widget _buildProducts(CartState state) {
     final query = _searchQuery.trim().toLowerCase();
 
-    final filteredItems = cart.items.where((item) {
+    final filteredItems = state.items.where((item) {
       final title = item.product.title.toLowerCase();
       return title.contains(query);
     }).toList();
 
-    if (cart.items.isEmpty) {
+    if (state.items.isEmpty) {
       return const Center(child: Text("Sepet Boş"));
     }
-    if(filteredItems.isEmpty) {
+
+    if (filteredItems.isEmpty) {
       return const Center(child: Text("Sepette böyle bir ürün yok"));
     }
+
     return ListView.builder(
       itemCount: filteredItems.length,
       itemBuilder: (context, index) {
@@ -134,9 +143,12 @@ class _OrdersState extends State<Orders> {
           price: item.product.price,
           count: item.quantity,
           onTap: () {},
-          onIncrease: () => cart.increaseQuantity(item.product),
-          onDecrease: () => cart.decreaseQuantity(item.product),
-          onDelete: () => cart.removeFromCard(item.product),
+          onIncrease: () =>
+              context.read<CartCubit>().increaseQuantity(item.product),
+          onDecrease: () =>
+              context.read<CartCubit>().decreaseQuantity(item.product),
+          onDelete: () =>
+              context.read<CartCubit>().removeFromCart(item.product),
         );
       },
     );

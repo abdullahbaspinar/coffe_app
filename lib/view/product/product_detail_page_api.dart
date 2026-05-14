@@ -1,8 +1,8 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/model/product.dart';
-import 'package:coffe_app/view_model/card_view_model.dart';
+import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetailPageApi extends StatefulWidget {
   final Product product;
@@ -328,7 +328,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       height: 58,
       child: ElevatedButton(
         onPressed: () async {
-          await context.read<CardViewModel>().addToCard(
+          await context.read<CartCubit>().addToCart(
             widget.product,
             quantity: quantity,
           );

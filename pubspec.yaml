@@ -39,6 +39,8 @@ dependencies:
   flutter_svg: ^2.2.4
   sidebarx: ^0.17.2
   http: ^1.6.0
+  bloc: ^9.2.1
+  flutter_bloc: ^9.1.1
 
 dev_dependencies:
   flutter_test:
