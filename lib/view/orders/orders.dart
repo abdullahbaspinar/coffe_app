@@ -16,6 +16,13 @@ class Orders extends StatefulWidget {
 class _OrdersState extends State<Orders> {
   CardViewModel get cart => context.watch<CardViewModel>();
 
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +36,7 @@ class _OrdersState extends State<Orders> {
               _buildSearchBar,
               const SizedBox(height: 8),
               Expanded(child: _buildProducts(cart)),
-              const SizedBox(height: 8,),
+              const SizedBox(height: 8),
               TotalAmount(),
               const SizedBox(height: 8),
               CompleteOrdersButton(),
@@ -80,10 +87,16 @@ class _OrdersState extends State<Orders> {
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: Colors.black, width: 1),
       ),
-      child: const Row(
+      child: Row(
         children: [
           Expanded(
             child: TextField(
+              controller: _searchController,
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
               decoration: InputDecoration(
                 hintText: "Search",
                 border: InputBorder.none,
@@ -98,13 +111,23 @@ class _OrdersState extends State<Orders> {
   }
 
   Widget _buildProducts(CardViewModel cart) {
+    final query = _searchQuery.trim().toLowerCase();
+
+    final filteredItems = cart.items.where((item) {
+      final title = item.product.title.toLowerCase();
+      return title.contains(query);
+    }).toList();
+
     if (cart.items.isEmpty) {
       return const Center(child: Text("Sepet Boş"));
     }
+    if(filteredItems.isEmpty) {
+      return const Center(child: Text("Sepette böyle bir ürün yok"));
+    }
     return ListView.builder(
-      itemCount: cart.items.length,
+      itemCount: filteredItems.length,
       itemBuilder: (context, index) {
-        final item = cart.items[index];
+        final item = filteredItems[index];
         return OrdersCard(
           imagePath: item.product.imageUrl,
           title: item.product.title,
