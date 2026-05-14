@@ -79,3 +79,4 @@ class CardViewModel extends ChangeNotifier {
 
   double get grandTotal => _items.fold(0, (sum, item) => sum + item.total);
 }
+
