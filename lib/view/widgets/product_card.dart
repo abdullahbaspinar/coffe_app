@@ -79,10 +79,7 @@ class ProductCard extends StatelessWidget {
               top: 0,
               left: 0,
               right: 0,
-              child: Image.asset(
-                imagePath,
-                height: 150,
-              ),
+              child: Image.asset(imagePath, height: 150),
             ),
           ],
         ),

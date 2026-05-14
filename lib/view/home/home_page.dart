@@ -1,14 +1,19 @@
+import 'dart:async';
+
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/model/category.dart';
 import 'package:coffe_app/core/services/product_service.dart';
+import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
 import 'package:coffe_app/view/orders/orders.dart';
 import 'package:coffe_app/view/product/product_detail_page.dart';
+import 'package:coffe_app/view/product/product_detail_page_api.dart';
 import 'package:coffe_app/view/product/products.dart';
 import 'package:coffe_app/view/profile/profile_page.dart';
 import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
+import 'package:coffe_app/view/widgets/products_card.dart';
 import 'package:coffe_app/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,13 +25,13 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class Product {
+class HomeProduct {
   final String imagePath;
   final String title;
   final String price;
   final String oldPrice;
 
-  Product({
+  HomeProduct({
     required this.imagePath,
     required this.title,
     required this.price,
@@ -89,26 +94,26 @@ class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   AuthViewModel get authViewModel => context.watch<AuthViewModel>();
 
-  final List<Product> products = [
-    Product(
+  final List<HomeProduct> products = [
+    HomeProduct(
       imagePath: "assets/product/product1.png",
       title: "Ice Latte",
       price: "\$5.8",
       oldPrice: "\$9.9",
     ),
-    Product(
+    HomeProduct(
       imagePath: "assets/product/product2.png",
       title: "Caramel Latte",
       price: "\$6.2",
       oldPrice: "\$8.5",
     ),
-    Product(
+    HomeProduct(
       imagePath: "assets/product/product1.png",
       title: "Mocha Frappe",
       price: "\$7.1",
       oldPrice: "\$10.0",
     ),
-    Product(
+    HomeProduct(
       imagePath: "assets/product/product2.png",
       title: "Mocha Frappe",
       price: "\$7.1",
@@ -134,33 +139,157 @@ class _HomePageState extends State<HomePage> {
   ];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+
+  List<Product> _searchResults = [];
+  bool _searchLoading = false;
+  String? _searchError;
+  String _searchQuery = "";
+  Timer? _searchDebounce;
+
+  void _onSearchChanged(String value) {
+    final trimmed = value.trim();
+
+    setState(() {
+      _searchQuery = value;
+      _searchLoading = trimmed.isNotEmpty;
+
+      if (trimmed.isEmpty) {
+        _searchResults = [];
+        _searchError = null;
+      }
+    });
+
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 200), () {
+      _searchProducts(value);
+    });
+  }
+
+  Future<void> _searchProducts(String query) async {
+    final trimmed = query.trim();
+
+    if (trimmed.isEmpty) {
+      setState(() {
+        _searchResults = [];
+        _searchError = null;
+        _searchLoading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _searchLoading = true;
+      _searchError = null;
+    });
+
+    try {
+      final results = await _productService.searchAllProducts(
+        query: trimmed,
+        offset: 0,
+        limit: 20,
+      );
+
+      if (!mounted) return;
+      if (trimmed != _searchQuery.trim()) return;
+
+      setState(() {
+        _searchResults = results;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _searchError = e.toString();
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _searchLoading = false;
+        });
+      }
+    }
+  }
+
+  void _closeSearchOverlay() {
+    if (_searchQuery.trim().isEmpty && _searchResults.isEmpty) return;
+
+    _searchDebounce?.cancel();
+    _searchFocusNode.unfocus();
+    _searchController.clear();
+
+    setState(() {
+      _searchQuery = "";
+      _searchResults = [];
+      _searchError = null;
+      _searchLoading = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocusNode.dispose();
+    _searchDebounce?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.backgroundColor,
       drawer: _buildSideBar,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsetsGeometry.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader,
-                SizedBox(height: 12),
-                _buildSearchbar,
-                SizedBox(height: 12),
-                _buildBody,
-                SizedBox(height: 12),
-                _buildCategories,
-                SizedBox(height: 12),
-                _buildFeaturedBeverages,
-              ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: _closeSearchOverlay,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: _buildHomeContent,
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget get _buildHomeContent {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildHeader,
+        SizedBox(height: 12),
+        _buildSearchbar,
+        SizedBox(height: 12),
+        _buildMainContent,
+      ],
+    );
+  }
+
+  Widget get _buildMainContent {
+    return Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildBody,
+            SizedBox(height: 12),
+            _buildCategories,
+            SizedBox(height: 12),
+            _buildFeaturedBeverages,
+          ],
+        ),
+        if (_searchQuery.trim().isNotEmpty)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: _buildSearchResultsOverlay,
+          ),
+      ],
     );
   }
 
@@ -422,27 +551,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget get _buildSearchbar {
-    return Container(
-      height: 58,
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.black, width: 1),
-      ),
-      child: const Row(
-        children: [
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Search",
-                border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: 16, color: Colors.black),
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        height: 58,
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: Colors.black, width: 1),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _searchController,
+                focusNode: _searchFocusNode,
+                onChanged: _onSearchChanged,
+                decoration: const InputDecoration(
+                  hintText: "Search",
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(fontSize: 16, color: Colors.black),
+                ),
               ),
             ),
-          ),
-          Icon(Icons.search, color: Colors.black, size: 30),
-        ],
+            Icon(Icons.search, color: Colors.black, size: 30),
+          ],
+        ),
       ),
     );
   }
@@ -473,6 +608,81 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
+    );
+  }
+
+  Widget get _buildSearchResultsOverlay {
+    return GestureDetector(
+      onTap: () {},
+      child: Material(
+        elevation: 8,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          constraints: const BoxConstraints(maxHeight: 420),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: Colors.black12),
+          ),
+          child: _buildSearchResultsContent,
+        ),
+      ),
+    );
+  }
+
+  Widget get _buildSearchResultsContent {
+    if (_searchLoading) {
+      return const SizedBox(
+        height: 120,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_searchError != null) {
+      return SizedBox(
+        height: 120,
+        child: Center(
+          child: Text(
+            "Arama başarısız",
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      );
+    }
+
+    if (_searchResults.isEmpty) {
+      return const SizedBox(
+        height: 120,
+        child: Center(child: Text("Sonuç bulunamadı")),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      shrinkWrap: true,
+      itemCount: _searchResults.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 8),
+      itemBuilder: (context, index) {
+        final product = _searchResults[index];
+
+        return ProductsCard(
+          imagePath: "assets/product/product2/mocha.png",
+          imageUrl: product.imageUrl,
+          title: product.title,
+          category: product.category,
+          price: product.price,
+          rating: 4.5,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ProductDetailPageApi(product: product),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
