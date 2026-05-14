@@ -1,8 +1,9 @@
 import 'package:coffe_app/constants/app_colors.dart';
-import 'package:coffe_app/view/product/product_detail_page.dart';
 import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/orders_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:coffe_app/view_model/card_view_model.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -12,6 +13,8 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
+  CardViewModel get cart => context.watch<CardViewModel>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,9 +27,9 @@ class _OrdersState extends State<Orders> {
             children: [
               _buildSearchBar,
               const SizedBox(height: 8),
-              _buildProducts,
-              Spacer(),
-              CompleteOrdersButton()
+              Expanded(child: _buildProducts(cart)),
+              const SizedBox(height: 8),
+              CompleteOrdersButton(),
             ],
           ),
         ),
@@ -91,46 +94,25 @@ class _OrdersState extends State<Orders> {
     );
   }
 
-  Widget get _buildProducts {
-    return Column(
-      children: [
-        OrdersCard(
-          imagePath: "assets/product/product2/tea.png",
-          title: "Turkish Tea",
-          price: 1.5,
-          count: 3,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProductDetail()),
-            );
-          },
-        ),
-        OrdersCard(
-          imagePath: "assets/product/product2/mocha.png",
-          title: "Mocha",
-          price: 3.2,
-          count: 2,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProductDetail()),
-            );
-          },
-        ),
-        OrdersCard(
-          imagePath: "assets/product/product2/tea.png",
-          title: "Turkish Tea",
-          price: 1.5,
-          count: 7,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProductDetail()),
-            );
-          },
-        ),
-      ],
+  Widget _buildProducts(CardViewModel cart) {
+    if (cart.items.isEmpty) {
+      return const Center(child: Text("Sepet Boş"));
+    }
+    return ListView.builder(
+      itemCount: cart.items.length,
+      itemBuilder: (context, index) {
+        final item = cart.items[index];
+        return OrdersCard(
+          imagePath: item.product.imageUrl,
+          title: item.product.title,
+          price: item.product.price,
+          count: item.quantity,
+          onTap: () {},
+          onIncrease: () => cart.increaseQuantity(item.product),
+          onDecrease: () => cart.decreaseQuantity(item.product),
+          onDelete: () => cart.removeFromCard(item.product),
+        );
+      },
     );
   }
 }
