@@ -2,10 +2,10 @@ import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/reset_password_page.dart';
 import 'package:coffe_app/view/auth/sign_up_page.dart';
 import 'package:coffe_app/view/home/home_page.dart';
-import 'package:coffe_app/view_model/auth_view_model.dart';
+import 'package:coffe_app/view_model/auth/auth_cubit.dart';
+import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -32,12 +32,10 @@ class _SignInPageState extends State<SignInPage> {
   Future<void> _handleSignIn() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final authViewModel = context.read<AuthViewModel>();
-
-    final result = await authViewModel.signIn(
-      email: emailController.text,
-      password: passwordController.text,
-    );
+    final result = await context.read<AuthCubit>().signIn(
+          email: emailController.text,
+          password: passwordController.text,
+        );
 
     if (!mounted) return;
 
@@ -48,52 +46,54 @@ class _SignInPageState extends State<SignInPage> {
         (route) => false,
       );
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(result)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result)),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final authViewModel = context.watch<AuthViewModel>();
-
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildSignInLogo,
-                const Spacer(),
-                _buildSignInText,
-                const SizedBox(height: 8),
-                _buildSignInTextDescription,
-                const SizedBox(height: 16),
-                _buildSignInUsernameLabel,
-                const SizedBox(height: 16),
-                _buildSignInUsernameField,
-                const SizedBox(height: 16),
-                _buildSignInPasswordLabel,
-                const SizedBox(height: 16),
-                _buildSignInPasswordField,
-                const SizedBox(height: 16),
-                _buildLoginButton(authViewModel),
-                const SizedBox(height: 8),
-                _buildResetPasswordRow,
-                const Spacer(),
-                _buildCreateAccountText,
-                const SizedBox(height: 16),
-                _buildCreateAccountButton,
-              ],
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppColors.backgroundColor,
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildSignInLogo,
+                    const Spacer(),
+                    _buildSignInText,
+                    const SizedBox(height: 8),
+                    _buildSignInTextDescription,
+                    const SizedBox(height: 16),
+                    _buildSignInUsernameLabel,
+                    const SizedBox(height: 16),
+                    _buildSignInUsernameField,
+                    const SizedBox(height: 16),
+                    _buildSignInPasswordLabel,
+                    const SizedBox(height: 16),
+                    _buildSignInPasswordField,
+                    const SizedBox(height: 16),
+                    _buildLoginButton(state),
+                    const SizedBox(height: 8),
+                    _buildResetPasswordRow,
+                    const Spacer(),
+                    _buildCreateAccountText,
+                    const SizedBox(height: 16),
+                    _buildCreateAccountButton,
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -199,8 +199,9 @@ class _SignInPageState extends State<SignInPage> {
               }
 
               final email = value.trim();
+
               if (!email.contains("@") || !email.contains(".")) {
-                return "geçerli email adresi giriniz";
+                return "Geçerli email adresi giriniz";
               }
 
               return null;
@@ -270,11 +271,11 @@ class _SignInPageState extends State<SignInPage> {
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return "Şifre boş bırsılmamalı";
+                return "Şifre boş bırakılamaz";
               }
 
               if (value.trim().length < 6) {
-                return "Şifre en az 6 karekterden oluşmalı";
+                return "Şifre en az 6 karakterden oluşmalı";
               }
 
               return null;
@@ -285,12 +286,12 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget _buildLoginButton (AuthViewModel authViewModel) {
+  Widget _buildLoginButton(AuthState state) {
     return SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: authViewModel.isLoading ? null : _handleSignIn,
+        onPressed: state.isLoading ? null : _handleSignIn,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryColor,
           shape: RoundedRectangleBorder(
@@ -298,11 +299,14 @@ class _SignInPageState extends State<SignInPage> {
           ),
           elevation: 0,
         ),
-        child: authViewModel.isLoading
+        child: state.isLoading
             ? const SizedBox(
                 width: 24,
                 height: 24,
-                child: CircularProgressIndicator(strokeWidth: 2),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.secondaryColor,
+                ),
               )
             : const Text(
                 "LOGIN",

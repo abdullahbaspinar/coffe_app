@@ -1,8 +1,9 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/sign_in_page.dart';
-import 'package:coffe_app/view_model/auth_view_model.dart';
+import 'package:coffe_app/view_model/auth/auth_cubit.dart';
+import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -12,6 +13,15 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool isPasswordHidden = true;
+  bool isFormValid = false;
+
   @override
   void initState() {
     super.initState();
@@ -20,94 +30,97 @@ class _SignUpPageState extends State<SignUpPage> {
     passwordController.addListener(checkForm);
   }
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-
-  bool isPassworHidden = true;
-  bool isFormValid = false;
-
   void checkForm() {
     setState(() {
       isFormValid =
-          nameController.text.isNotEmpty &&
-          emailController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty;
+          nameController.text.trim().isNotEmpty &&
+          emailController.text.trim().isNotEmpty &&
+          passwordController.text.trim().isNotEmpty;
     });
   }
 
+  @override
   void dispose() {
+    nameController.removeListener(checkForm);
+    emailController.removeListener(checkForm);
+    passwordController.removeListener(checkForm);
+
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+
     super.dispose();
   }
 
-  Future<void>_handleSignUp()async{
-    if(!_formKey.currentState!.validate()) return;
+  Future<void> _handleSignUp() async {
+    if (!_formKey.currentState!.validate()) return;
 
-    final authViewModel = context.read<AuthViewModel>();
-
-    final result = await authViewModel.signUp(name: nameController.text, email: emailController.text, password: passwordController.text);
+    final result = await context.read<AuthCubit>().signUp(
+          name: nameController.text,
+          email: emailController.text,
+          password: passwordController.text,
+        );
 
     if (!mounted) return;
 
     if (result == null) {
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const SignInPage()),
-       (route) => false,
-       );
-    }else {
-      ScaffoldMessenger.of(context,
-      ).showSnackBar(SnackBar(content: Text(result)));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const SignInPage()),
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result)),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child:  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildSignUpLogo,
-              SizedBox(height: 24),
-              _buildSignUpText,
-              SizedBox(height: 8),
-              _buildSignUpTextDescription,
-              SizedBox(height: 16),
-              _buildSignUpUsernameLabel,
-              SizedBox(height: 16),
-              _buildSignUpNameField,
-              SizedBox(height: 20),
-              _buildSignUpEmailLabel,
-              SizedBox(height: 16),
-              _buildSignUpEmailField,
-              SizedBox(height: 20),
-              _buildSignUpPasswordLabel,
-              SizedBox(height: 16),
-              _buildSignUpPasswordField,
-              SizedBox(height: 20),
-              _buildSignUpButton(AuthViewModel()),
-              SizedBox(height: 16),
-              _buildSignUpTermsText,
-
-
-            ],
-          ),)
-          
-          
-         
-        ),
-      ),
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppColors.backgroundColor,
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 24),
+                      _buildSignUpLogo,
+                      const SizedBox(height: 24),
+                      _buildSignUpText,
+                      const SizedBox(height: 8),
+                      _buildSignUpTextDescription,
+                      const SizedBox(height: 16),
+                      _buildSignUpUsernameLabel,
+                      const SizedBox(height: 16),
+                      _buildSignUpNameField,
+                      const SizedBox(height: 20),
+                      _buildSignUpEmailLabel,
+                      const SizedBox(height: 16),
+                      _buildSignUpEmailField,
+                      const SizedBox(height: 20),
+                      _buildSignUpPasswordLabel,
+                      const SizedBox(height: 16),
+                      _buildSignUpPasswordField,
+                      const SizedBox(height: 20),
+                      _buildSignUpButton(state),
+                      const SizedBox(height: 16),
+                      _buildSignUpTermsText,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -116,7 +129,8 @@ class _SignUpPageState extends State<SignUpPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset("assets/images/logo.png", width: 48, height: 48),
-        Text(
+        const SizedBox(width: 8),
+        const Text(
           "Ombe",
           style: TextStyle(
             color: Colors.black,
@@ -129,7 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpText {
-    return Row(
+    return const Row(
       children: [
         Text(
           "Sign Up",
@@ -144,14 +158,12 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpTextDescription {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+    return const Row(
       children: [
         Expanded(
           child: Text(
-            "Lorem lorem lorem lorem  lorem Lorem lorem lorem lorem Lorem lorem lorem lorem",
+            "Lorem lorem lorem lorem lorem Lorem lorem lorem lorem Lorem lorem lorem lorem",
             textAlign: TextAlign.start,
-
             style: TextStyle(
               fontWeight: FontWeight.normal,
               color: Colors.black,
@@ -163,7 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpUsernameLabel {
-    return Row(
+    return const Row(
       children: [
         Text(
           "Name",
@@ -183,12 +195,15 @@ class _SignUpPageState extends State<SignUpPage> {
         Expanded(
           child: TextFormField(
             controller: nameController,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.name,
             decoration: InputDecoration(
               hintText: "Name",
               filled: true,
               fillColor: Colors.grey.shade100,
-              contentPadding: const EdgeInsets.symmetric(vertical: 18),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 18,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -199,14 +214,14 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: AppColors.primaryColor,
                   width: 1.5,
                 ),
               ),
             ),
             validator: (value) {
-              if (value == null || value.trim().isEmpty){
+              if (value == null || value.trim().isEmpty) {
                 return "İsim boş bırakılamaz";
               }
               return null;
@@ -218,7 +233,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpEmailLabel {
-    return Row(
+    return const Row(
       children: [
         Text(
           "Email",
@@ -243,7 +258,10 @@ class _SignUpPageState extends State<SignUpPage> {
               hintText: "example@gmail.com",
               filled: true,
               fillColor: Colors.grey.shade100,
-              contentPadding: const EdgeInsets.symmetric(vertical: 18),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 18,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -254,7 +272,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: AppColors.primaryColor,
                   width: 1.5,
                 ),
@@ -266,8 +284,9 @@ class _SignUpPageState extends State<SignUpPage> {
               }
 
               final email = value.trim();
+
               if (!email.contains("@") || !email.contains(".")) {
-                return "geçerli email adresi giriniz";
+                return "Geçerli email adresi giriniz";
               }
 
               return null;
@@ -279,7 +298,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpPasswordLabel {
-    return Row(
+    return const Row(
       children: [
         Text(
           "Password",
@@ -299,24 +318,26 @@ class _SignUpPageState extends State<SignUpPage> {
         Expanded(
           child: TextFormField(
             controller: passwordController,
-            obscureText: isPassworHidden,
-
+            obscureText: isPasswordHidden,
             decoration: InputDecoration(
               hintText: "Password",
               suffixIcon: IconButton(
                 onPressed: () {
                   setState(() {
-                    isPassworHidden = !isPassworHidden;
+                    isPasswordHidden = !isPasswordHidden;
                   });
                 },
                 icon: Icon(
-                  isPassworHidden ? Icons.visibility_off : Icons.visibility,
+                  isPasswordHidden ? Icons.visibility_off : Icons.visibility,
                   color: AppColors.primaryColor,
                 ),
               ),
               filled: true,
               fillColor: Colors.grey.shade100,
-              contentPadding: const EdgeInsets.symmetric(vertical: 18),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 18,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -327,7 +348,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: AppColors.primaryColor,
                   width: 1.5,
                 ),
@@ -335,11 +356,11 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return "Şifre boş bırsılmamalı";
+                return "Şifre boş bırakılamaz";
               }
 
               if (value.trim().length < 6) {
-                return "Şifre en az 6 karekterden oluşmalı";
+                return "Şifre en az 6 karakterden oluşmalı";
               }
 
               return null;
@@ -350,13 +371,12 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildSignUpButton (AuthViewModel authViewModel) {
+  Widget _buildSignUpButton(AuthState state) {
     return SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: 
-          authViewModel.isLoading ? null :_handleSignUp,        
+        onPressed: state.isLoading || !isFormValid ? null : _handleSignUp,
         style: ElevatedButton.styleFrom(
           backgroundColor: isFormValid ? AppColors.primaryColor : Colors.grey,
           shape: RoundedRectangleBorder(
@@ -364,14 +384,23 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           elevation: 0,
         ),
-        child: const Text(
-          "SIGN UP",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: AppColors.secondaryColor,
-          ),
-        ),
+        child: state.isLoading
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.secondaryColor,
+                ),
+              )
+            : const Text(
+                "SIGN UP",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.secondaryColor,
+                ),
+              ),
       ),
     );
   }
@@ -380,16 +409,15 @@ class _SignUpPageState extends State<SignUpPage> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: TextStyle(fontSize: 12, color: Colors.grey),
+        style: const TextStyle(fontSize: 12, color: Colors.grey),
         children: [
           const TextSpan(text: "By tapping Sign up you accept all our "),
-
           WidgetSpan(
             child: GestureDetector(
               onTap: () {
-                print("Terms tıklandı");
+                debugPrint("Terms tıklandı");
               },
-              child: Text(
+              child: const Text(
                 "terms",
                 style: TextStyle(
                   color: AppColors.primaryColor,
@@ -399,15 +427,13 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
           ),
-
-          const TextSpan(text: " and ", style: TextStyle(fontSize: 12)),
-
+          const TextSpan(text: " and "),
           WidgetSpan(
             child: GestureDetector(
               onTap: () {
-                print("Condition tıklandı");
+                debugPrint("Condition tıklandı");
               },
-              child: Text(
+              child: const Text(
                 "conditions",
                 style: TextStyle(
                   color: AppColors.primaryColor,
