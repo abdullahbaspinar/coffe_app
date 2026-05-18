@@ -14,6 +14,7 @@ import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
+import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -92,7 +93,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   int selectedIndex = 0;
-  AuthViewModel get authViewModel => context.watch<AuthViewModel>();
+  AuthCubit get authCubit => context.watch<AuthCubit>();
 
   final List<HomeProduct> products = [
     HomeProduct(
@@ -322,7 +323,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget get _usernameText {
     return Text(
-      authViewModel.currentUserName,
+      authCubit.currentUserName,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: const TextStyle(
