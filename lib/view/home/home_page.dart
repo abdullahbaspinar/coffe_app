@@ -15,9 +15,8 @@ import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
-import 'package:coffe_app/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -644,10 +643,7 @@ class _HomePageState extends State<HomePage> {
       return SizedBox(
         height: 120,
         child: Center(
-          child: Text(
-            "Arama başarısız",
-            style: TextStyle(color: Colors.red),
-          ),
+          child: Text("Arama başarısız", style: TextStyle(color: Colors.red)),
         ),
       );
     }

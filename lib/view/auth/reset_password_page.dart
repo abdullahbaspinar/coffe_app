@@ -1,8 +1,9 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/sign_in_page.dart';
-import 'package:coffe_app/view_model/auth_view_model.dart';
+import 'package:coffe_app/view_model/auth/auth_cubit.dart';
+import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});
@@ -12,218 +13,250 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-
+  @override
   void dispose() {
-    emailController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
   Future<void> _handleResetPassword() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final authViewModel = context.read<AuthViewModel>();
-
-    final result = await authViewModel.resetPassword(
-      email: emailController.text,
+    final result = await context.read<AuthCubit>().resetPassword(
+      email: _emailController.text.trim(),
     );
 
     if (!mounted) return;
 
     if (result == null) {
+      _showSnackBar("Şifre sıfırlama maili gönderildi.");
+
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => SignInPage()),
+        MaterialPageRoute(builder: (_) => const SignInPage()),
         (route) => false,
       );
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(result)));
+      _showSnackBar(result);
     }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void _goToSignInPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const SignInPage()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final authViewModel = context.watch<AuthViewModel>();
-
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppColors.backgroundColor,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      "assets/images/logo.png",
-                      width: 48,
-                      height: 48,
-                    ),
-                    Text(
-                      "Ombe",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    _buildLogoHeader(),
+                    const SizedBox(height: 32),
+                    _buildTitle(),
+                    const SizedBox(height: 8),
+                    _buildDescription(),
+                    const SizedBox(height: 32),
+                    _buildEmailLabel(),
+                    const SizedBox(height: 12),
+                    _buildEmailField(),
+                    const SizedBox(height: 24),
+                    _buildSubmitButton(state),
+                    const SizedBox(height: 24),
+                    _buildLoginRedirect(),
                   ],
                 ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Text(
-                      "Forgot Password",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "Lorem lorem lorem lorem  lorem Lorem lorem lorem lorem Lorem lorem lorem lorem",
-                        textAlign: .start,
-
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Text(
-                      "EMail",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: "Email Address",
-                          filled: true,
-                          fillColor: Colors.grey.shade100,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 18,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: AppColors.primaryColor,
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
-                         validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return "Email boş bırakılamaz";
-              }
-
-              final email = value.trim();
-              if (!email.contains("@") || !email.contains(".")) {
-                return "geçerli email adresi giriniz";
-              }
-
-              return null;
-            },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: authViewModel.isLoading ? null : _handleResetPassword,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      "SUBMİT",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.secondaryColor,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Text(
-                      "Sign in to yor registered",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const SignInPage()),
-                        );
-                      },
-                      child: Text(
-                        "Login here",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLogoHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          "assets/images/logo.png",
+          width: 48,
+          height: 48,
+        ),
+        const SizedBox(width: 8),
+        const Text(
+          "Ombe",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTitle() {
+    return const Text(
+      "Forgot Password",
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+        fontSize: 24,
+      ),
+    );
+  }
+
+  Widget _buildDescription() {
+    return const Text(
+      "Enter your email address and we will send a reset link.",
+      style: TextStyle(
+        fontWeight: FontWeight.normal,
+        color: Colors.black,
+        fontSize: 15,
+      ),
+    );
+  }
+
+  Widget _buildEmailLabel() {
+    return const Text(
+      "Email",
+      style: TextStyle(
+        fontSize: 16,
+        color: Colors.grey,
+        fontWeight: FontWeight.normal,
+      ),
+    );
+  }
+
+  Widget _buildEmailField() {
+    return TextFormField(
+      controller: _emailController,
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.done,
+      decoration: InputDecoration(
+        hintText: "Email Address",
+        filled: true,
+        fillColor: Colors.grey.shade100,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 18,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: AppColors.primaryColor,
+            width: 1.5,
           ),
         ),
       ),
+      validator: _validateEmail,
+    );
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return "Email boş bırakılamaz";
+    }
+
+    final email = value.trim();
+
+    if (!email.contains("@") || !email.contains(".")) {
+      return "Geçerli email adresi giriniz";
+    }
+
+    return null;
+  }
+
+  Widget _buildSubmitButton(AuthState state) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: state.isLoading ? null : _handleResetPassword,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primaryColor,
+          disabledBackgroundColor: AppColors.primaryColor.withOpacity(0.6),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+          elevation: 0,
+        ),
+        child: state.isLoading
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.secondaryColor,
+                ),
+              )
+            : const Text(
+                "SUBMIT",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.secondaryColor,
+                ),
+              ),
+      ),
+    );
+  }
+
+  Widget _buildLoginRedirect() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Flexible(
+          child: Text(
+            "Sign in to your registered account",
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.normal,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: _goToSignInPage,
+          child: const Text(
+            "Login here",
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.normal,
+              color: AppColors.primaryColor,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
