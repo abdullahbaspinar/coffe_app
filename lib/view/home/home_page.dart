@@ -1,8 +1,17 @@
+<<<<<<< Updated upstream
+=======
+import 'dart:async';
+>>>>>>> Stashed changes
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
+<<<<<<< Updated upstream
 import 'package:flutter/foundation.dart';
+=======
+import 'package:coffe_app/view/widgets/products_card.dart';
+import 'package:coffe_app/view_model/auth/auth_cubit.dart';
+>>>>>>> Stashed changes
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -249,6 +258,81 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+<<<<<<< Updated upstream
+=======
+  Widget get _buildSearchResultsOverlay {
+    return GestureDetector(
+      onTap: () {},
+      child: Material(
+        elevation: 8,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          constraints: const BoxConstraints(maxHeight: 420),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: Colors.black12),
+          ),
+          child: _buildSearchResultsContent,
+        ),
+      ),
+    );
+  }
+
+  Widget get _buildSearchResultsContent {
+    if (_searchLoading) {
+      return const SizedBox(
+        height: 120,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_searchError != null) {
+      return SizedBox(
+        height: 120,
+        child: Center(
+          child: Text("Arama başarısız", style: TextStyle(color: Colors.red)),
+        ),
+      );
+    }
+
+    if (_searchResults.isEmpty) {
+      return const SizedBox(
+        height: 120,
+        child: Center(child: Text("Sonuç bulunamadı")),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      shrinkWrap: true,
+      itemCount: _searchResults.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 8),
+      itemBuilder: (context, index) {
+        final product = _searchResults[index];
+
+        return ProductsCard(
+          imagePath: "assets/product/product2/mocha.png",
+          imageUrl: product.imageUrl,
+          title: product.title,
+          category: product.category,
+          price: product.price,
+          rating: 4.5,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ProductDetailPageApi(product: product),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+>>>>>>> Stashed changes
   Widget get _buildCategories {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
