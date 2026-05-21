@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/core/services/product_service.dart';
 import 'package:coffe_app/model/category.dart';
 import 'package:coffe_app/view/product/product_detail_page_api.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
+import 'package:coffe_app/view_model/products/products_cubit.dart';
+import 'package:coffe_app/view_model/products/products_state.dart';
 import 'package:coffe_app/view_model/products_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class Products extends StatefulWidget {
@@ -18,13 +23,14 @@ class Products extends StatefulWidget {
 class _ProductsState extends State<Products> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-  late final ProductsViewModel _vm;
+  late final ProductsCubit _cubit;
 
   @override
   void initState() {
     super.initState();
-    _vm = ProductsViewModel(service: ProductService());
-    _vm.init(widget.category.id);
+    _cubit = ProductsCubit(service: ProductService());
+    _cubit.init(widget.category.id);
+
     _scrollController.addListener(_onScroll);
   }
 
@@ -32,7 +38,7 @@ class _ProductsState extends State<Products> {
     if (!_scrollController.hasClients) return;
     final threshold = _scrollController.position.maxScrollExtent - 200;
     if (_scrollController.position.pixels >= threshold) {
-      _vm.loadMore();
+      _cubit.loadMore();
     }
   }
 
@@ -40,14 +46,15 @@ class _ProductsState extends State<Products> {
   void dispose() {
     _scrollController.dispose();
     _searchController.dispose();
-    _vm.dispose();
+    _cubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _vm,
+    return BlocProvider.value(
+      value: _cubit,
+      
       child: Builder(
         builder: (context) {
           return Scaffold(
@@ -62,18 +69,18 @@ class _ProductsState extends State<Products> {
                 ),
                 const SizedBox(height: 12),
                 Expanded(
-                  child: Consumer<ProductsViewModel>(
-                    builder: (context, vm, _) {
-                      if (vm.isInitialLoading && vm.items.isEmpty) {
+                  child: BlocBuilder<ProductsCubit, ProductsState>(
+                    builder: (context, state) {
+                      if (state.IsInitialLoading && state.items.isEmpty) {
                         return const Center(child: CircularProgressIndicator());
                       }
 
-                      if (vm.errorMessage != null && vm.items.isEmpty) {
+                      if (state.errorMessage != null && state.items.isEmpty) {
                         return Center(
                           child: Padding(
                             padding: const EdgeInsets.all(20),
                             child: Text(
-                              vm.errorMessage!,
+                              state.errorMessage!,
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.red),
                             ),
@@ -81,21 +88,22 @@ class _ProductsState extends State<Products> {
                         );
                       }
 
-                      if (vm.items.isEmpty) {
+                      if (state.items.isEmpty) {
                         return const Center(
                           child: Text("Bu kategoride urun bulunamadi."),
                         );
                       }
 
                       return RefreshIndicator(
-                        onRefresh: vm.refresh,
+                        onRefresh: () =>
+                            context.read<ProductsCubit>().refresh(),
                         child: ListView.builder(
                           controller: _scrollController,
                           physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: vm.items.length + 1,
+                          itemCount: state.items.length + 1,
                           itemBuilder: (context, index) {
-                            if (index < vm.items.length) {
-                              final p = vm.items[index];
+                            if (index < state.items.length) {
+                              final p = state.items[index];
                               return ProductsCard(
                                 imagePath: "assets/product/product2/mocha.png",
                                 imageUrl: p.imageUrl,
@@ -116,7 +124,7 @@ class _ProductsState extends State<Products> {
                             }
 
                             // listenin sonuna loader / bitti bilgisi
-                            if (vm.isLoadingMore) {
+                            if (state.isLoadingMore) {
                               return const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 20),
                                 child: Center(
@@ -125,7 +133,7 @@ class _ProductsState extends State<Products> {
                               );
                             }
 
-                            if (!vm.hasMore) {
+                            if (!state.hashMore) {
                               return const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 20),
                                 child: Center(
@@ -195,8 +203,9 @@ class _ProductsState extends State<Products> {
           Expanded(
             child: TextField(
               controller: _searchController,
-              onChanged: (value) =>
-                  context.read<ProductsViewModel>().onSearchChanged(value),
+              onChanged: (value) {
+                context.read<ProductsCubit>().onSearchChanged(value);
+              },
               decoration: const InputDecoration(
                 hintText: "Search in this category",
                 border: InputBorder.none,
