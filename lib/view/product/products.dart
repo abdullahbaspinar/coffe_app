@@ -7,10 +7,8 @@ import 'package:coffe_app/view/product/product_detail_page_api.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
 import 'package:coffe_app/view_model/products/products_cubit.dart';
 import 'package:coffe_app/view_model/products/products_state.dart';
-import 'package:coffe_app/view_model/products_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class Products extends StatefulWidget {
   final Category category;
@@ -28,8 +26,9 @@ class _ProductsState extends State<Products> {
   @override
   void initState() {
     super.initState();
-    _cubit = ProductsCubit(service: ProductService());
-    _cubit.init(widget.category.id);
+    // Yapıyı bozmadan yeni Cubit constructor'ımıza uygun hale getirdik
+    _cubit = ProductsCubit(ProductService());
+    _cubit.fetchProducts(categoryId: widget.category.id);
 
     _scrollController.addListener(_onScroll);
   }
@@ -38,7 +37,8 @@ class _ProductsState extends State<Products> {
     if (!_scrollController.hasClients) return;
     final threshold = _scrollController.position.maxScrollExtent - 200;
     if (_scrollController.position.pixels >= threshold) {
-      _cubit.loadMore();
+      // Fonksiyon adını güncelledik
+      _cubit.loadMoreProducts();
     }
   }
 
@@ -54,7 +54,6 @@ class _ProductsState extends State<Products> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _cubit,
-      
       child: Builder(
         builder: (context) {
           return Scaffold(
@@ -71,16 +70,19 @@ class _ProductsState extends State<Products> {
                 Expanded(
                   child: BlocBuilder<ProductsCubit, ProductsState>(
                     builder: (context, state) {
-                      if (state.IsInitialLoading && state.items.isEmpty) {
+                      
+                      // 1. Durum: İlk Yükleme Ekranı (ProductsLoading)
+                      if (state is ProductsLoading) {
                         return const Center(child: CircularProgressIndicator());
                       }
 
-                      if (state.errorMessage != null && state.items.isEmpty) {
+                      // 2. Durum: Hata Ekranı (ProductsError)
+                      if (state is ProductsError) {
                         return Center(
                           child: Padding(
                             padding: const EdgeInsets.all(20),
                             child: Text(
-                              state.errorMessage!,
+                              state.errorMessage, // state.errorMessage! yerine doğrudan erişim
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.red),
                             ),
@@ -88,67 +90,74 @@ class _ProductsState extends State<Products> {
                         );
                       }
 
-                      if (state.items.isEmpty) {
+                      // 3. Durum: Başarılı Yükleme Ama Liste Boş
+                      if (state is ProductsLoaded && state.items.isEmpty) {
                         return const Center(
                           child: Text("Bu kategoride urun bulunamadi."),
                         );
                       }
 
-                      return RefreshIndicator(
-                        onRefresh: () =>
-                            context.read<ProductsCubit>().refresh(),
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: state.items.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index < state.items.length) {
-                              final p = state.items[index];
-                              return ProductsCard(
-                                imagePath: "assets/product/product2/mocha.png",
-                                imageUrl: p.imageUrl,
-                                title: p.title,
-                                category: p.category,
-                                price: p.price,
-                                rating: 3.8,
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          ProductDetailPageApi(product: p),
-                                    ),
-                                  );
-                                },
-                              );
-                            }
+                      // 4. Durum: Verilerin Ekrana Basıldığı Başarılı Senaryo (ProductsLoaded)
+                      if (state is ProductsLoaded) {
+                        return RefreshIndicator(
+                          onRefresh: () async =>
+                              context.read<ProductsCubit>().fetchProducts(categoryId: widget.category.id),
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: state.items.length + 1,
+                            itemBuilder: (context, index) {
+                              if (index < state.items.length) {
+                                final p = state.items[index];
+                                return ProductsCard(
+                                  imagePath: "assets/product/product2/mocha.png",
+                                  imageUrl: p.imageUrl,
+                                  title: p.title,
+                                  category: p.category,
+                                  price: p.price,
+                                  rating: 3.8,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            ProductDetailPageApi(product: p),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
 
-                            // listenin sonuna loader / bitti bilgisi
-                            if (state.isLoadingMore) {
-                              return const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 20),
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            }
-
-                            if (!state.hashMore) {
-                              return const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 20),
-                                child: Center(
-                                  child: Text(
-                                    "Tum urunler yuklendi.",
-                                    style: TextStyle(color: Colors.grey),
+                              // Listenin altına loader / bitti bilgisi ekleme mantığı
+                              if (state.isLoadingMore) {
+                                return const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
                                   ),
-                                ),
-                              );
-                            }
+                                );
+                              }
 
-                            return const SizedBox.shrink();
-                          },
-                        ),
-                      );
+                              if (!state.hashMore) {
+                                return const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  child: Center(
+                                    child: Text(
+                                      "Tum urunler yuklendi.",
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              return const SizedBox.shrink();
+                            },
+                          ),
+                        );
+                      }
+
+                      // Fallback: Herhangi bir aksilikte boş kutu dön
+                      return const SizedBox.shrink();
                     },
                   ),
                 ),
@@ -204,7 +213,8 @@ class _ProductsState extends State<Products> {
             child: TextField(
               controller: _searchController,
               onChanged: (value) {
-                context.read<ProductsCubit>().onSearchChanged(value);
+                // Arama fonksiyonunun adını Cubit'e yazdığımız gibi güncelledik
+                context.read<ProductsCubit>().searchProducts(query: value);
               },
               decoration: const InputDecoration(
                 hintText: "Search in this category",
