@@ -1,6 +1,46 @@
 import 'package:coffe_app/model/card_item.dart';
 
-class CartState {
+abstract class CardState {
+  const CardState();
+
+  get items => null;
+}
+
+class CardInitial extends CardState {
+  const CardInitial();
+}
+
+class CardLoading extends CardState {
+  const CardLoading();
+}
+
+class CardLoaded extends CardState {
+  final List<CardItem> items;
+
+  const CardLoaded({required this.items});
+
+  double get grandTotal {
+    double toplam = 0.0;
+
+    for (var item in items) {
+      if (item.total != null) {
+        toplam = toplam + item.total!;
+      }
+    }
+    return toplam;
+  }
+
+  CardLoaded copyWith({List<CardItem>? items}) {
+    return CardLoaded(items: items ?? this.items);
+  }
+}
+
+class CardError extends CardState {
+  final String errorMessage;
+  const CardError({required this.errorMessage});
+}
+
+/* class CartState {
   final List<CardItem> items;
   final bool isLoading;
   final String? errorMessage;
@@ -22,4 +62,4 @@ class CartState {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
-}
+} */

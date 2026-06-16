@@ -81,7 +81,7 @@ class CompleteOrdersButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: () {
-          context.read<CartCubit>().clearCart();
+          context.read<CardCubit>().clearCard;
           _showSuccessDialog(context);
         },
         borderRadius: BorderRadius.circular(16),
