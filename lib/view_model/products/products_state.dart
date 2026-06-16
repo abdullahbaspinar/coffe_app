@@ -7,19 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 abstract class ProductsState {
+    final List<Product> items;
   final int categoryId;
   final int offset;
   final String query;
 
-  const ProductsState({this.categoryId = 0, this.offset = 0, this.query = ""});
+  const ProductsState({this.categoryId = 0, this.offset = 0, this.query = "",this.items=const []});
 }
 
 class ProductsInitial extends ProductsState {
-  const ProductsInitial({super.categoryId, super.offset, super.query});
+  const ProductsInitial({super.categoryId, super.offset, super.query, super.items});
 }
 
 class ProductsLoading extends ProductsState {
-  const ProductsLoading({super.categoryId, super.offset, super.query});
+  const ProductsLoading({super.categoryId, super.offset, super.query, super.items});
 }
 
 

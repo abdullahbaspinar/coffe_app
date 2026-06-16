@@ -1,5 +1,6 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
+import 'package:coffe_app/view_model/cart/cart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,12 @@ class TotalAmount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = amount ?? context.watch<CartCubit>().state.grandTotal;
+    final state = context.watch<CardCubit>().state;
+
+    double finalTotal = 0.0;
+    if (state is CardLoaded) {
+      finalTotal = state.grandTotal;
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
@@ -46,7 +52,7 @@ class TotalAmount extends StatelessWidget {
             ),
           ),
           Text(
-            "\$${total.toStringAsFixed(1)}",
+            "\$${finalTotal.toStringAsFixed(1)}",
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,

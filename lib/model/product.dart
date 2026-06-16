@@ -56,4 +56,6 @@ class Product {
       "imageUrl": imageUrl,
     };
   }
+
+  void operator *(double other) {}
 }

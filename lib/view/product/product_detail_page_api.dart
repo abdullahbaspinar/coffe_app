@@ -328,7 +328,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       height: 58,
       child: ElevatedButton(
         onPressed: () async {
-          await context.read<CartCubit>().addToCart(
+          await context.read<CardCubit>().addToCard(
             widget.product,
             quantity: quantity,
           );
