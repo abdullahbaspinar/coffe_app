@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:coffe_app/constants/app_colors.dart';
 
 class FeaturedBeverageItem extends StatelessWidget {
-  final String imagePath;
+  final String imageUrl;
   final String title;
   final String price;
   final String points;
   final String rating;
   final VoidCallback onTap;
+  final String fallbackImagePath;
 
   const FeaturedBeverageItem({
     super.key,
-    required this.imagePath,
+    required this.imageUrl,
     required this.title,
     required this.price,
     required this.points,
     required this.rating,
     required this.onTap,
+    this.fallbackImagePath = "assets/product/product2/mocha.png",
   });
 
   @override
@@ -38,10 +40,18 @@ class FeaturedBeverageItem extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.cover,
-                  ),
+                  child: imageUrl.isNotEmpty
+                      ? Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              fallbackImagePath,
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        )
+                      : Image.asset(fallbackImagePath, fit: BoxFit.cover),
                 ),
               ),
               Positioned(
@@ -58,11 +68,7 @@ class FeaturedBeverageItem extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.star,
-                        color: Colors.white,
-                        size: 16,
-                      ),
+                      const Icon(Icons.star, color: Colors.white, size: 16),
                       const SizedBox(width: 4),
                       Text(
                         rating,
