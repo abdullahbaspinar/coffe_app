@@ -1,5 +1,6 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
+import 'package:coffe_app/view_model/cart/cart_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -80,8 +81,16 @@ class CompleteOrdersButton extends StatelessWidget {
       color: AppColors.primaryColor,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
-        onTap: () {
-          context.read<CardCubit>().clearCard;
+        onTap: () async {
+          final state = context.read<CartCubit>().state;
+          if (state is! CartLoaded || state.items.isEmpty) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Sepetiniz boş.')));
+            return;
+          }
+          await context.read<CartCubit>().clearCart();
+          if (!context.mounted) return;
           _showSuccessDialog(context);
         },
         borderRadius: BorderRadius.circular(16),

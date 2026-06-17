@@ -1,7 +1,7 @@
 import 'package:coffe_app/constants/app_colors.dart';
 import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/total_amount.dart';
-import 'package:coffe_app/model/card_item.dart'; // CardItem modelini import ettik
+import 'package:coffe_app/model/cart_item.dart'; // CartItem modelini import ettik
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
@@ -37,7 +37,7 @@ class _OrdersState extends State<Orders> {
               _buildSearchBar,
               const SizedBox(height: 8),
               Expanded(
-                child: BlocBuilder<CardCubit, CardState>(
+                child: BlocBuilder<CartCubit, CartState>(
                   builder: (context, state) {
                     return _buildProducts(state);
                   },
@@ -107,17 +107,17 @@ class _OrdersState extends State<Orders> {
     );
   }
 
-  Widget _buildProducts(CardState state) {
-    if (state is CardInitial || state is CardLoading) {
+  Widget _buildProducts(CartState state) {
+    if (state is CartInitial || state is CartLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (state is CardError) {
+    if (state is CartError) {
       return Center(child: Text(state.errorMessage, style: const TextStyle(color: Colors.red)));
     }
 
     final query = _searchQuery.trim().toLowerCase();
-    final loadedState = state as CardLoaded;
+    final loadedState = state as CartLoaded;
 
     final filteredItems = loadedState.items.where((item) {
       final title = item.product.title.toLowerCase();
@@ -140,7 +140,7 @@ class _OrdersState extends State<Orders> {
     );
   }
 
-  Widget _buildCartItem(CardItem item) {
+  Widget _buildCartItem(CartItem item) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: Padding(
@@ -202,7 +202,7 @@ class _OrdersState extends State<Orders> {
                 ),
                 IconButton(
                   onPressed: () {
-                    context.read<CardCubit>().quantityPlus(item.product);
+                    context.read<CartCubit>().quantityPlus(item.product);
                   },
                   icon: const Icon(Icons.add_circle_outline, color: AppColors.primaryColor),
                 ),
@@ -215,9 +215,9 @@ class _OrdersState extends State<Orders> {
   }
 
   // 🚀 SİLME DİYALOGUNU YÖNETEN TEMİZ METOD
-  void _handleDecreaseAction(CardItem item) {
+  void _handleDecreaseAction(CartItem item) {
     if (item.quantity > 1) {
-      context.read<CardCubit>().quantityNotPlus(item.product);
+      context.read<CartCubit>().quantityDecrease(item.product);
     } else {
       showDialog(
         context: context,
@@ -232,7 +232,7 @@ class _OrdersState extends State<Orders> {
               ),
               TextButton(
                 onPressed: () {
-                  context.read<CardCubit>().deleteFromCard(item.product);
+                  context.read<CartCubit>().deleteFromCart(item.product);
                   Navigator.pop(dialogContext);
                 },
                 child: const Text("Evet", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
