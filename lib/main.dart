@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthCubit>(
           create: (_) => AuthCubit(),
         ),
-        BlocProvider<CardCubit>(
-          create: (_) => CardCubit()..loadCard(),
+        BlocProvider<CartCubit>(
+          create: (_) => CartCubit()..loadCart(),
         ),
       ],
       child: const MaterialApp(

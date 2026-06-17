@@ -5,17 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
 class TotalAmount extends StatelessWidget {
-  final double? amount;
   final String title;
 
-  const TotalAmount({super.key, this.amount, this.title = "Total Amount"});
+  const TotalAmount({super.key, this.title = "Total Amount"});
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CardCubit>().state;
+    final state = context.watch<CartCubit>().state;
 
     double finalTotal = 0.0;
-    if (state is CardLoaded) {
+    if (state is CartLoaded) {
       finalTotal = state.grandTotal;
     }
 

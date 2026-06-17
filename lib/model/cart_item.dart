@@ -1,10 +1,10 @@
 import 'package:coffe_app/model/product.dart';
 
-class CardItem {
+class CartItem {
   final Product product;
   int quantity;
 
-  CardItem({required this.product, required this.quantity});
+  CartItem({required this.product, required this.quantity});
 
   double get total => product.price * quantity;
 
@@ -15,8 +15,8 @@ class CardItem {
     };
   }
 
-  factory CardItem.fromMap(Map<String, dynamic> map) {
-    return CardItem(
+  factory CartItem.fromMap(Map<String, dynamic> map) {
+    return CartItem(
       product: Product.fromMap(Map<String, dynamic>.from(map["product"])),
       quantity: map["quantity"] ?? 1,
     );
