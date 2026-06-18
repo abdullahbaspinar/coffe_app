@@ -326,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 TextButton(
                   onPressed: () {
-                    context.read<HomeCubit>().loadHomeData();
+                    _homeCubit.loadHomeData();
                   },
                   child: const Text("Tekrar Dene"),
                 ),
@@ -506,7 +506,7 @@ class _HomePageState extends State<HomePage> {
               controller: _searchController,
               focusNode: _searchFocusNode,
               onChanged: (value) {
-                context.read<HomeCubit>().onSearchChanged(value);
+                _homeCubit.onSearchChanged(value);
               },
               decoration: const InputDecoration(
                 hintText: "Search",

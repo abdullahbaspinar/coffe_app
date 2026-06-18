@@ -24,7 +24,6 @@ class ProductsLoading extends ProductsState {
 }
 
 
-
 class ProductsLoaded extends ProductsState {
   final List<Product> items;
   final bool isLoadingMore;
