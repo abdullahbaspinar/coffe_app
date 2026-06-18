@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/sign_in_page.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
@@ -107,7 +107,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         const Text(
           "Ombe",
           style: TextStyle(
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -121,7 +121,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       "Forgot Password",
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: Colors.black,
+        color: AppColors.textPrimary,
         fontSize: 24,
       ),
     );
@@ -132,7 +132,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       "Enter your email address and we will send a reset link.",
       style: TextStyle(
         fontWeight: FontWeight.normal,
-        color: Colors.black,
+        color: AppColors.textPrimary,
         fontSize: 15,
       ),
     );
@@ -143,7 +143,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       "Email",
       style: TextStyle(
         fontSize: 16,
-        color: Colors.grey,
+        color: AppColors.textMuted,
         fontWeight: FontWeight.normal,
       ),
     );
@@ -157,7 +157,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       decoration: InputDecoration(
         hintText: "Email Address",
         filled: true,
-        fillColor: Colors.grey.shade100,
+        fillColor: AppColors.inputFill,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 18,
@@ -168,7 +168,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -204,7 +204,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         onPressed: state.isLoading ? null : _handleResetPassword,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryColor,
-          disabledBackgroundColor: AppColors.primaryColor.withOpacity(0.6),
+          disabledBackgroundColor: AppColors.primaryDisabled,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
@@ -241,7 +241,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.normal,
-              color: Colors.grey,
+              color: AppColors.textMuted,
             ),
           ),
         ),

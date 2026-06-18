@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 
 class FeaturedBeverageItem extends StatelessWidget {
   final String imageUrl;
@@ -36,7 +36,7 @@ class FeaturedBeverageItem extends StatelessWidget {
                 height: 110,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.grey.shade200,
+                  color: AppColors.surfaceMuted,
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
@@ -63,17 +63,17 @@ class FeaturedBeverageItem extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFF9A3D),
+                    color: AppColors.accentOrange,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.star, color: Colors.white, size: 16),
+                      const Icon(Icons.star, color: AppColors.white, size: 16),
                       const SizedBox(width: 4),
                       Text(
                         rating,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -98,7 +98,7 @@ class FeaturedBeverageItem extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const Spacer(),
@@ -110,7 +110,7 @@ class FeaturedBeverageItem extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       Text(

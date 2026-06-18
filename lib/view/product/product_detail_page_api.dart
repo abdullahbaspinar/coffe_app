@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class ProductDetailPageApi extends StatefulWidget {
 class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
   int quantity = 1;
 
-  final double rating = 4.8;
+  double get rating => widget.product.displayRating;
 
   void _showAddedToCartDialog() {
     showDialog(
@@ -37,7 +37,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
                     color: AppColors.primaryColor,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.check, color: Colors.white, size: 42),
+                  child: const Icon(Icons.check, color: AppColors.white, size: 42),
                 ),
                 const SizedBox(height: 18),
                 const Text(
@@ -49,7 +49,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
                   "${widget.product.title} successfully added to cart.",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: Colors.black54,
+                    color: AppColors.textSecondary,
                     fontSize: 14,
                     height: 1.4,
                   ),
@@ -71,7 +71,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
                       child: Text(
                         "OK",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -107,12 +107,12 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+        icon: Icon(Icons.arrow_back_ios_new, color: AppColors.white),
       ),
       title: Text(
         "Details",
         style: TextStyle(
-          color: Colors.white,
+          color: AppColors.white,
           fontSize: 22,
           fontWeight: FontWeight.w700,
         ),
@@ -120,7 +120,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       actions: [
         IconButton(
           onPressed: () {},
-          icon: Icon(Icons.favorite_border, color: Colors.white),
+          icon: Icon(Icons.favorite_border, color: AppColors.white),
         ),
       ],
     );
@@ -182,7 +182,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           child: Text(
             widget.product.title,
             style: const TextStyle(
-              color: Colors.black,
+              color: AppColors.textPrimary,
               fontSize: 26,
               fontWeight: FontWeight.w800,
             ),
@@ -206,7 +206,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: AppColors.primaryColor.withValues(alpha: 0.12),
+            color: AppColors.primaryTint,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
@@ -219,12 +219,12 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           ),
         ),
         const Spacer(),
-        const Icon(Icons.star, color: Colors.amber, size: 22),
+        const Icon(Icons.star, color: AppColors.star, size: 22),
         const SizedBox(width: 4),
         Text(
-          rating.toString(),
+          rating.toStringAsFixed(1),
           style: const TextStyle(
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 16,
             fontWeight: FontWeight.w700,
           ),
@@ -240,7 +240,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         const Text(
           "Description",
           style: TextStyle(
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.w800,
           ),
@@ -249,7 +249,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         Text(
           widget.product.description,
           style: const TextStyle(
-            color: Colors.black54,
+            color: AppColors.textSecondary,
             fontSize: 15,
             height: 1.5,
             fontWeight: FontWeight.w500,
@@ -265,7 +265,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         const Text(
           "Quantity",
           style: TextStyle(
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.w800,
           ),
@@ -285,7 +285,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         Text(
           quantity.toString(),
           style: const TextStyle(
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.w800,
           ),
@@ -317,7 +317,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(14),
         ),
-        child: Icon(icon, color: Colors.white, size: 22),
+        child: Icon(icon, color: AppColors.white, size: 22),
       ),
     );
   }
@@ -346,7 +346,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         child: Text(
           "Add to Cart - \$${(widget.product.price * quantity).toStringAsFixed(2)}",
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.white,
             fontSize: 17,
             fontWeight: FontWeight.w800,
           ),

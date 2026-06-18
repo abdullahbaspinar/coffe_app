@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/model/category.dart';
 import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> {
             const Text(
               "Featured Beverages",
               style: TextStyle(
-                color: Colors.black,
+                color: AppColors.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -254,7 +254,7 @@ class _HomePageState extends State<HomePage> {
                 title: product.title,
                 price: "\$${product.price.toStringAsFixed(2)}",
                 points: "50 pts",
-                rating: "4.5",
+                rating: product.displayRating.toStringAsFixed(1),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -303,7 +303,7 @@ class _HomePageState extends State<HomePage> {
           "Categories",
           style: TextStyle(
             fontSize: 16,
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -321,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                 const Expanded(
                   child: Text(
                     "Kategoriler yüklenemedi.",
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: AppColors.error),
                   ),
                 ),
                 TextButton(
@@ -369,14 +369,14 @@ class _HomePageState extends State<HomePage> {
       onTap: () {},
       child: Material(
         elevation: 8,
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(18),
         child: Container(
           constraints: const BoxConstraints(maxHeight: 420),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: Colors.black12),
+            border: Border.all(color: AppColors.borderLight),
           ),
           child: _buildSearchResultsContent(state),
         ),
@@ -398,7 +398,7 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: Text(
             "Arama başarısız",
-            style: TextStyle(color: Colors.red),
+            style: TextStyle(color: AppColors.error),
           ),
         ),
       );
@@ -425,7 +425,7 @@ class _HomePageState extends State<HomePage> {
           title: product.title,
           category: product.category,
           price: product.price,
-          rating: 4.5,
+          rating: product.displayRating,
           onTap: () {
             Navigator.push(
               context,
@@ -449,7 +449,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               const Text(
                 "Good Morning",
-                style: TextStyle(fontSize: 14, color: Colors.black),
+                style: TextStyle(fontSize: 14, color: AppColors.textPrimary),
               ),
               const SizedBox(height: 6),
               Text(
@@ -459,7 +459,7 @@ class _HomePageState extends State<HomePage> {
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -482,7 +482,7 @@ class _HomePageState extends State<HomePage> {
             ),
             IconButton(
               onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-              icon: const Icon(Icons.menu, size: 30, color: Colors.black),
+              icon: const Icon(Icons.menu, size: 30, color: AppColors.textPrimary),
             ),
           ],
         ),
@@ -495,9 +495,9 @@ class _HomePageState extends State<HomePage> {
       height: 58,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.black, width: 1),
+        border: Border.all(color: AppColors.textPrimary, width: 1),
       ),
       child: Row(
         children: [
@@ -511,11 +511,11 @@ class _HomePageState extends State<HomePage> {
               decoration: const InputDecoration(
                 hintText: "Search",
                 border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: 16, color: Colors.black),
+                hintStyle: TextStyle(fontSize: 16, color: AppColors.textPrimary),
               ),
             ),
           ),
-          const Icon(Icons.search, color: Colors.black, size: 30),
+          const Icon(Icons.search, color: AppColors.textPrimary, size: 30),
         ],
       ),
     );
@@ -523,7 +523,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget get _buildSideBar {
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -562,14 +562,14 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
           ),
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close, color: Colors.grey, size: 28),
+            icon: const Icon(Icons.close, color: AppColors.textMuted, size: 28),
           ),
         ],
       ),
@@ -599,12 +599,12 @@ class _HomePageState extends State<HomePage> {
           );
           setState(() => selectedIndex = 0);
         }),
-        const Divider(color: Colors.black12),
+        const Divider(color: AppColors.borderLight),
         ListTile(
-          leading: const Icon(Icons.logout, color: Colors.red),
+          leading: const Icon(Icons.logout, color: AppColors.error),
           title: const Text(
             "Log Out",
-            style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+            style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600),
           ),
           onTap: () async {
             await context.read<AuthCubit>().signOut();
@@ -631,12 +631,12 @@ class _HomePageState extends State<HomePage> {
     return ListTile(
       leading: Icon(
         icon,
-        color: isSelected ? AppColors.primaryColor : Colors.grey,
+        color: isSelected ? AppColors.primaryColor : AppColors.textMuted,
       ),
       title: Text(
         title,
         style: TextStyle(
-          color: isSelected ? AppColors.primaryColor : Colors.grey,
+          color: isSelected ? AppColors.primaryColor : AppColors.textMuted,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
         ),
       ),

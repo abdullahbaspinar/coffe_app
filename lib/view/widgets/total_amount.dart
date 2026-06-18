@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:coffe_app/view_model/cart/cart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +23,7 @@ class TotalAmount extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.secondaryColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         children: [
@@ -31,7 +31,7 @@ class TotalAmount extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: AppColors.primaryColor.withOpacity(0.12),
+              color: AppColors.primaryTint,
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(
@@ -46,7 +46,7 @@ class TotalAmount extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
+                color: AppColors.textPrimary,
               ),
             ),
           ),

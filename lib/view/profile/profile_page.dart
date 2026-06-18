@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/widgets/most_ordered_card.dart';
 import 'package:coffe_app/view/widgets/personal_information_card.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Text(
                 "MOST ORDERED",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.textPrimary,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -55,13 +55,13 @@ class _ProfilePageState extends State<ProfilePage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary),
         ),
       ),
       title: Text(
         "Profile",
         style: TextStyle(
-          color: Colors.black,
+          color: AppColors.textPrimary,
           fontSize: 22,
           fontWeight: FontWeight.w700,
         ),
@@ -69,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.edit, color: Colors.black),
+          icon: const Icon(Icons.edit, color: AppColors.textPrimary),
         ),
       ],
     );
@@ -89,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Text(
             "Abdullah Başpınar",
             style: TextStyle(
-              color: Colors.black,
+              color: AppColors.textPrimary,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),

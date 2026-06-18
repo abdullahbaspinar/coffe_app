@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/orders/orders.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +44,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
   PreferredSizeWidget get _buildAppBar {
     return AppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
@@ -127,7 +127,7 @@ class _ProductDetailState extends State<ProductDetail> {
     return const Text(
       "Ice Chocolate Coffee",
       style: TextStyle(
-        color: Colors.black,
+        color: AppColors.textPrimary,
         fontSize: 28,
         fontWeight: FontWeight.bold,
       ),
@@ -138,7 +138,7 @@ class _ProductDetailState extends State<ProductDetail> {
     return const Text(
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
       style: TextStyle(
-        color: Colors.grey,
+        color: AppColors.textMuted,
         fontSize: 18,
         fontWeight: FontWeight.normal,
         height: 1.5,
@@ -153,9 +153,9 @@ class _ProductDetailState extends State<ProductDetail> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: AppColors.primaryColor,
-            inactiveTrackColor: Colors.grey.shade300,
+            inactiveTrackColor: AppColors.border,
             thumbColor: AppColors.primaryColor,
-            overlayColor: AppColors.primaryColor.withValues(alpha: 0.15),
+            overlayColor: AppColors.primaryTint,
             trackHeight: 8,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 13),
           ),
@@ -177,19 +177,19 @@ class _ProductDetailState extends State<ProductDetail> {
           children: [
             Text(
               "Small",
-              style: TextStyle(fontSize: 18, color: Colors.black54),
+              style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
             ),
             Text(
               "Medium",
-              style: TextStyle(fontSize: 18, color: Colors.black54),
+              style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
             ),
             Text(
               "Large",
-              style: TextStyle(fontSize: 18, color: Colors.black54),
+              style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
             ),
             Text(
               "Xtra Large",
-              style: TextStyle(fontSize: 18, color: Colors.black54),
+              style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
             ),
           ],
         ),
@@ -217,7 +217,7 @@ class _ProductDetailState extends State<ProductDetail> {
           style: TextStyle(
             fontSize: 36,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(width: 10),
@@ -227,7 +227,7 @@ class _ProductDetailState extends State<ProductDetail> {
             "\$8.0",
             style: TextStyle(
               fontSize: 18,
-              color: Colors.grey,
+              color: AppColors.textMuted,
               decoration: TextDecoration.lineThrough,
             ),
           ),
@@ -240,9 +240,9 @@ class _ProductDetailState extends State<ProductDetail> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: AppColors.textMuted),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -262,7 +262,7 @@ class _ProductDetailState extends State<ProductDetail> {
             style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: AppColors.textPrimary,
             ),
           ),
           IconButton(
@@ -299,7 +299,7 @@ class _ProductDetailState extends State<ProductDetail> {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: AppColors.white,
           ),
         ),
       ),
@@ -311,11 +311,11 @@ class _ProductDetailState extends State<ProductDetail> {
       width: 84,
       height: 84,
       decoration: BoxDecoration(
-        color: Colors.orange,
+        color: AppColors.accentOrange,
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.orangeAccent.withValues(alpha: 0.3),
+            color: AppColors.accentOrange.withValues(alpha: 0.3),
             blurRadius: 16,
             spreadRadius: 2,
           ),
@@ -325,7 +325,7 @@ class _ProductDetailState extends State<ProductDetail> {
         child: Text(
           "4.5",
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.white,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),

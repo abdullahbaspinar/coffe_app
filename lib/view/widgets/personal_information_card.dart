@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class PersonalInformationCard extends StatelessWidget {
@@ -33,7 +33,7 @@ class PersonalInformationCard extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: Colors.black,
+                color: AppColors.textPrimary,
                 fontSize: 12,
                 fontWeight: FontWeight.normal,
               ),
@@ -42,7 +42,7 @@ class PersonalInformationCard extends StatelessWidget {
             Text(
               description,
               style: TextStyle(
-                color: Colors.black,
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),

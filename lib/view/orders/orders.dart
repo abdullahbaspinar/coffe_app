@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/total_amount.dart';
 import 'package:coffe_app/model/cart_item.dart'; // CartItem modelini import ettik
@@ -63,17 +63,17 @@ class _OrdersState extends State<Orders> {
         padding: const EdgeInsets.only(left: 12),
         child: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary),
         ),
       ),
       title: const Text(
         "Orders",
-        style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w700),
+        style: TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.w700),
       ),
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.more_horiz, color: Colors.black, size: 28),
+          icon: const Icon(Icons.more_horiz, color: AppColors.textPrimary, size: 28),
         ),
       ],
     );
@@ -84,9 +84,9 @@ class _OrdersState extends State<Orders> {
       height: 58,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.black, width: 1),
+        border: Border.all(color: AppColors.textPrimary, width: 1),
       ),
       child: Row(
         children: [
@@ -97,11 +97,11 @@ class _OrdersState extends State<Orders> {
               decoration: const InputDecoration(
                 hintText: "Search",
                 border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: 16, color: Colors.black),
+                hintStyle: TextStyle(fontSize: 16, color: AppColors.textPrimary),
               ),
             ),
           ),
-          const Icon(Icons.search, color: Colors.black, size: 30),
+          const Icon(Icons.search, color: AppColors.textPrimary, size: 30),
         ],
       ),
     );
@@ -113,7 +113,7 @@ class _OrdersState extends State<Orders> {
     }
 
     if (state is CartError) {
-      return Center(child: Text(state.errorMessage, style: const TextStyle(color: Colors.red)));
+      return Center(child: Text(state.errorMessage, style: const TextStyle(color: AppColors.error)));
     }
 
     final query = _searchQuery.trim().toLowerCase();
@@ -194,7 +194,7 @@ class _OrdersState extends State<Orders> {
               children: [
                 IconButton(
                   onPressed: () => _handleDecreaseAction(item),
-                  icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                  icon: const Icon(Icons.remove_circle_outline, color: AppColors.error),
                 ),
                 Text(
                   "${item.quantity}",
@@ -235,7 +235,7 @@ class _OrdersState extends State<Orders> {
                   context.read<CartCubit>().deleteFromCart(item.product);
                   Navigator.pop(dialogContext);
                 },
-                child: const Text("Evet", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                child: const Text("Evet", style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold)),
               ),
             ],
           );

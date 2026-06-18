@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/reset_password_page.dart';
 import 'package:coffe_app/view/auth/sign_up_page.dart';
 import 'package:coffe_app/view/home/home_page.dart';
@@ -106,7 +106,7 @@ class _SignInPageState extends State<SignInPage> {
         const Text(
           "Ombe",
           style: TextStyle(
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -122,7 +122,7 @@ class _SignInPageState extends State<SignInPage> {
           "Sign In",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 24,
           ),
         ),
@@ -139,7 +139,7 @@ class _SignInPageState extends State<SignInPage> {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.normal,
-              color: Colors.black,
+              color: AppColors.textPrimary,
             ),
           ),
         ),
@@ -154,7 +154,7 @@ class _SignInPageState extends State<SignInPage> {
           "Username",
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey,
+            color: AppColors.textMuted,
             fontWeight: FontWeight.normal,
           ),
         ),
@@ -172,7 +172,7 @@ class _SignInPageState extends State<SignInPage> {
             decoration: InputDecoration(
               hintText: "Email Address",
               filled: true,
-              fillColor: Colors.grey.shade100,
+              fillColor: AppColors.inputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
@@ -183,7 +183,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.border),
               ),
               focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -219,7 +219,7 @@ class _SignInPageState extends State<SignInPage> {
           "Password",
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey,
+            color: AppColors.textMuted,
             fontWeight: FontWeight.normal,
           ),
         ),
@@ -237,7 +237,7 @@ class _SignInPageState extends State<SignInPage> {
             decoration: InputDecoration(
               hintText: "Password",
               filled: true,
-              fillColor: Colors.grey.shade100,
+              fillColor: AppColors.inputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
@@ -259,7 +259,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.border),
               ),
               focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -328,7 +328,7 @@ class _SignInPageState extends State<SignInPage> {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.normal,
-            color: Colors.grey,
+            color: AppColors.textMuted,
           ),
         ),
         TextButton(
@@ -358,7 +358,7 @@ class _SignInPageState extends State<SignInPage> {
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.normal,
-          color: Colors.grey,
+          color: AppColors.textMuted,
         ),
       ),
     );
@@ -387,7 +387,7 @@ class _SignInPageState extends State<SignInPage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: AppColors.textPrimary,
           ),
         ),
       ),

@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:coffe_app/view_model/cart/cart_state.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class CompleteOrdersButton extends StatelessWidget {
                       ),
                       child: const Icon(
                         Icons.check,
-                        color: Colors.white,
+                        color: AppColors.white,
                         size: 48,
                       ),
                     ),
@@ -54,7 +54,7 @@ class CompleteOrdersButton extends StatelessWidget {
                     Text(
                       "Your order has been successfully placed.",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(color: AppColors.textMuted),
                     ),
                   ],
                 ),
@@ -101,7 +101,7 @@ class CompleteOrdersButton extends StatelessWidget {
               "Complete Order",
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.white,
+                color: AppColors.white,
                 fontWeight: FontWeight.w700,
               ),
             ),

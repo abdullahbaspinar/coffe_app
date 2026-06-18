@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class OrdersCard extends StatelessWidget {
@@ -32,14 +32,14 @@ class OrdersCard extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
-          color: Colors.redAccent,
+          color: AppColors.errorAccent,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Icon(Icons.delete_outline, color: Colors.white),
+        child: const Icon(Icons.delete_outline, color: AppColors.white),
       ),
       onDismissed: (_) => onDelete(),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
@@ -73,7 +73,7 @@ class OrdersCard extends StatelessWidget {
                         "\$ $price",
                         style: const TextStyle(
                           fontSize: 14,
-                          color: Colors.grey,
+                          color: AppColors.textMuted,
                         ),
                       ),
                     ],
@@ -87,7 +87,7 @@ class OrdersCard extends StatelessWidget {
                       visualDensity: VisualDensity.compact,
                       icon: const Icon(
                         Icons.delete_outline,
-                        color: Colors.redAccent,
+                        color: AppColors.errorAccent,
                       ),
                     ),
                     Text(
@@ -144,7 +144,7 @@ class _QuantityButton extends StatelessWidget {
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(icon, color: Colors.white, size: 16),
+        child: Icon(icon, color: AppColors.white, size: 16),
       ),
     );
   }
