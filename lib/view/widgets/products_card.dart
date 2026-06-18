@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 
 class ProductsCard extends StatelessWidget {
   final String imagePath;
@@ -27,7 +28,7 @@ class ProductsCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           borderRadius: BorderRadius.circular(28),
         ),
         child: Row(
@@ -64,17 +65,17 @@ class ProductsCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFFFF9333),
+              color: AppColors.accentOrange,
               borderRadius: BorderRadius.circular(22),
             ),
             child: Row(
               children: [
-                const Icon(Icons.star, color: Colors.white, size: 16),
+                const Icon(Icons.star, color: AppColors.white, size: 16),
                 const SizedBox(width: 6),
                 Text(
                   rating.toStringAsFixed(1),
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -105,7 +106,7 @@ class ProductsCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(category, style: const TextStyle(color: Colors.grey)),
+              Text(category, style: const TextStyle(color: AppColors.textMuted)),
               const Spacer(),
               Text(
                 "\$${price.toStringAsFixed(1)}",
@@ -122,7 +123,7 @@ class ProductsCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
               decoration: BoxDecoration(
-                color: const Color(0xFFDDEDE6),
+                color: AppColors.primarySurface,
                 borderRadius: BorderRadius.circular(24),
               ),
               child: const Row(
@@ -130,14 +131,14 @@ class ProductsCard extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.shopping_bag_outlined,
-                    color: Color(0xFF0F7B4D),
+                    color: AppColors.primaryDark,
                     size: 20,
                   ),
                   SizedBox(width: 6),
                   Text(
                     "Buy",
                     style: TextStyle(
-                      color: Color(0xFF0F7B4D),
+                      color: AppColors.primaryDark,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

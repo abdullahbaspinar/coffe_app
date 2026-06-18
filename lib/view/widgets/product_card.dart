@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 
 class ProductCard extends StatelessWidget {
   final String imagePath;
@@ -34,7 +35,7 @@ class ProductCard extends StatelessWidget {
                 height: 180,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0A8A5B),
+                  color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(28),
                 ),
                 child: Column(
@@ -44,7 +45,7 @@ class ProductCard extends StatelessWidget {
                     Text(
                       title,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -55,7 +56,7 @@ class ProductCard extends StatelessWidget {
                         Text(
                           price,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -64,7 +65,7 @@ class ProductCard extends StatelessWidget {
                         Text(
                           oldPrice,
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
+                            color: AppColors.textOnPrimary.withValues(alpha: 0.6),
                             fontSize: 16,
                             decoration: TextDecoration.lineThrough,
                           ),

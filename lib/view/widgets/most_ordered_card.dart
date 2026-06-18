@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class MostOrderedCard extends StatelessWidget {
@@ -31,7 +31,7 @@ class MostOrderedCard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -40,7 +40,7 @@ class MostOrderedCard extends StatelessWidget {
               Text(
                 category,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontWeight: FontWeight.normal,
                   fontSize: 8,
                 ),

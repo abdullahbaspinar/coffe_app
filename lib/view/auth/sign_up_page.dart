@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/sign_in_page.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
@@ -133,7 +133,7 @@ class _SignUpPageState extends State<SignUpPage> {
         const Text(
           "Ombe",
           style: TextStyle(
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -149,7 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
           "Sign Up",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.textPrimary,
             fontSize: 24,
           ),
         ),
@@ -166,7 +166,7 @@ class _SignUpPageState extends State<SignUpPage> {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.normal,
-              color: Colors.black,
+              color: AppColors.textPrimary,
             ),
           ),
         ),
@@ -181,7 +181,7 @@ class _SignUpPageState extends State<SignUpPage> {
           "Name",
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey,
+            color: AppColors.textMuted,
             fontWeight: FontWeight.normal,
           ),
         ),
@@ -199,7 +199,7 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: InputDecoration(
               hintText: "Name",
               filled: true,
-              fillColor: Colors.grey.shade100,
+              fillColor: AppColors.inputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
@@ -210,7 +210,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -239,7 +239,7 @@ class _SignUpPageState extends State<SignUpPage> {
           "Email",
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey,
+            color: AppColors.textMuted,
             fontWeight: FontWeight.normal,
           ),
         ),
@@ -257,7 +257,7 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: InputDecoration(
               hintText: "example@gmail.com",
               filled: true,
-              fillColor: Colors.grey.shade100,
+              fillColor: AppColors.inputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
@@ -268,7 +268,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -304,7 +304,7 @@ class _SignUpPageState extends State<SignUpPage> {
           "Password",
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey,
+            color: AppColors.textMuted,
             fontWeight: FontWeight.normal,
           ),
         ),
@@ -333,7 +333,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               filled: true,
-              fillColor: Colors.grey.shade100,
+              fillColor: AppColors.inputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
@@ -344,7 +344,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -378,7 +378,7 @@ class _SignUpPageState extends State<SignUpPage> {
       child: ElevatedButton(
         onPressed: state.isLoading || !isFormValid ? null : _handleSignUp,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isFormValid ? AppColors.primaryColor : Colors.grey,
+          backgroundColor: isFormValid ? AppColors.primaryColor : AppColors.textMuted,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
@@ -409,7 +409,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: const TextStyle(fontSize: 12, color: Colors.grey),
+        style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
         children: [
           const TextSpan(text: "By tapping Sign up you accept all our "),
           WidgetSpan(

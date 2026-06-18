@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -152,7 +152,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     decoration: BoxDecoration(
                       color: currentPage == index
                           ? AppColors.secondaryColor
-                          : Colors.grey.shade400,
+                          : AppColors.textDisabled,
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -177,7 +177,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),

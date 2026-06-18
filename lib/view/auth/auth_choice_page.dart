@@ -1,4 +1,4 @@
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/sign_in_page.dart';
 import 'package:coffe_app/view/widgets/social_login_button.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
       style: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,
-        color: Colors.black,
+        color: AppColors.textPrimary,
       ),
     );
   }
@@ -71,7 +71,7 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
       style: TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w400,
-        color: Colors.grey,
+        color: AppColors.textMuted,
       ),
     );
   }
@@ -83,7 +83,7 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
       style: TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.bold,
-        color: Colors.black,
+        color: AppColors.textPrimary,
         height: 1.2,
       ),
     );
@@ -148,7 +148,7 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
             ),
           );
         },
-        borderColor: Colors.grey.shade300,
+        borderColor: AppColors.border,
       ),
     );
   }

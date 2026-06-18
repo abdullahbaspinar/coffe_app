@@ -6,6 +6,7 @@ class Product {
   final String category;
   final double price;
   final String imageUrl;
+  final double rating;
 
   Product({
     required this.id,
@@ -15,7 +16,11 @@ class Product {
     required this.category,
     required this.price,
     required this.imageUrl,
+    required this.rating,
   });
+
+  /// API'den rating gelmezse veya 0 ise kartlarda 5.0 gösterilir.
+  double get displayRating => rating > 0 ? rating : 5.0;
 
   factory Product.fromJson(Map<String, dynamic> json) {
     final images = json["images"] as List?;
@@ -30,6 +35,7 @@ class Product {
       imageUrl: (images != null && images.isNotEmpty && images.first is String)
           ? images.first as String
           : "",
+      rating: (json["rating"] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -42,6 +48,7 @@ class Product {
       category: map["category"] ?? "",
       price: (map["price"] as num?)?.toDouble() ?? 0.0,
       imageUrl: map["imageUrl"] ?? "",
+      rating: (map["rating"] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -50,10 +57,11 @@ class Product {
       "id": id,
       "title": title,
       "description": description,
-      "categoryId":categoryId,
+      "categoryId": categoryId,
       "category": category,
       "price": price,
       "imageUrl": imageUrl,
+      "rating": rating,
     };
   }
 

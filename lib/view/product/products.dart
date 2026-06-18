@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:coffe_app/constants/app_colors.dart';
+import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/core/services/product_service.dart';
 import 'package:coffe_app/model/category.dart';
 import 'package:coffe_app/view/product/product_detail_page_api.dart';
@@ -84,7 +84,7 @@ class _ProductsState extends State<Products> {
                             child: Text(
                               state.errorMessage, // state.errorMessage! yerine doğrudan erişim
                               textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.red),
+                              style: const TextStyle(color: AppColors.error),
                             ),
                           ),
                         );
@@ -115,7 +115,7 @@ class _ProductsState extends State<Products> {
                                   title: p.title,
                                   category: p.category,
                                   price: p.price,
-                                  rating: 3.8,
+                                  rating: p.displayRating,
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -144,7 +144,7 @@ class _ProductsState extends State<Products> {
                                   child: Center(
                                     child: Text(
                                       "Tum urunler yuklendi.",
-                                      style: TextStyle(color: Colors.grey),
+                                      style: TextStyle(color: AppColors.textMuted),
                                     ),
                                   ),
                                 );
@@ -178,13 +178,13 @@ class _ProductsState extends State<Products> {
         padding: const EdgeInsets.only(left: 12),
         child: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary),
         ),
       ),
       title: Text(
         widget.category.name,
         style: const TextStyle(
-          color: Colors.black,
+          color: AppColors.textPrimary,
           fontSize: 22,
           fontWeight: FontWeight.w700,
         ),
@@ -192,7 +192,7 @@ class _ProductsState extends State<Products> {
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.more_horiz, color: Colors.black, size: 28),
+          icon: const Icon(Icons.more_horiz, color: AppColors.textPrimary, size: 28),
         ),
       ],
     );
@@ -203,9 +203,9 @@ class _ProductsState extends State<Products> {
       height: 58,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.black, width: 1),
+        border: Border.all(color: AppColors.textPrimary, width: 1),
       ),
       child: Row(
         children: [
@@ -219,11 +219,11 @@ class _ProductsState extends State<Products> {
               decoration: const InputDecoration(
                 hintText: "Search in this category",
                 border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: 16, color: Colors.black),
+                hintStyle: TextStyle(fontSize: 16, color: AppColors.textPrimary),
               ),
             ),
           ),
-          const Icon(Icons.search, color: Colors.black, size: 30),
+          const Icon(Icons.search, color: AppColors.textPrimary, size: 30),
         ],
       ),
     );
