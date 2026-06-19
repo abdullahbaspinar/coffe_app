@@ -1,5 +1,7 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 
 class PersonalInformationCard extends StatelessWidget {
   final IconData icon_name;
@@ -23,9 +25,9 @@ class PersonalInformationCard extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
           ),
-          child: Icon(icon_name, color: AppColors.primaryColor, size: 30),
+          child: Icon(icon_name, color: context.appPrimary, size: 30),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: AppSpacing.s16),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,18 +35,18 @@ class PersonalInformationCard extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 12,
-                fontWeight: FontWeight.normal,
+                color: context.appTextPrimary,
+                fontSize: AppTypography.size12,
+                fontWeight: AppTypography.regular,
               ),
             ),
-            SizedBox(height: 6),
+            SizedBox(height: AppSpacing.s6),
             Text(
               description,
               style: TextStyle(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+                color: context.appTextPrimary,
+                fontWeight: AppTypography.bold,
+                fontSize: AppTypography.size16,
               ),
             ),
           ],

@@ -3,6 +3,9 @@ import 'package:coffe_app/view/auth/sign_in_page.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -81,37 +84,36 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: AppColors.backgroundColor,
-          body: SafeArea(
+                    body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: AppSpacing.padding24,
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 24),
+                      const SizedBox(height: AppSpacing.s24),
                       _buildSignUpLogo,
-                      const SizedBox(height: 24),
+                      const SizedBox(height: AppSpacing.s24),
                       _buildSignUpText,
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.s8),
                       _buildSignUpTextDescription,
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.s16),
                       _buildSignUpUsernameLabel,
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.s16),
                       _buildSignUpNameField,
-                      const SizedBox(height: 20),
+                      const SizedBox(height: AppSpacing.s20),
                       _buildSignUpEmailLabel,
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.s16),
                       _buildSignUpEmailField,
-                      const SizedBox(height: 20),
+                      const SizedBox(height: AppSpacing.s20),
                       _buildSignUpPasswordLabel,
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.s16),
                       _buildSignUpPasswordField,
-                      const SizedBox(height: 20),
+                      const SizedBox(height: AppSpacing.s20),
                       _buildSignUpButton(state),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.s16),
                       _buildSignUpTermsText,
                     ],
                   ),
@@ -129,13 +131,13 @@ class _SignUpPageState extends State<SignUpPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset("assets/images/logo.png", width: 48, height: 48),
-        const SizedBox(width: 8),
-        const Text(
+        SizedBox(width: AppSpacing.s8),
+        Text(
           "Ombe",
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size24,
+            fontWeight: AppTypography.bold,
           ),
         ),
       ],
@@ -143,14 +145,14 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpText {
-    return const Row(
+    return Row(
       children: [
         Text(
           "Sign Up",
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-            fontSize: 24,
+            fontWeight: AppTypography.bold,
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size24,
           ),
         ),
       ],
@@ -158,15 +160,15 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpTextDescription {
-    return const Row(
+    return Row(
       children: [
         Expanded(
           child: Text(
             "Lorem lorem lorem lorem lorem Lorem lorem lorem lorem Lorem lorem lorem lorem",
             textAlign: TextAlign.start,
             style: TextStyle(
-              fontWeight: FontWeight.normal,
-              color: AppColors.textPrimary,
+              fontWeight: AppTypography.regular,
+              color: context.appTextPrimary,
             ),
           ),
         ),
@@ -175,14 +177,14 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpUsernameLabel {
-    return const Row(
+    return Row(
       children: [
         Text(
           "Name",
           style: TextStyle(
-            fontSize: 16,
-            color: AppColors.textMuted,
-            fontWeight: FontWeight.normal,
+            fontSize: AppTypography.size16,
+            color: context.appTextMuted,
+            fontWeight: AppTypography.regular,
           ),
         ),
       ],
@@ -199,23 +201,23 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: InputDecoration(
               hintText: "Name",
               filled: true,
-              fillColor: AppColors.inputFill,
+              fillColor: context.appInputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
-                  color: AppColors.primaryColor,
+                borderRadius: AppRadius.border(AppRadius.size16),
+                borderSide: BorderSide(
+                  color: context.appPrimary,
                   width: 1.5,
                 ),
               ),
@@ -233,14 +235,14 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpEmailLabel {
-    return const Row(
+    return Row(
       children: [
         Text(
           "Email",
           style: TextStyle(
-            fontSize: 16,
-            color: AppColors.textMuted,
-            fontWeight: FontWeight.normal,
+            fontSize: AppTypography.size16,
+            color: context.appTextMuted,
+            fontWeight: AppTypography.regular,
           ),
         ),
       ],
@@ -257,23 +259,23 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: InputDecoration(
               hintText: "example@gmail.com",
               filled: true,
-              fillColor: AppColors.inputFill,
+              fillColor: context.appInputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
-                  color: AppColors.primaryColor,
+                borderRadius: AppRadius.border(AppRadius.size16),
+                borderSide: BorderSide(
+                  color: context.appPrimary,
                   width: 1.5,
                 ),
               ),
@@ -298,14 +300,14 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget get _buildSignUpPasswordLabel {
-    return const Row(
+    return Row(
       children: [
         Text(
           "Password",
           style: TextStyle(
-            fontSize: 16,
-            color: AppColors.textMuted,
-            fontWeight: FontWeight.normal,
+            fontSize: AppTypography.size16,
+            color: context.appTextMuted,
+            fontWeight: AppTypography.regular,
           ),
         ),
       ],
@@ -329,27 +331,27 @@ class _SignUpPageState extends State<SignUpPage> {
                 },
                 icon: Icon(
                   isPasswordHidden ? Icons.visibility_off : Icons.visibility,
-                  color: AppColors.primaryColor,
+                  color: context.appPrimary,
                 ),
               ),
               filled: true,
-              fillColor: AppColors.inputFill,
+              fillColor: context.appInputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
-                  color: AppColors.primaryColor,
+                borderRadius: AppRadius.border(AppRadius.size16),
+                borderSide: BorderSide(
+                  color: context.appPrimary,
                   width: 1.5,
                 ),
               ),
@@ -378,27 +380,27 @@ class _SignUpPageState extends State<SignUpPage> {
       child: ElevatedButton(
         onPressed: state.isLoading || !isFormValid ? null : _handleSignUp,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isFormValid ? AppColors.primaryColor : AppColors.textMuted,
+          backgroundColor: isFormValid ? context.appPrimary : AppColors.textMuted,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: AppRadius.border(AppRadius.size18),
           ),
           elevation: 0,
         ),
         child: state.isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 width: 24,
                 height: 24,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.secondaryColor,
+                  color: context.appSecondary,
                 ),
               )
-            : const Text(
+            : Text(
                 "SIGN UP",
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.secondaryColor,
+                  fontSize: AppTypography.size18,
+                  fontWeight: AppTypography.semiBold,
+                  color: context.appSecondary,
                 ),
               ),
       ),
@@ -409,7 +411,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+        style: TextStyle(fontSize: AppTypography.size12, color: context.appTextMuted),
         children: [
           const TextSpan(text: "By tapping Sign up you accept all our "),
           WidgetSpan(
@@ -417,12 +419,12 @@ class _SignUpPageState extends State<SignUpPage> {
               onTap: () {
                 debugPrint("Terms tıklandı");
               },
-              child: const Text(
+              child: Text(
                 "terms",
                 style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
+                  color: context.appPrimary,
+                  fontWeight: AppTypography.semiBold,
+                  fontSize: AppTypography.size12,
                 ),
               ),
             ),
@@ -433,12 +435,12 @@ class _SignUpPageState extends State<SignUpPage> {
               onTap: () {
                 debugPrint("Condition tıklandı");
               },
-              child: const Text(
+              child: Text(
                 "conditions",
                 style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
+                  color: context.appPrimary,
+                  fontWeight: AppTypography.semiBold,
+                  fontSize: AppTypography.size12,
                 ),
               ),
             ),

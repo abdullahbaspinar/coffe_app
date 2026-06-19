@@ -8,6 +8,10 @@ import 'package:coffe_app/view/widgets/products_card.dart';
 import 'package:coffe_app/view_model/products/products_cubit.dart';
 import 'package:coffe_app/view_model/products/products_state.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_size.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Products extends StatefulWidget {
@@ -57,16 +61,15 @@ class _ProductsState extends State<Products> {
       child: Builder(
         builder: (context) {
           return Scaffold(
-            backgroundColor: AppColors.backgroundColor,
-            appBar: _buildAppBar,
+                        appBar: _buildAppBar,
             body: Column(
               children: [
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.s12),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: AppSpacing.paddingH20,
                   child: _buildSearchBar(context),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.s12),
                 Expanded(
                   child: BlocBuilder<ProductsCubit, ProductsState>(
                     builder: (context, state) {
@@ -80,7 +83,7 @@ class _ProductsState extends State<Products> {
                       if (state is ProductsError) {
                         return Center(
                           child: Padding(
-                            padding: const EdgeInsets.all(20),
+                            padding: AppSpacing.padding20,
                             child: Text(
                               state.errorMessage, // state.errorMessage! yerine doğrudan erişim
                               textAlign: TextAlign.center,
@@ -131,7 +134,7 @@ class _ProductsState extends State<Products> {
                               // Listenin altına loader / bitti bilgisi ekleme mantığı
                               if (state.isLoadingMore) {
                                 return const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  padding: AppSpacing.paddingV20,
                                   child: Center(
                                     child: CircularProgressIndicator(),
                                   ),
@@ -139,12 +142,12 @@ class _ProductsState extends State<Products> {
                               }
 
                               if (!state.hashMore) {
-                                return const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                return Padding(
+                                  padding: AppSpacing.paddingV20,
                                   child: Center(
                                     child: Text(
                                       "Tum urunler yuklendi.",
-                                      style: TextStyle(color: AppColors.textMuted),
+                                      style: TextStyle(color: context.appTextMuted),
                                     ),
                                   ),
                                 );
@@ -171,28 +174,27 @@ class _ProductsState extends State<Products> {
 
   PreferredSizeWidget get _buildAppBar {
     return AppBar(
-      backgroundColor: AppColors.backgroundColor,
-      elevation: 0,
+            elevation: 0,
       centerTitle: true,
       leading: Padding(
-        padding: const EdgeInsets.only(left: 12),
+        padding: EdgeInsets.only(left: 12),
         child: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary),
+          icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
       title: Text(
         widget.category.name,
-        style: const TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 22,
-          fontWeight: FontWeight.w700,
+        style: TextStyle(
+          color: context.appTextPrimary,
+          fontSize: AppTypography.size22,
+          fontWeight: AppTypography.bold,
         ),
       ),
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.more_horiz, color: AppColors.textPrimary, size: 28),
+          icon: Icon(Icons.more_horiz, color: context.appTextPrimary, size: 28),
         ),
       ],
     );
@@ -200,12 +202,12 @@ class _ProductsState extends State<Products> {
 
   Widget _buildSearchBar(BuildContext context) {
     return Container(
-      height: 58,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      height: AppSizes.searchBarHeight,
+      padding: AppSpacing.paddingH16,
       decoration: BoxDecoration(
         color: AppColors.transparent,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: AppColors.textPrimary, width: 1),
+        borderRadius: AppRadius.border(AppRadius.size30),
+        border: Border.all(color: context.appTextPrimary, width: 1),
       ),
       child: Row(
         children: [
@@ -213,17 +215,24 @@ class _ProductsState extends State<Products> {
             child: TextField(
               controller: _searchController,
               onChanged: (value) {
-                // Arama fonksiyonunun adını Cubit'e yazdığımız gibi güncelledik
                 context.read<ProductsCubit>().searchProducts(query: value);
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: "Search in this category",
                 border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: 16, color: AppColors.textPrimary),
+                hintStyle: TextStyle(fontSize: AppTypography.size16, color: context.appTextMuted),
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              focusedErrorBorder: InputBorder.none,
+                isDense: true,
+              contentPadding: EdgeInsets.zero,
+              filled: false,
               ),
             ),
           ),
-          const Icon(Icons.search, color: AppColors.textPrimary, size: 30),
+          Icon(Icons.search, color: context.appTextPrimary, size: 30),
         ],
       ),
     );

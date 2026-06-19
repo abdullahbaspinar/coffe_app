@@ -1,5 +1,8 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 
 class MostOrderedCard extends StatelessWidget {
   final String imagePath;
@@ -16,10 +19,10 @@ class MostOrderedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(AppSpacing.s4),
       decoration: BoxDecoration(
-        color: AppColors.primaryColor,
-        borderRadius: BorderRadius.circular(16),
+        color: context.appPrimary,
+        borderRadius: AppRadius.border(AppRadius.size16),
       ),
       child: Row(
         children: [
@@ -32,17 +35,17 @@ class MostOrderedCard extends StatelessWidget {
                 title,
                 style: TextStyle(
                   color: AppColors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+                  fontSize: AppTypography.size12,
+                  fontWeight: AppTypography.bold,
                 ),
               ),
-              SizedBox(height: 6),
+              SizedBox(height: AppSpacing.s6),
               Text(
                 category,
                 style: TextStyle(
                   color: AppColors.white,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 8,
+                  fontWeight: AppTypography.regular,
+                  fontSize: AppTypography.size8,
                 ),
               ),
             ],

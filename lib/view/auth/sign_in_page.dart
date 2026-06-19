@@ -5,6 +5,9 @@ import 'package:coffe_app/view/home/home_page.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInPage extends StatefulWidget {
@@ -57,10 +60,9 @@ class _SignInPageState extends State<SignInPage> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: AppColors.backgroundColor,
-          body: SafeArea(
+                    body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: AppSpacing.padding24,
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -69,23 +71,23 @@ class _SignInPageState extends State<SignInPage> {
                     _buildSignInLogo,
                     const Spacer(),
                     _buildSignInText,
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.s8),
                     _buildSignInTextDescription,
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.s16),
                     _buildSignInUsernameLabel,
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.s16),
                     _buildSignInUsernameField,
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.s16),
                     _buildSignInPasswordLabel,
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.s16),
                     _buildSignInPasswordField,
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.s16),
                     _buildLoginButton(state),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.s8),
                     _buildResetPasswordRow,
                     const Spacer(),
                     _buildCreateAccountText,
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.s16),
                     _buildCreateAccountButton,
                   ],
                 ),
@@ -102,13 +104,13 @@ class _SignInPageState extends State<SignInPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset("assets/images/logo.png", width: 48, height: 48),
-        const SizedBox(width: 8),
-        const Text(
+        SizedBox(width: AppSpacing.s8),
+        Text(
           "Ombe",
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size24,
+            fontWeight: AppTypography.bold,
           ),
         ),
       ],
@@ -116,14 +118,14 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget get _buildSignInText {
-    return const Row(
+    return Row(
       children: [
         Text(
           "Sign In",
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-            fontSize: 24,
+            fontWeight: AppTypography.bold,
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size24,
           ),
         ),
       ],
@@ -131,15 +133,15 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget get _buildSignInTextDescription {
-    return const Row(
+    return Row(
       children: [
         Expanded(
           child: Text(
             "Lorem lorem lorem lorem lorem Lorem lorem lorem lorem Lorem lorem lorem lorem",
             textAlign: TextAlign.start,
             style: TextStyle(
-              fontWeight: FontWeight.normal,
-              color: AppColors.textPrimary,
+              fontWeight: AppTypography.regular,
+              color: context.appTextPrimary,
             ),
           ),
         ),
@@ -148,14 +150,14 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget get _buildSignInUsernameLabel {
-    return const Row(
+    return Row(
       children: [
         Text(
           "Username",
           style: TextStyle(
-            fontSize: 16,
-            color: AppColors.textMuted,
-            fontWeight: FontWeight.normal,
+            fontSize: AppTypography.size16,
+            color: context.appTextMuted,
+            fontWeight: AppTypography.regular,
           ),
         ),
       ],
@@ -172,23 +174,23 @@ class _SignInPageState extends State<SignInPage> {
             decoration: InputDecoration(
               hintText: "Email Address",
               filled: true,
-              fillColor: AppColors.inputFill,
+              fillColor: context.appInputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide(color: AppColors.border),
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(AppRadius.corner(AppRadius.size16)),
                 borderSide: BorderSide(
-                  color: AppColors.primaryColor,
+                  color: context.appPrimary,
                   width: 1.5,
                 ),
               ),
@@ -213,14 +215,14 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget get _buildSignInPasswordLabel {
-    return const Row(
+    return Row(
       children: [
         Text(
           "Password",
           style: TextStyle(
-            fontSize: 16,
-            color: AppColors.textMuted,
-            fontWeight: FontWeight.normal,
+            fontSize: AppTypography.size16,
+            color: context.appTextMuted,
+            fontWeight: AppTypography.regular,
           ),
         ),
       ],
@@ -237,7 +239,7 @@ class _SignInPageState extends State<SignInPage> {
             decoration: InputDecoration(
               hintText: "Password",
               filled: true,
-              fillColor: AppColors.inputFill,
+              fillColor: context.appInputFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
@@ -250,21 +252,21 @@ class _SignInPageState extends State<SignInPage> {
                 },
                 icon: Icon(
                   isPasswordHidden ? Icons.visibility_off : Icons.visibility,
-                  color: AppColors.primaryColor,
+                  color: context.appPrimary,
                 ),
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.border(AppRadius.size16),
                 borderSide: BorderSide(color: AppColors.border),
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(AppRadius.corner(AppRadius.size16)),
                 borderSide: BorderSide(
-                  color: AppColors.primaryColor,
+                  color: context.appPrimary,
                   width: 1.5,
                 ),
               ),
@@ -293,27 +295,27 @@ class _SignInPageState extends State<SignInPage> {
       child: ElevatedButton(
         onPressed: state.isLoading ? null : _handleSignIn,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: context.appPrimary,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: AppRadius.border(AppRadius.size18),
           ),
           elevation: 0,
         ),
         child: state.isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 width: 24,
                 height: 24,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.secondaryColor,
+                  color: context.appSecondary,
                 ),
               )
-            : const Text(
+            : Text(
                 "LOGIN",
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.secondaryColor,
+                  fontSize: AppTypography.size18,
+                  fontWeight: AppTypography.semiBold,
+                  color: context.appSecondary,
                 ),
               ),
       ),
@@ -323,12 +325,12 @@ class _SignInPageState extends State<SignInPage> {
   Widget get _buildResetPasswordRow {
     return Row(
       children: [
-        const Text(
+        Text(
           "Forgot password ? ",
           style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-            color: AppColors.textMuted,
+            fontSize: AppTypography.size14,
+            fontWeight: AppTypography.regular,
+            color: context.appTextMuted,
           ),
         ),
         TextButton(
@@ -338,12 +340,12 @@ class _SignInPageState extends State<SignInPage> {
               MaterialPageRoute(builder: (_) => const ResetPasswordPage()),
             );
           },
-          child: const Text(
+          child: Text(
             "Reset Password",
             style: TextStyle(
-              color: AppColors.primaryColor,
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
+              color: context.appPrimary,
+              fontWeight: AppTypography.regular,
+              fontSize: AppTypography.size14,
             ),
           ),
         ),
@@ -352,13 +354,13 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget get _buildCreateAccountText {
-    return const Center(
+    return Center(
       child: Text(
         "Don't have any account ? ",
         style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.normal,
-          color: AppColors.textMuted,
+          fontSize: AppTypography.size14,
+          fontWeight: AppTypography.regular,
+          color: context.appTextMuted,
         ),
       ),
     );
@@ -378,16 +380,16 @@ class _SignInPageState extends State<SignInPage> {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.createAccountBackgroundColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: AppRadius.border(AppRadius.size18),
           ),
           elevation: 0,
         ),
-        child: const Text(
+        child: Text(
           "CREATE ACCOUNT",
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
+            fontSize: AppTypography.size18,
+            fontWeight: AppTypography.semiBold,
+            color: context.appTextPrimary,
           ),
         ),
       ),

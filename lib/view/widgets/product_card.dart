@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:coffe_app/core/constants/app_colors.dart';
 
 class ProductCard extends StatelessWidget {
@@ -33,40 +36,40 @@ class ProductCard extends StatelessWidget {
               right: 0,
               child: Container(
                 height: 180,
-                padding: const EdgeInsets.all(16),
+                padding: AppSpacing.padding16,
                 decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(28),
+                  color: context.appPrimary,
+                  borderRadius: AppRadius.border(AppRadius.size28),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 60),
+                    SizedBox(height: AppSpacing.s60),
                     Text(
                       title,
                       style: const TextStyle(
                         color: AppColors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        fontSize: AppTypography.size18,
+                        fontWeight: AppTypography.semiBold,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.s12),
                     Row(
                       children: [
                         Text(
                           price,
                           style: const TextStyle(
                             color: AppColors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                            fontSize: AppTypography.size24,
+                            fontWeight: AppTypography.bold,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: AppSpacing.s8),
                         Text(
                           oldPrice,
                           style: TextStyle(
                             color: AppColors.textOnPrimary.withValues(alpha: 0.6),
-                            fontSize: 16,
+                            fontSize: AppTypography.size16,
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),

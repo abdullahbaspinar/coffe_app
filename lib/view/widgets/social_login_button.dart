@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 
 class SocialLoginButton extends StatelessWidget {
   final String text;
@@ -22,15 +25,15 @@ class SocialLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: backgroundColor,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: AppRadius.border(AppRadius.size18),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: AppRadius.border(AppRadius.size18),
         child: Container(
           height: 56,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: AppSpacing.paddingH16,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: AppRadius.border(AppRadius.size18),
             border: borderColor != null
                 ? Border.all(color: borderColor!)
                 : null,
@@ -47,13 +50,13 @@ class SocialLoginButton extends StatelessWidget {
               Text(
                 text,
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  fontSize: AppTypography.size16,
+                  fontWeight: AppTypography.semiBold,
                   color: textColor,
                 ),
               ),
               const Spacer(),
-              const SizedBox(width: 24),
+              const SizedBox(width: AppSpacing.s24),
             ],
           ),
         ),

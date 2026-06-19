@@ -3,6 +3,10 @@ import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/total_amount.dart';
 import 'package:coffe_app/model/cart_item.dart'; // CartItem modelini import ettik
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_size.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:coffe_app/view_model/cart/cart_state.dart';
@@ -27,15 +31,14 @@ class _OrdersState extends State<Orders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
       appBar: _buildAppBar,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: AppSpacing.padding12,
           child: Column(
             children: [
               _buildSearchBar,
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.s8),
               Expanded(
                 child: BlocBuilder<CartCubit, CartState>(
                   builder: (context, state) {
@@ -43,9 +46,9 @@ class _OrdersState extends State<Orders> {
                   },
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.s8),
               const TotalAmount(),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.s8),
               const CompleteOrdersButton(),
             ],
           ),
@@ -56,24 +59,27 @@ class _OrdersState extends State<Orders> {
 
   PreferredSizeWidget get _buildAppBar {
     return AppBar(
-      backgroundColor: AppColors.backgroundColor,
       elevation: 0,
       centerTitle: true,
       leading: Padding(
-        padding: const EdgeInsets.only(left: 12),
+        padding: EdgeInsets.only(left: 12),
         child: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary),
+          icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
-      title: const Text(
+      title: Text(
         "Orders",
-        style: TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.w700),
+        style: TextStyle(
+          color: context.appTextPrimary,
+          fontSize: AppTypography.size22,
+          fontWeight: AppTypography.bold,
+        ),
       ),
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.more_horiz, color: AppColors.textPrimary, size: 28),
+          icon: Icon(Icons.more_horiz, color: context.appTextPrimary, size: 28),
         ),
       ],
     );
@@ -81,12 +87,12 @@ class _OrdersState extends State<Orders> {
 
   Widget get _buildSearchBar {
     return Container(
-      height: 58,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      height: AppSizes.searchBarHeight,
+      padding: AppSpacing.paddingH16,
       decoration: BoxDecoration(
         color: AppColors.transparent,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: AppColors.textPrimary, width: 1),
+        borderRadius: AppRadius.border(AppRadius.size30),
+        border: Border.all(color: context.appTextPrimary, width: 1),
       ),
       child: Row(
         children: [
@@ -94,14 +100,25 @@ class _OrdersState extends State<Orders> {
             child: TextField(
               controller: _searchController,
               onChanged: (value) => setState(() => _searchQuery = value),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: "Search",
                 border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: 16, color: AppColors.textPrimary),
+                hintStyle: TextStyle(
+                  fontSize: AppTypography.size16,
+                  color: context.appTextMuted,
+                ),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                focusedErrorBorder: InputBorder.none,
+                isDense: true,
+                contentPadding: EdgeInsets.zero,
+                filled: false,
               ),
             ),
           ),
-          const Icon(Icons.search, color: AppColors.textPrimary, size: 30),
+          Icon(Icons.search, color: context.appTextPrimary, size: 30),
         ],
       ),
     );
@@ -113,7 +130,12 @@ class _OrdersState extends State<Orders> {
     }
 
     if (state is CartError) {
-      return Center(child: Text(state.errorMessage, style: const TextStyle(color: AppColors.error)));
+      return Center(
+        child: Text(
+          state.errorMessage,
+          style: const TextStyle(color: AppColors.error),
+        ),
+      );
     }
 
     final query = _searchQuery.trim().toLowerCase();
@@ -144,13 +166,13 @@ class _OrdersState extends State<Orders> {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: AppSpacing.padding12,
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppRadius.border(AppRadius.size8),
               child: Image.network(
-                item.product.imageUrl, 
+                item.product.imageUrl,
                 width: 70,
                 height: 70,
                 fit: BoxFit.cover,
@@ -164,29 +186,38 @@ class _OrdersState extends State<Orders> {
                 },
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: AppSpacing.s16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     item.product.title,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: AppTypography.size16,
+                      fontWeight: AppTypography.bold,
+                    ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.s4),
                   Row(
                     children: [
                       Text(
                         "\$${item.product.price}",
-                        style: const TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          color: context.appPrimary,
+                          fontWeight: AppTypography.semiBold,
+                        ),
                       ),
                       const Spacer(),
                       Text(
                         "Total: \$${(item.quantity * item.product.price).toStringAsFixed(1)}",
-                        style: const TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.w600),
-                      )
+                        style: TextStyle(
+                          color: context.appPrimary,
+                          fontWeight: AppTypography.semiBold,
+                        ),
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -194,17 +225,26 @@ class _OrdersState extends State<Orders> {
               children: [
                 IconButton(
                   onPressed: () => _handleDecreaseAction(item),
-                  icon: const Icon(Icons.remove_circle_outline, color: AppColors.error),
+                  icon: const Icon(
+                    Icons.remove_circle_outline,
+                    color: AppColors.error,
+                  ),
                 ),
                 Text(
                   "${item.quantity}",
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: AppTypography.size16,
+                    fontWeight: AppTypography.bold,
+                  ),
                 ),
                 IconButton(
                   onPressed: () {
                     context.read<CartCubit>().quantityPlus(item.product);
                   },
-                  icon: const Icon(Icons.add_circle_outline, color: AppColors.primaryColor),
+                  icon: Icon(
+                    Icons.add_circle_outline,
+                    color: context.appPrimary,
+                  ),
                 ),
               ],
             ),
@@ -214,7 +254,6 @@ class _OrdersState extends State<Orders> {
     );
   }
 
-  // 🚀 SİLME DİYALOGUNU YÖNETEN TEMİZ METOD
   void _handleDecreaseAction(CartItem item) {
     if (item.quantity > 1) {
       context.read<CartCubit>().quantityDecrease(item.product);
@@ -228,14 +267,23 @@ class _OrdersState extends State<Orders> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext),
-                child: const Text("Hayır", style: TextStyle(color: AppColors.primaryColor)),
+                child: Text(
+                  "Hayır",
+                  style: TextStyle(color: context.appPrimary),
+                ),
               ),
               TextButton(
                 onPressed: () {
                   context.read<CartCubit>().deleteFromCart(item.product);
                   Navigator.pop(dialogContext);
                 },
-                child: const Text("Evet", style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold)),
+                child: const Text(
+                  "Evet",
+                  style: TextStyle(
+                    color: AppColors.error,
+                    fontWeight: AppTypography.bold,
+                  ),
+                ),
               ),
             ],
           );

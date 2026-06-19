@@ -1,5 +1,8 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 
 class OrdersCard extends StatelessWidget {
   final String imagePath;
@@ -30,25 +33,25 @@ class OrdersCard extends StatelessWidget {
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
+        padding: EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
           color: AppColors.errorAccent,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppRadius.border(AppRadius.size12),
         ),
-        child: const Icon(Icons.delete_outline, color: AppColors.white),
+        child: Icon(Icons.delete_outline, color: AppColors.white),
       ),
       onDismissed: (_) => onDelete(),
       child: Material(
         color: AppColors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppRadius.border(AppRadius.size12),
           child: Container(
-            padding: const EdgeInsets.all(12),
+            padding: AppSpacing.padding12,
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: AppRadius.border(AppRadius.size12),
                   child: Image.network(
                     imagePath,
                     width: 70,
@@ -56,24 +59,24 @@ class OrdersCard extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: AppSpacing.s12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                        style: TextStyle(
+                          fontSize: AppTypography.size16,
+                          fontWeight: AppTypography.semiBold,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: AppSpacing.s8),
                       Text(
                         "\$ $price",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppColors.textMuted,
+                        style: TextStyle(
+                          fontSize: AppTypography.size14,
+                          color: context.appTextMuted,
                         ),
                       ),
                     ],
@@ -92,12 +95,12 @@ class OrdersCard extends StatelessWidget {
                     ),
                     Text(
                       "\$${(price * count).toStringAsFixed(1)}",
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.primaryColor,
+                      style: TextStyle(
+                        fontSize: AppTypography.size14,
+                        color: context.appPrimary,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.s8),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -107,8 +110,8 @@ class OrdersCard extends StatelessWidget {
                           child: Text(
                             "$count",
                             style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                              fontSize: AppTypography.size14,
+                              fontWeight: AppTypography.bold,
                             ),
                           ),
                         ),
@@ -136,13 +139,13 @@ class _QuantityButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: AppRadius.border(AppRadius.size8),
       child: Container(
         width: 28,
         height: 28,
         decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(8),
+          color: context.appPrimary,
+          borderRadius: AppRadius.border(AppRadius.size8),
         ),
         child: Icon(icon, color: AppColors.white, size: 16),
       ),

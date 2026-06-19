@@ -15,6 +15,10 @@ import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/home/home_cubit.dart';
 import 'package:coffe_app/view_model/home/home_state.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_size.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -124,7 +128,6 @@ class _HomePageState extends State<HomePage> {
       value: _homeCubit,
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: AppColors.backgroundColor,
         drawer: _buildSideBar,
         body: GestureDetector(
           behavior: HitTestBehavior.translucent,
@@ -132,14 +135,14 @@ class _HomePageState extends State<HomePage> {
           child: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: AppSpacing.padding20,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildHeader,
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.s12),
                     _buildSearchbar,
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.s12),
                     BlocBuilder<HomeCubit, HomeState>(
                       builder: (context, state) {
                         return _buildMainContent(state);
@@ -162,9 +165,9 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildBody,
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.s12),
             _buildCategories(state),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.s12),
             _buildFeaturedBeverages(state),
           ],
         ),
@@ -189,7 +192,7 @@ class _HomePageState extends State<HomePage> {
           final product = products[index];
 
           return Padding(
-            padding: const EdgeInsets.only(right: 12),
+            padding: EdgeInsets.only(right: 12),
             child: ProductCard(
               imagePath: product.imagePath,
               title: product.title,
@@ -218,18 +221,18 @@ class _HomePageState extends State<HomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               "Featured Beverages",
               style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+                color: context.appTextPrimary,
+                fontSize: AppTypography.size20,
+                fontWeight: AppTypography.bold,
               ),
             ),
             _featuredMoreButton(categories),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.s12),
         if (state is HomeLoading || state is HomeInitial)
           const SizedBox(
             height: 120,
@@ -245,7 +248,7 @@ class _HomePageState extends State<HomePage> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: featuredProducts.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 18),
+            separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.s18),
             itemBuilder: (context, index) {
               final product = featuredProducts[index];
 
@@ -282,12 +285,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             },
-      child: const Text(
+      child: Text(
         "More",
         style: TextStyle(
-          fontSize: 16,
-          color: AppColors.primaryColor,
-          fontWeight: FontWeight.bold,
+          fontSize: AppTypography.size16,
+          color: context.appPrimary,
+          fontWeight: AppTypography.bold,
         ),
       ),
     );
@@ -299,15 +302,15 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Categories",
           style: TextStyle(
-            fontSize: 16,
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
+            fontSize: AppTypography.size16,
+            color: context.appTextPrimary,
+            fontWeight: AppTypography.bold,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.s12),
         if (state is HomeLoading || state is HomeInitial)
           const SizedBox(
             height: 60,
@@ -342,7 +345,7 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 final item = categories[index];
                 return Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: EdgeInsets.only(right: 8),
                   child: CategoriesCard(
                     title: item.name,
                     imageUrl: item.image,
@@ -369,13 +372,13 @@ class _HomePageState extends State<HomePage> {
       onTap: () {},
       child: Material(
         elevation: 8,
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(18),
+        color: context.appBackground,
+        borderRadius: AppRadius.border(AppRadius.size18),
         child: Container(
           constraints: const BoxConstraints(maxHeight: 420),
           decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(18),
+            color: context.appBackground,
+            borderRadius: AppRadius.border(AppRadius.size18),
             border: Border.all(color: AppColors.borderLight),
           ),
           child: _buildSearchResultsContent(state),
@@ -412,10 +415,10 @@ class _HomePageState extends State<HomePage> {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: AppSpacing.paddingV12,
       shrinkWrap: true,
       itemCount: state.searchResults.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 8),
+      separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.s8),
       itemBuilder: (context, index) {
         final product = state.searchResults[index];
 
@@ -447,19 +450,19 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "Good Morning",
-                style: TextStyle(fontSize: 14, color: AppColors.textPrimary),
+                style: TextStyle(fontSize: AppTypography.size14, color: context.appTextPrimary),
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: AppSpacing.s6),
               Text(
                 authCubit.currentUserName,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  fontSize: AppTypography.size24,
+                  fontWeight: AppTypography.bold,
+                  color: context.appTextPrimary,
                 ),
               ),
             ],
@@ -474,15 +477,15 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (_) => const Orders()),
                 );
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.shopping_bag_outlined,
                 size: 28,
-                color: AppColors.primaryColor,
+                color: context.appPrimary,
               ),
             ),
             IconButton(
               onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-              icon: const Icon(Icons.menu, size: 30, color: AppColors.textPrimary),
+              icon: Icon(Icons.menu, size: 30, color: context.appTextPrimary),
             ),
           ],
         ),
@@ -490,46 +493,71 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget get _buildSearchbar {
-    return Container(
-      height: 58,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: AppColors.transparent,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: AppColors.textPrimary, width: 1),
+ Widget get _buildSearchbar {
+  return Container(
+    height: AppSizes.searchBarHeight,
+    padding: AppSpacing.paddingH16,
+    decoration: BoxDecoration(
+      color: Colors.transparent,
+      borderRadius: AppRadius.border(AppRadius.size30),
+      border: Border.all(
+        color: context.appTextPrimary, // hep beyaz
+        width: 1,
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _searchController,
-              focusNode: _searchFocusNode,
-              onChanged: (value) {
-                _homeCubit.onSearchChanged(value);
-              },
-              decoration: const InputDecoration(
-                hintText: "Search",
-                border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: 16, color: AppColors.textPrimary),
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: TextField(
+            controller: _searchController,
+            focusNode: _searchFocusNode,
+            onChanged: (value) {
+              _homeCubit.onSearchChanged(value);
+            },
+            style: TextStyle(
+              color: context.appTextPrimary,
+              fontSize: AppTypography.size16,
+            ),
+            cursorColor: context.appTextPrimary,
+            decoration: InputDecoration(
+              hintText: "Search",
+              hintStyle: TextStyle(
+                fontSize: AppTypography.size16,
+                color: context.appTextMuted,
               ),
+
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              focusedErrorBorder: InputBorder.none,
+
+              isDense: true,
+              contentPadding: EdgeInsets.zero,
+              filled: false,
             ),
           ),
-          const Icon(Icons.search, color: AppColors.textPrimary, size: 30),
-        ],
-      ),
-    );
-  }
+        ),
+        Icon(
+          Icons.search,
+          color: context.appTextPrimary, 
+          size: 30,
+        ),
+      ],
+    ),
+  );
+}
 
   Widget get _buildSideBar {
     return Drawer(
-      backgroundColor: AppColors.white,
+      backgroundColor: context.appBackground,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildSideBarHeader,
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.s12),
             _buildMenuItems,
           ],
         ),
@@ -556,20 +584,20 @@ class _HomePageState extends State<HomePage> {
                 height: 50,
                 fit: BoxFit.contain,
               ),
-              const SizedBox(width: 10),
-              const Text(
+              SizedBox(width: AppSpacing.s10),
+              Text(
                 "Ombe",
                 style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  fontSize: AppTypography.size24,
+                  fontWeight: AppTypography.bold,
+                  color: context.appTextPrimary,
                 ),
               ),
             ],
           ),
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close, color: AppColors.textMuted, size: 28),
+            icon: Icon(Icons.close, color: context.appTextMuted, size: 28),
           ),
         ],
       ),
@@ -585,9 +613,15 @@ class _HomePageState extends State<HomePage> {
         }),
         _menuItem(Icons.shopping_bag_outlined, "My Order", 1, () {
           setState(() => selectedIndex = 1);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const Orders()),
+          );
+          setState(() => selectedIndex = 0);
+          
         }),
         _menuItem(Icons.store_outlined, "Store Location", 2, () {
-          setState(() => selectedIndex = 2);
+          setState(() => selectedIndex = 0);
           Navigator.pop(context);
         }),
         _menuItem(Icons.person_outline, "Profile", 3, () async {
@@ -604,7 +638,10 @@ class _HomePageState extends State<HomePage> {
           leading: const Icon(Icons.logout, color: AppColors.error),
           title: const Text(
             "Log Out",
-            style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              color: AppColors.error,
+              fontWeight: AppTypography.semiBold,
+            ),
           ),
           onTap: () async {
             await context.read<AuthCubit>().signOut();
@@ -620,23 +657,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _menuItem(
-    IconData icon,
-    String title,
-    int index,
-    VoidCallback onTap,
-  ) {
+  Widget _menuItem(IconData icon, String title, int index, VoidCallback onTap) {
     final isSelected = selectedIndex == index;
 
     return ListTile(
       leading: Icon(
         icon,
-        color: isSelected ? AppColors.primaryColor : AppColors.textMuted,
+        color: isSelected ? context.appPrimary : AppColors.textMuted,
       ),
       title: Text(
         title,
         style: TextStyle(
-          color: isSelected ? AppColors.primaryColor : AppColors.textMuted,
+          color: isSelected ? context.appPrimary : AppColors.textMuted,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
         ),
       ),

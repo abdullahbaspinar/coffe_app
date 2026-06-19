@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:coffe_app/core/constants/app_colors.dart';
 
 class FeaturedBeverageItem extends StatelessWidget {
@@ -35,11 +38,11 @@ class FeaturedBeverageItem extends StatelessWidget {
                 width: 110,
                 height: 110,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: AppRadius.border(AppRadius.size20),
                   color: AppColors.surfaceMuted,
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: AppRadius.border(AppRadius.size20),
                   child: imageUrl.isNotEmpty
                       ? Image.network(
                           imageUrl,
@@ -64,18 +67,18 @@ class FeaturedBeverageItem extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.accentOrange,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: AppRadius.border(AppRadius.size20),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.star, color: AppColors.white, size: 16),
-                      const SizedBox(width: 4),
+                      Icon(Icons.star, color: AppColors.white, size: 16),
+                      SizedBox(width: AppSpacing.s4),
                       Text(
                         rating,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontWeight: AppTypography.bold,
+                          fontSize: AppTypography.size14,
                         ),
                       ),
                     ],
@@ -84,7 +87,7 @@ class FeaturedBeverageItem extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(width: 18),
+          SizedBox(width: AppSpacing.s18),
           Expanded(
             child: SizedBox(
               height: 110,
@@ -95,10 +98,10 @@ class FeaturedBeverageItem extends StatelessWidget {
                     title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                    style: TextStyle(
+                      fontSize: AppTypography.size18,
+                      fontWeight: AppTypography.bold,
+                      color: context.appTextPrimary,
                     ),
                   ),
                   const Spacer(),
@@ -107,18 +110,18 @@ class FeaturedBeverageItem extends StatelessWidget {
                     children: [
                       Text(
                         price,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                        style: TextStyle(
+                          fontSize: AppTypography.size16,
+                          fontWeight: AppTypography.bold,
+                          color: context.appTextPrimary,
                         ),
                       ),
                       Text(
                         points,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColor,
+                        style: TextStyle(
+                          fontSize: AppTypography.size16,
+                          fontWeight: AppTypography.bold,
+                          color: context.appPrimary,
                         ),
                       ),
                     ],
