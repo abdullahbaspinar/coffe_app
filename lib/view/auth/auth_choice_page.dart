@@ -2,6 +2,9 @@ import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/sign_in_page.dart';
 import 'package:coffe_app/view/widgets/social_login_button.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 
 class AuthChoicePage extends StatefulWidget {
   const AuthChoicePage({super.key});
@@ -14,26 +17,25 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
+            body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: AppSpacing.padding24,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(),
               _buildAuthChoiceLogo,
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.s8),
               _buildAuthChoiceAppName,
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.s8),
               _buildAuthChoiceAppDescription,
-              const SizedBox(height: 20),
+              const SizedBox(height: AppSpacing.s20),
               _buildAuthChoiceTitle,
               const Spacer(),
               _buildAuthChoiceEmailButton,
-              const SizedBox(height: 30),
+              const SizedBox(height: AppSpacing.s30),
               _buildAuthChoiceFacebookButton,
-              const SizedBox(height: 6),
+              const SizedBox(height: AppSpacing.s6),
               _buildAuthChoiceGoogleButton,
             ],
           ),
@@ -44,7 +46,7 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
 
   Widget get _buildAuthChoiceLogo {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: AppRadius.border(AppRadius.size24),
       child: Image.asset(
         "assets/images/logo.png",
         height: 200,
@@ -55,35 +57,35 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
   }
 
   Widget get _buildAuthChoiceAppName {
-    return const Text(
+    return Text(
       "Ombe",
       style: TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
+        fontSize: AppTypography.size32,
+        fontWeight: AppTypography.bold,
+        color: context.appTextPrimary,
       ),
     );
   }
 
   Widget get _buildAuthChoiceAppDescription {
-    return const Text(
+    return Text(
       "Coffe Shop App",
       style: TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        color: AppColors.textMuted,
+        fontSize: AppTypography.size15,
+        fontWeight: AppTypography.regular,
+        color: context.appTextMuted,
       ),
     );
   }
 
   Widget get _buildAuthChoiceTitle {
-    return const Text(
+    return Text(
       "Morning begins with ombe coffee",
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
+        fontSize: AppTypography.size28,
+        fontWeight: AppTypography.bold,
+        color: context.appTextPrimary,
         height: 1.2,
       ),
     );
@@ -96,7 +98,7 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
       child: SocialLoginButton(
         text: "Login with Email",
         iconPath: "assets/images/inbox.png",
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: context.appPrimary,
         textColor: AppColors.backgroundColor,
         onTap: () {
           Navigator.pushReplacement(
@@ -138,8 +140,8 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
       child: SocialLoginButton(
         text: "Login with Google",
         iconPath: "assets/images/logos/google_logo.png",
-        backgroundColor: AppColors.backgroundColor,
-        textColor: AppColors.primaryColor,
+        backgroundColor: context.appBackground,
+        textColor: context.appPrimary,
         onTap: () {
           Navigator.pushReplacement(
             context,

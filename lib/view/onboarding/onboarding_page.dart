@@ -1,6 +1,9 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -72,22 +75,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
+            body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(30),
+          padding: AppSpacing.padding30,
           child: Column(
             children: [
               Align(
                 alignment: Alignment.topRight,
                 child: TextButton(
                   onPressed: skipOnboarding,
-                  child: const Text(
+                  child: Text(
                     "Skip",
                     style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      color: context.appPrimary,
+                      fontSize: AppTypography.size16,
+                      fontWeight: AppTypography.semiBold,
                     ),
                   ),
                 ),
@@ -108,7 +110,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: AppRadius.border(AppRadius.size24),
                           child: SvgPicture.asset(
                             item["image"]!,
                             height: 300,
@@ -116,23 +118,23 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             fit: BoxFit.contain,
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        SizedBox(height: AppSpacing.s40),
                         Text(
                           item["title"]!,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primaryColor,
+                          style: TextStyle(
+                            fontSize: AppTypography.size28,
+                            fontWeight: AppTypography.bold,
+                            color: context.appPrimary,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: AppSpacing.s16),
                         Text(
                           item["description"]!,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: 16,
+                          style: TextStyle(
+                            color: context.appPrimary,
+                            fontSize: AppTypography.size16,
                           ),
                         ),
                       ],
@@ -153,21 +155,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       color: currentPage == index
                           ? AppColors.secondaryColor
                           : AppColors.textDisabled,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: AppRadius.border(AppRadius.size12),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: AppSpacing.s32),
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
                   onPressed: nextPage,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryColor,
+                    backgroundColor: context.appPrimary,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: AppRadius.border(AppRadius.size18),
                     ),
                   ),
                   child: Text(
@@ -175,8 +177,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         ? "Get started"
                         : "Next",
                     style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontSize: AppTypography.size18,
+                      fontWeight: AppTypography.semiBold,
                       color: AppColors.white,
                     ),
                   ),

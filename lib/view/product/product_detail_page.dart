@@ -1,6 +1,9 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/orders/orders.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 
 class ProductDetail extends StatefulWidget {
   const ProductDetail({super.key});
@@ -23,7 +26,7 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar,
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: context.appPrimary,
       body: Column(
         children: [
           _buildTopSection,
@@ -51,14 +54,14 @@ class _ProductDetailState extends State<ProductDetail> {
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: const Icon(Icons.arrow_back, color: AppColors.backgroundColor),
+        icon: Icon(Icons.arrow_back, color: context.appBackground),
       ),
-      title: const Text(
+      title: Text(
         "Details",
         style: TextStyle(
-          color: AppColors.backgroundColor,
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
+          color: context.appBackground,
+          fontSize: AppTypography.size24,
+          fontWeight: AppTypography.bold,
         ),
       ),
       actions: [
@@ -70,7 +73,7 @@ class _ProductDetailState extends State<ProductDetail> {
           },
           icon:  Icon(
             isBookMarked ? Icons.bookmark : Icons.bookmark_border,
-            color: AppColors.backgroundColor,
+            color: context.appBackground,
           ),
         ),
       ],
@@ -95,9 +98,9 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget get _buildBottomCard {
     return Container(
       height: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: const BoxDecoration(
-        color: AppColors.backgroundColor,
+      padding: AppSpacing.padding24,
+      decoration: BoxDecoration(
+        color: context.appBackground,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(36),
           topRight: Radius.circular(36),
@@ -107,15 +110,15 @@ class _ProductDetailState extends State<ProductDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: AppSpacing.s30),
             _buildProductHeader,
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.s16),
             _buildProductDescription,
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.s24),
             _buildSizeSelector,
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.s24),
             _buildPriceAndQuantityRow,
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.s32),
             _buildOrderButton,
           ],
         ),
@@ -124,23 +127,23 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Widget get _buildProductHeader {
-    return const Text(
+    return Text(
       "Ice Chocolate Coffee",
       style: TextStyle(
-        color: AppColors.textPrimary,
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
+        color: context.appTextPrimary,
+        fontSize: AppTypography.size28,
+        fontWeight: AppTypography.bold,
       ),
     );
   }
 
   Widget get _buildProductDescription {
-    return const Text(
+    return Text(
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
       style: TextStyle(
-        color: AppColors.textMuted,
-        fontSize: 18,
-        fontWeight: FontWeight.normal,
+        color: context.appTextMuted,
+        fontSize: AppTypography.size18,
+        fontWeight: AppTypography.regular,
         height: 1.5,
       ),
     );
@@ -152,10 +155,10 @@ class _ProductDetailState extends State<ProductDetail> {
       children: [
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
-            activeTrackColor: AppColors.primaryColor,
+            activeTrackColor: context.appPrimary,
             inactiveTrackColor: AppColors.border,
-            thumbColor: AppColors.primaryColor,
-            overlayColor: AppColors.primaryTint,
+            thumbColor: context.appPrimary,
+            overlayColor: context.appPrimaryTint,
             trackHeight: 8,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 13),
           ),
@@ -171,25 +174,25 @@ class _ProductDetailState extends State<ProductDetail> {
             },
           ),
         ),
-        const SizedBox(height: 12),
-        const Row(
+        const SizedBox(height: AppSpacing.s12),
+         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               "Small",
-              style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
+              style: TextStyle(fontSize: AppTypography.size18, color: context.appTextPrimary),
             ),
             Text(
               "Medium",
-              style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
+              style: TextStyle(fontSize: AppTypography.size18, color: context.appTextPrimary),
             ),
             Text(
               "Large",
-              style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
+              style: TextStyle(fontSize: AppTypography.size18, color: context.appTextPrimary),
             ),
             Text(
               "Xtra Large",
-              style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
+              style: TextStyle(fontSize: AppTypography.size18, color: context.appTextPrimary),
             ),
           ],
         ),
@@ -202,7 +205,7 @@ class _ProductDetailState extends State<ProductDetail> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(child: _buildPriceSection),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacing.s12),
         _buildQuantitySelector,
       ],
     );
@@ -212,22 +215,22 @@ class _ProductDetailState extends State<ProductDetail> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        const Text(
+        Text(
           "\$ 5.8",
           style: TextStyle(
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            fontSize: AppTypography.size36,
+            fontWeight: AppTypography.bold,
+            color: context.appTextPrimary,
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: AppSpacing.s10),
         Padding(
-          padding: const EdgeInsets.only(bottom: 6),
+          padding: EdgeInsets.only(bottom: 6),
           child: Text(
             "\$8.0",
             style: TextStyle(
-              fontSize: 18,
-              color: AppColors.textMuted,
+              fontSize: AppTypography.size18,
+              color: context.appTextMuted,
               decoration: TextDecoration.lineThrough,
             ),
           ),
@@ -240,9 +243,9 @@ class _ProductDetailState extends State<ProductDetail> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: AppColors.textMuted),
+        color: context.appBackground,
+        borderRadius: AppRadius.border(AppRadius.size30),
+        border: Border.all(color: context.appTextMuted),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -255,14 +258,14 @@ class _ProductDetailState extends State<ProductDetail> {
                 });
               }
             },
-            icon: const Icon(Icons.remove, color: AppColors.primaryColor),
+            icon: Icon(Icons.remove, color: context.appPrimary),
           ),
           Text(
             "$quantity",
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+            style: TextStyle(
+              fontSize: AppTypography.size22,
+              fontWeight: AppTypography.bold,
+              color: context.appTextPrimary,
             ),
           ),
           IconButton(
@@ -271,7 +274,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 quantity++;
               });
             },
-            icon: const Icon(Icons.add, color: AppColors.primaryColor),
+            icon: Icon(Icons.add, color: context.appPrimary),
           ),
         ],
       ),
@@ -288,17 +291,17 @@ class _ProductDetailState extends State<ProductDetail> {
           );
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: context.appPrimary,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: AppRadius.border(AppRadius.size30),
           ),
           elevation: 0,
         ),
         child: Text(
           "PLACE ORDER  \$ ${totalPrice.toStringAsFixed(1)}",
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontSize: AppTypography.size20,
+            fontWeight: AppTypography.bold,
             color: AppColors.white,
           ),
         ),
@@ -326,8 +329,8 @@ class _ProductDetailState extends State<ProductDetail> {
           "4.5",
           style: TextStyle(
             color: AppColors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontSize: AppTypography.size24,
+            fontWeight: AppTypography.bold,
           ),
         ),
       ),

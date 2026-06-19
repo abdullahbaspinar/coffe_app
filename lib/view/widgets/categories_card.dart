@@ -1,5 +1,8 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 
 class CategoriesCard extends StatelessWidget {
   final String title;
@@ -24,9 +27,9 @@ class CategoriesCard extends StatelessWidget {
         height: 62,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
-          color: AppColors.backgroundColor,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.border, width: 1),
+          color: context.appBackground,
+          borderRadius: AppRadius.border(AppRadius.size20),
+          border: Border.all(color: context.appBorder, width: 1),
           boxShadow: [
             BoxShadow(
               color: AppColors.shadow,
@@ -37,8 +40,8 @@ class CategoriesCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _buildLeadingImage(),
-            const SizedBox(width: 10),
+            _buildLeadingImage(context),
+            SizedBox(width: AppSpacing.s10),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -48,17 +51,17 @@ class CategoriesCard extends StatelessWidget {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.bold,
+                    style: TextStyle(
+                      color: context.appTextPrimary,
+                      fontWeight: AppTypography.bold,
                     ),
                   ),
                   if (menuCount != null && menuCount!.trim().isNotEmpty)
                     Text(
                       '$menuCount Menus',
-                      style: const TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 12,
+                      style: TextStyle(
+                        color: context.appPrimary,
+                        fontSize: AppTypography.size12,
                       ),
                     ),
                 ],
@@ -70,33 +73,33 @@ class CategoriesCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLeadingImage() {
+  Widget _buildLeadingImage(BuildContext context) {
     if (imageUrl != null && imageUrl!.trim().isNotEmpty) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: AppRadius.border(AppRadius.size10),
         child: Image.network(
           imageUrl!,
           width: 38,
           height: 38,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => _fallbackIcon(),
+          errorBuilder: (_, __, ___) => _fallbackIcon(context),
         ),
       );
     }
-    return _fallbackIcon();
+    return _fallbackIcon(context);
   }
 
-  Widget _fallbackIcon() {
+  Widget _fallbackIcon(BuildContext context) {
     return Container(
       width: 38,
       height: 38,
       decoration: BoxDecoration(
-        color: AppColors.primaryTint,
-        borderRadius: BorderRadius.circular(10),
+        color: context.appPrimaryTint,
+        borderRadius: AppRadius.border(AppRadius.size10),
       ),
-      child: const Icon(
+      child: Icon(
         Icons.category_outlined,
-        color: AppColors.primaryColor,
+        color: context.appPrimary,
         size: 20,
       ),
     );

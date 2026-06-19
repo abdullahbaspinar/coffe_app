@@ -2,6 +2,10 @@ import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_size.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetailPageApi extends StatefulWidget {
@@ -23,46 +27,46 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       builder: (context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: AppRadius.border(AppRadius.size24),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: AppSpacing.padding24,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   width: 72,
                   height: 72,
-                  decoration: const BoxDecoration(
-                    color: AppColors.primaryColor,
+                  decoration: BoxDecoration(
+                    color: context.appPrimary,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.check, color: AppColors.white, size: 42),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: AppSpacing.s18),
                 const Text(
                   "Successfully Added to Cart",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                  style: TextStyle(fontSize: AppTypography.size22, fontWeight: AppTypography.extraBold),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.s8),
                 Text(
                   "${widget.product.title} successfully added to cart.",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textSecondary,
-                    fontSize: 14,
+                    fontSize: AppTypography.size14,
                     height: 1.4,
                   ),
                 ),
-                const SizedBox(height: 22),
+                SizedBox(height: AppSpacing.s18),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryColor,
+                      backgroundColor: context.appPrimary,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: AppRadius.border(AppRadius.size16),
                       ),
                       elevation: 0,
                     ),
@@ -72,8 +76,8 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
                         "OK",
                         style: TextStyle(
                           color: AppColors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                          fontSize: AppTypography.size16,
+                          fontWeight: AppTypography.bold,
                         ),
                       ),
                     ),
@@ -90,7 +94,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: context.appPrimary,
       appBar: _buildAppBar,
       body: SingleChildScrollView(
         child: Column(children: [_buildTopSection, _buildBottomSection]),
@@ -100,27 +104,28 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
 
   PreferredSizeWidget get _buildAppBar {
     return AppBar(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: context.appPrimary,
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: Icon(Icons.arrow_back_ios_new, color: AppColors.white),
+        icon: Icon(Icons.arrow_back_ios_new, color: context.appBackground),
       ),
       title: Text(
         "Details",
         style: TextStyle(
-          color: AppColors.white,
-          fontSize: 22,
-          fontWeight: FontWeight.w700,
+          color: context.appBackground,
+          fontSize: AppTypography.size22,
+          fontWeight: AppTypography.bold,
         ),
       ),
       actions: [
         IconButton(
           onPressed: () {},
-          icon: Icon(Icons.favorite_border, color: AppColors.white),
+          icon: Icon(Icons.favorite_border, color: context.appBackground
+          ),
         ),
       ],
     );
@@ -131,7 +136,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       height: 280,
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: AppSpacing.padding24,
         child: Image.network(
           widget.product.imageUrl,
           fit: BoxFit.contain,
@@ -149,9 +154,9 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
   Widget get _buildBottomSection {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: const BoxDecoration(
-        color: AppColors.backgroundColor,
+      padding: AppSpacing.padding24,
+      decoration: BoxDecoration(
+        color: context.appBackground,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(36),
           topRight: Radius.circular(36),
@@ -161,13 +166,13 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildTitleAndPrice,
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.s12),
           _buildCategoryAndRating,
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.s24),
           _buildDescription,
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.s24),
           _buildQuantitySelector,
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.s24),
           _buildAddToCartButton,
         ],
       ),
@@ -181,19 +186,19 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         Expanded(
           child: Text(
             widget.product.title,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 26,
-              fontWeight: FontWeight.w800,
+            style: TextStyle(
+              color: context.appTextPrimary,
+              fontSize: AppTypography.size24,
+              fontWeight: AppTypography.extraBold,
             ),
           ),
         ),
         Text(
           "\$${widget.product.price.toStringAsFixed(2)}",
-          style: const TextStyle(
-            color: AppColors.primaryColor,
-            fontSize: 24,
-            fontWeight: FontWeight.w800,
+          style: TextStyle(
+            color: context.appPrimary,
+            fontSize: AppTypography.size24,
+            fontWeight: AppTypography.extraBold,
           ),
         ),
       ],
@@ -206,27 +211,27 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: AppColors.primaryTint,
-            borderRadius: BorderRadius.circular(20),
+            color: context.appPrimaryTint,
+            borderRadius: AppRadius.border(AppRadius.size20),
           ),
           child: Text(
             widget.product.category,
-            style: const TextStyle(
-              color: AppColors.primaryColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
+            style: TextStyle(
+              color: context.appPrimary,
+              fontSize: AppTypography.size14,
+              fontWeight: AppTypography.bold,
             ),
           ),
         ),
         const Spacer(),
-        const Icon(Icons.star, color: AppColors.star, size: 22),
-        const SizedBox(width: 4),
+        Icon(Icons.star, color: AppColors.star, size: 22),
+        SizedBox(width: AppSpacing.s4),
         Text(
           rating.toStringAsFixed(1),
-          style: const TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+          style: TextStyle(
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size16,
+            fontWeight: AppTypography.bold,
           ),
         ),
       ],
@@ -237,22 +242,22 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Description",
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 20,
-            fontWeight: FontWeight.w800,
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size20,
+            fontWeight: AppTypography.extraBold,
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: AppSpacing.s10),
         Text(
           widget.product.description,
-          style: const TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 15,
+          style:  TextStyle(
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size15,
             height: 1.5,
-            fontWeight: FontWeight.w500,
+            fontWeight: AppTypography.medium,
           ),
         ),
       ],
@@ -262,12 +267,12 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
   Widget get _buildQuantitySelector {
     return Row(
       children: [
-        const Text(
+        Text(
           "Quantity",
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 20,
-            fontWeight: FontWeight.w800,
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size20,
+            fontWeight: AppTypography.extraBold,
           ),
         ),
         const Spacer(),
@@ -281,16 +286,16 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
             }
           },
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: AppSpacing.s16),
         Text(
           quantity.toString(),
-          style: const TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 20,
-            fontWeight: FontWeight.w800,
+          style: TextStyle(
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size20,
+            fontWeight: AppTypography.extraBold,
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: AppSpacing.s16),
         _buildQuantityButton(
           icon: Icons.add,
           onTap: () {
@@ -309,13 +314,13 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: AppRadius.border(AppRadius.size14),
       child: Container(
         width: 42,
         height: 42,
         decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(14),
+          color: context.appPrimary,
+          borderRadius: AppRadius.border(AppRadius.size14),
         ),
         child: Icon(icon, color: AppColors.white, size: 22),
       ),
@@ -325,7 +330,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
   Widget get _buildAddToCartButton {
     return SizedBox(
       width: double.infinity,
-      height: 58,
+      height: AppSizes.searchBarHeight,
       child: ElevatedButton(
         onPressed: () async {
           await context.read<CartCubit>().addToCart(
@@ -337,9 +342,9 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           _showAddedToCartDialog();
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: context.appPrimary,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: AppRadius.border(AppRadius.size30),
           ),
           elevation: 0,
         ),
@@ -347,8 +352,8 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           "Add to Cart - \$${(widget.product.price * quantity).toStringAsFixed(2)}",
           style: const TextStyle(
             color: AppColors.white,
-            fontSize: 17,
-            fontWeight: FontWeight.w800,
+            fontSize: AppTypography.size18,
+            fontWeight: AppTypography.extraBold,
           ),
         ),
       ),

@@ -2,6 +2,9 @@ import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:coffe_app/view_model/cart/cart_state.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CompleteOrdersButton extends StatelessWidget {
@@ -14,47 +17,47 @@ class CompleteOrdersButton extends StatelessWidget {
       builder: (context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: AppRadius.border(AppRadius.size24),
           ),
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.all(24),
+                padding: AppSpacing.padding24,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 16),
+                    SizedBox(height: AppSpacing.s16),
 
                     Container(
                       width: 80,
                       height: 80,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primaryColor,
+                      decoration: BoxDecoration(
+                        color: context.appPrimary,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.check,
                         color: AppColors.white,
                         size: 48,
                       ),
                     ),
 
-                    SizedBox(height: 20),
+                    SizedBox(height: AppSpacing.s20),
 
                     Text(
                       "Order Completed",
                       style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                        fontSize: AppTypography.size22,
+                        fontWeight: AppTypography.bold,
                       ),
                     ),
 
-                    SizedBox(height: 8),
+                    SizedBox(height: AppSpacing.s8),
 
                     Text(
                       "Your order has been successfully placed.",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.textMuted),
+                      style: TextStyle(color: context.appTextMuted),
                     ),
                   ],
                 ),
@@ -78,8 +81,8 @@ class CompleteOrdersButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.primaryColor,
-      borderRadius: BorderRadius.circular(16),
+      color: context.appPrimary,
+      borderRadius: AppRadius.border(AppRadius.size16),
       child: InkWell(
         onTap: () async {
           final state = context.read<CartCubit>().state;
@@ -93,16 +96,16 @@ class CompleteOrdersButton extends StatelessWidget {
           if (!context.mounted) return;
           _showSuccessDialog(context);
         },
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.border(AppRadius.size16),
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 16),
           child: Center(
             child: Text(
               "Complete Order",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: AppTypography.size16,
                 color: AppColors.white,
-                fontWeight: FontWeight.w700,
+                fontWeight: AppTypography.bold,
               ),
             ),
           ),

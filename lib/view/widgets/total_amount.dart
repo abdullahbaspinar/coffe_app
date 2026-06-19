@@ -3,6 +3,9 @@ import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:coffe_app/view_model/cart/cart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 
 class TotalAmount extends StatelessWidget {
   final String title;
@@ -21,9 +24,9 @@ class TotalAmount extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.secondaryColor,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
+        color: context.appSecondary,
+        borderRadius: AppRadius.border(AppRadius.size18),
+        border: Border.all(color: context.appBorder),
       ),
       child: Row(
         children: [
@@ -31,31 +34,31 @@ class TotalAmount extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: AppColors.primaryTint,
-              borderRadius: BorderRadius.circular(12),
+              color: context.appPrimaryTint,
+              borderRadius: AppRadius.border(AppRadius.size12),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.receipt_long_outlined,
-              color: AppColors.primaryColor,
+              color: context.appPrimary,
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: AppSpacing.s12),
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                fontSize: AppTypography.size16,
+                fontWeight: AppTypography.semiBold,
+                color: context.appTextPrimary,
               ),
             ),
           ),
           Text(
             "\$${finalTotal.toStringAsFixed(1)}",
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: AppColors.primaryColor,
+            style: TextStyle(
+              fontSize: AppTypography.size20,
+              fontWeight: AppTypography.extraBold,
+              color: context.appPrimary,
             ),
           ),
         ],

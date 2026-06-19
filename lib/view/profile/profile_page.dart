@@ -2,6 +2,8 @@ import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/view/widgets/most_ordered_card.dart';
 import 'package:coffe_app/view/widgets/personal_information_card.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -14,8 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: _buildAppBar,
+            appBar: _buildAppBar,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsetsGeometry.all(20),
@@ -23,18 +24,18 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildTopSection,
-              SizedBox(height: 8),
+              SizedBox(height: AppSpacing.s8),
               _buildMidSection,
-              SizedBox(height: 16),
+              SizedBox(height: AppSpacing.s16),
               Text(
                 "MOST ORDERED",
                 style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  color: context.appTextPrimary,
+                  fontSize: AppTypography.size16,
+                  fontWeight: AppTypography.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: AppSpacing.s8),
               _buildBottomSection,
               //widgetlar buraya gelecek
             ],
@@ -46,8 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   PreferredSizeWidget get _buildAppBar {
     return AppBar(
-      backgroundColor: AppColors.backgroundColor,
-      elevation: 0,
+            elevation: 0,
       centerTitle: true,
       leading: Padding(
         padding: EdgeInsetsGeometry.only(left: 12),
@@ -55,21 +55,21 @@ class _ProfilePageState extends State<ProfilePage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary),
+          icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
       title: Text(
         "Profile",
         style: TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 22,
-          fontWeight: FontWeight.w700,
+          color: context.appTextPrimary,
+          fontSize: AppTypography.size22,
+          fontWeight: AppTypography.bold,
         ),
       ),
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.edit, color: AppColors.textPrimary),
+          icon: Icon(Icons.edit, color: context.appTextPrimary),
         ),
       ],
     );
@@ -85,22 +85,22 @@ class _ProfilePageState extends State<ProfilePage> {
             radius: 75,
             backgroundImage: AssetImage("assets/profile/profile_picture.png"),
           ),
-          SizedBox(height: 16),
+          SizedBox(height: AppSpacing.s16),
           Text(
             "Abdullah Başpınar",
             style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+              color: context.appTextPrimary,
+              fontSize: AppTypography.size22,
+              fontWeight: AppTypography.bold,
             ),
           ),
-          SizedBox(height: 16),
+          SizedBox(height: AppSpacing.s16),
           Text(
             "Ankara, Turkey",
             style: TextStyle(
-              color: AppColors.primaryColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+              color: context.appPrimary,
+              fontSize: AppTypography.size16,
+              fontWeight: AppTypography.semiBold,
             ),
           ),
         ],
@@ -116,13 +116,13 @@ class _ProfilePageState extends State<ProfilePage> {
           title: "Mobile Phone",
           description: "+90 551 343 29 10",
         ),
-        SizedBox(height: 8),
+        SizedBox(height: AppSpacing.s8),
         PersonalInformationCard(
           icon_name: Icons.email_outlined,
           title: "Email Adress",
           description: "abdullahbaspinarr@gmail.com",
         ),
-        SizedBox(height: 8),
+        SizedBox(height: AppSpacing.s8),
         PersonalInformationCard(
           icon_name: Icons.location_on_outlined,
           title: "Adress",
@@ -143,13 +143,13 @@ class _ProfilePageState extends State<ProfilePage> {
               title: "Iced Latte",
               category: "Beverages",
             ),
-            SizedBox(width: 8),
+            SizedBox(width: AppSpacing.s8),
             MostOrderedCard(
               imagePath: "assets/product/product1.png",
               title: "Iced Latte",
               category: "Beverages",
             ),
-            SizedBox(width: 8),
+            SizedBox(width: AppSpacing.s8),
 
             MostOrderedCard(
               imagePath: "assets/product/product1.png",

@@ -3,6 +3,9 @@ import 'package:coffe_app/view/auth/sign_in_page.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -62,27 +65,26 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: AppColors.backgroundColor,
-          body: SafeArea(
+                    body: SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: AppSpacing.padding24,
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildLogoHeader(),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppSpacing.s32),
                     _buildTitle(),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.s8),
                     _buildDescription(),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppSpacing.s32),
                     _buildEmailLabel(),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.s12),
                     _buildEmailField(),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.s24),
                     _buildSubmitButton(state),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.s24),
                     _buildLoginRedirect(),
                   ],
                 ),
@@ -103,13 +105,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           width: 48,
           height: 48,
         ),
-        const SizedBox(width: 8),
-        const Text(
+        SizedBox(width: AppSpacing.s8),
+        Text(
           "Ombe",
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            color: context.appTextPrimary,
+            fontSize: AppTypography.size24,
+            fontWeight: AppTypography.bold,
           ),
         ),
       ],
@@ -117,34 +119,34 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   Widget _buildTitle() {
-    return const Text(
+    return Text(
       "Forgot Password",
       style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
-        fontSize: 24,
+        fontWeight: AppTypography.bold,
+        color: context.appTextPrimary,
+        fontSize: AppTypography.size24,
       ),
     );
   }
 
   Widget _buildDescription() {
-    return const Text(
+    return Text(
       "Enter your email address and we will send a reset link.",
       style: TextStyle(
-        fontWeight: FontWeight.normal,
-        color: AppColors.textPrimary,
-        fontSize: 15,
+        fontWeight: AppTypography.regular,
+        color: context.appTextPrimary,
+        fontSize: AppTypography.size15,
       ),
     );
   }
 
   Widget _buildEmailLabel() {
-    return const Text(
+    return Text(
       "Email",
       style: TextStyle(
-        fontSize: 16,
-        color: AppColors.textMuted,
-        fontWeight: FontWeight.normal,
+        fontSize: AppTypography.size16,
+        color: context.appTextMuted,
+        fontWeight: AppTypography.regular,
       ),
     );
   }
@@ -157,23 +159,23 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       decoration: InputDecoration(
         hintText: "Email Address",
         filled: true,
-        fillColor: AppColors.inputFill,
+        fillColor: context.appInputFill,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 18,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: AppRadius.border(AppRadius.size16),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: AppRadius.border(AppRadius.size16),
           borderSide: BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: AppColors.primaryColor,
+          borderRadius: AppRadius.border(AppRadius.size16),
+          borderSide: BorderSide(
+            color: context.appPrimary,
             width: 1.5,
           ),
         ),
@@ -203,28 +205,28 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       child: ElevatedButton(
         onPressed: state.isLoading ? null : _handleResetPassword,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: context.appPrimary,
           disabledBackgroundColor: AppColors.primaryDisabled,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: AppRadius.border(AppRadius.size18),
           ),
           elevation: 0,
         ),
         child: state.isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 width: 24,
                 height: 24,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.secondaryColor,
+                  color: context.appSecondary,
                 ),
               )
-            : const Text(
+            : Text(
                 "SUBMIT",
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.secondaryColor,
+                  fontSize: AppTypography.size18,
+                  fontWeight: AppTypography.semiBold,
+                  color: context.appSecondary,
                 ),
               ),
       ),
@@ -235,24 +237,24 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Flexible(
+        Flexible(
           child: Text(
             "Sign in to your registered account",
             style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.normal,
-              color: AppColors.textMuted,
+              fontSize: AppTypography.size15,
+              fontWeight: AppTypography.regular,
+              color: context.appTextMuted,
             ),
           ),
         ),
         TextButton(
           onPressed: _goToSignInPage,
-          child: const Text(
+          child: Text(
             "Login here",
             style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.normal,
-              color: AppColors.primaryColor,
+              fontSize: AppTypography.size15,
+              fontWeight: AppTypography.regular,
+              color: context.appPrimary,
             ),
           ),
         ),
