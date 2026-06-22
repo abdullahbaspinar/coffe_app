@@ -229,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: AppTypography.bold,
               ),
             ),
-            _featuredMoreButton(categories),
+            _featuredMoreButton(categories, featuredProducts),
           ],
         ),
         const SizedBox(height: AppSpacing.s12),
@@ -248,7 +248,8 @@ class _HomePageState extends State<HomePage> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: featuredProducts.length,
-            separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.s18),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: AppSpacing.s18),
             itemBuilder: (context, index) {
               final product = featuredProducts[index];
 
@@ -273,28 +274,37 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _featuredMoreButton(List<Category> categories) {
-    return TextButton(
-      onPressed: categories.isEmpty
-          ? null
-          : () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => Products(category: categories.first),
-                ),
-              );
-            },
-      child: Text(
-        "More",
-        style: TextStyle(
-          fontSize: AppTypography.size16,
-          color: context.appPrimary,
-          fontWeight: AppTypography.bold,
-        ),
-      ),
-    );
+ Widget _featuredMoreButton(List<Category> categories, List<Product> featuredProducts) {
+  final featuredCategoryIds = featuredProducts.map((p) => p.categoryId).toSet();
+
+  if (featuredCategoryIds.isEmpty) {
+    return TextButton(onPressed: null, child: Text("More"));
   }
+
+  final targetCategoryId = featuredCategoryIds.length == 1
+      ? featuredCategoryIds.first
+      : featuredProducts.first.categoryId;
+
+  final targetCategory = categories.cast<Category?>().firstWhere(
+        (c) => c!.id == targetCategoryId,
+        orElse: () => null,
+      );
+
+  return TextButton(
+    onPressed: targetCategory == null
+        ? null
+        : () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => Products(category: targetCategory),
+              ),
+            );
+          },
+    child: Text("More"),
+  );
+}
+
 
   Widget _buildCategories(HomeState state) {
     final categories = _categoriesFromState(state);
@@ -418,7 +428,8 @@ class _HomePageState extends State<HomePage> {
       padding: AppSpacing.paddingV12,
       shrinkWrap: true,
       itemCount: state.searchResults.length,
-      separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.s8),
+      separatorBuilder: (context, index) =>
+          const SizedBox(height: AppSpacing.s8),
       itemBuilder: (context, index) {
         final product = state.searchResults[index];
 
@@ -452,7 +463,10 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text(
                 "Good Morning",
-                style: TextStyle(fontSize: AppTypography.size14, color: context.appTextPrimary),
+                style: TextStyle(
+                  fontSize: AppTypography.size14,
+                  color: context.appTextPrimary,
+                ),
               ),
               SizedBox(height: AppSpacing.s6),
               Text(
@@ -493,61 +507,57 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- Widget get _buildSearchbar {
-  return Container(
-    height: AppSizes.searchBarHeight,
-    padding: AppSpacing.paddingH16,
-    decoration: BoxDecoration(
-      color: Colors.transparent,
-      borderRadius: AppRadius.border(AppRadius.size30),
-      border: Border.all(
-        color: context.appTextPrimary, // hep beyaz
-        width: 1,
+  Widget get _buildSearchbar {
+    return Container(
+      height: AppSizes.searchBarHeight,
+      padding: AppSpacing.paddingH16,
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: AppRadius.border(AppRadius.size30),
+        border: Border.all(
+          color: context.appTextPrimary, // hep beyaz
+          width: 1,
+        ),
       ),
-    ),
-    child: Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: _searchController,
-            focusNode: _searchFocusNode,
-            onChanged: (value) {
-              _homeCubit.onSearchChanged(value);
-            },
-            style: TextStyle(
-              color: context.appTextPrimary,
-              fontSize: AppTypography.size16,
-            ),
-            cursorColor: context.appTextPrimary,
-            decoration: InputDecoration(
-              hintText: "Search",
-              hintStyle: TextStyle(
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _searchController,
+              focusNode: _searchFocusNode,
+              onChanged: (value) {
+                _homeCubit.onSearchChanged(value);
+              },
+              style: TextStyle(
+                color: context.appTextPrimary,
                 fontSize: AppTypography.size16,
-                color: context.appTextMuted,
               ),
+              cursorColor: context.appTextPrimary,
+              decoration: InputDecoration(
+                hintText: "Search",
+                hintStyle: TextStyle(
+                  fontSize: AppTypography.size16,
+                  color: context.appTextMuted,
+                ),
 
-              border: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              errorBorder: InputBorder.none,
-              focusedErrorBorder: InputBorder.none,
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                focusedErrorBorder: InputBorder.none,
 
-              isDense: true,
-              contentPadding: EdgeInsets.zero,
-              filled: false,
+                isDense: true,
+                contentPadding: EdgeInsets.zero,
+                filled: false,
+              ),
             ),
           ),
-        ),
-        Icon(
-          Icons.search,
-          color: context.appTextPrimary, 
-          size: 30,
-        ),
-      ],
-    ),
-  );
-}
+          Icon(Icons.search, color: context.appTextPrimary, size: 30),
+        ],
+      ),
+    );
+  }
 
   Widget get _buildSideBar {
     return Drawer(
@@ -618,7 +628,6 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(builder: (_) => const Orders()),
           );
           setState(() => selectedIndex = 0);
-          
         }),
         _menuItem(Icons.store_outlined, "Store Location", 2, () {
           setState(() => selectedIndex = 0);

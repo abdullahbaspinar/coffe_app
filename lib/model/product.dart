@@ -19,7 +19,6 @@ class Product {
     required this.rating,
   });
 
-  /// API'den rating gelmezse veya 0 ise kartlarda 5.0 gösterilir.
   double get displayRating => rating > 0 ? rating : 5.0;
 
   factory Product.fromJson(Map<String, dynamic> json) {
