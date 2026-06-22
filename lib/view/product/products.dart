@@ -30,7 +30,6 @@ class _ProductsState extends State<Products> {
   @override
   void initState() {
     super.initState();
-    // Yapıyı bozmadan yeni Cubit constructor'ımıza uygun hale getirdik
     _cubit = ProductsCubit(ProductService());
     _cubit.fetchProducts(categoryId: widget.category.id);
 
@@ -41,7 +40,6 @@ class _ProductsState extends State<Products> {
     if (!_scrollController.hasClients) return;
     final threshold = _scrollController.position.maxScrollExtent - 200;
     if (_scrollController.position.pixels >= threshold) {
-      // Fonksiyon adını güncelledik
       _cubit.loadMoreProducts();
     }
   }
@@ -74,12 +72,10 @@ class _ProductsState extends State<Products> {
                   child: BlocBuilder<ProductsCubit, ProductsState>(
                     builder: (context, state) {
                       
-                      // 1. Durum: İlk Yükleme Ekranı (ProductsLoading)
                       if (state is ProductsLoading) {
                         return const Center(child: CircularProgressIndicator());
                       }
 
-                      // 2. Durum: Hata Ekranı (ProductsError)
                       if (state is ProductsError) {
                         return Center(
                           child: Padding(
@@ -93,14 +89,12 @@ class _ProductsState extends State<Products> {
                         );
                       }
 
-                      // 3. Durum: Başarılı Yükleme Ama Liste Boş
                       if (state is ProductsLoaded && state.items.isEmpty) {
                         return const Center(
                           child: Text("Bu kategoride urun bulunamadi."),
                         );
                       }
 
-                      // 4. Durum: Verilerin Ekrana Basıldığı Başarılı Senaryo (ProductsLoaded)
                       if (state is ProductsLoaded) {
                         return RefreshIndicator(
                           onRefresh: () async =>
@@ -131,7 +125,6 @@ class _ProductsState extends State<Products> {
                                 );
                               }
 
-                              // Listenin altına loader / bitti bilgisi ekleme mantığı
                               if (state.isLoadingMore) {
                                 return const Padding(
                                   padding: AppSpacing.paddingV20,
@@ -159,7 +152,6 @@ class _ProductsState extends State<Products> {
                         );
                       }
 
-                      // Fallback: Herhangi bir aksilikte boş kutu dön
                       return const SizedBox.shrink();
                     },
                   ),
