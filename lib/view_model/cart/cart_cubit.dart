@@ -7,7 +7,6 @@ import 'package:coffe_app/view_model/cart/cart_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartCubit extends Cubit<CartState> {
-  // Başlangıçta sepeti CartInitial durumunda açıyoruz
   CartCubit() : super(const CartInitial());
 
   static const _CartKey = "cart_items";

@@ -95,7 +95,6 @@ class ProductsCard extends StatelessWidget {
       height: 120,
       child: Stack(
         children: [
-          // Yazılar
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
