@@ -1,4 +1,5 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
+import 'package:coffe_app/view/product/product_detail_page_api.dart';
 import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/total_amount.dart';
 import 'package:coffe_app/model/cart_item.dart'; // CartItem modelini import ettik
@@ -163,7 +164,15 @@ class _OrdersState extends State<Orders> {
   }
 
   Widget _buildCartItem(CartItem item) {
-    return Card(
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProductDetailPageApi(product: item.product),
+          ),
+        );
+      },child: Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: Padding(
         padding: AppSpacing.padding12,
@@ -251,7 +260,10 @@ class _OrdersState extends State<Orders> {
           ],
         ),
       ),
+    ),
     );
+
+    
   }
 
   void _handleDecreaseAction(CartItem item) {
