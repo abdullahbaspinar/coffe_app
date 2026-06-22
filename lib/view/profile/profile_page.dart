@@ -37,7 +37,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(height: AppSpacing.s8),
               _buildBottomSection,
-              //widgetlar buraya gelecek
             ],
           ),
         ),

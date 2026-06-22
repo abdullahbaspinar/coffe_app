@@ -21,7 +21,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   }
 
   void searchCategories(String query) {
-    if (_allCategories.isEmpty) return; // henüz yüklenmediyse arama yapma
+    if (_allCategories.isEmpty) return;
     final trimmed = query.trim().toLowerCase();
     if (trimmed.isEmpty) {
       emit(CategoriesLoaded(categories: _allCategories));

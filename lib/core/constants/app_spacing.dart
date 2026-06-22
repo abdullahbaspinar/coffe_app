@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Tüm projelerde kullanılabilir boşluk sabitleri.
-/// Değerler piksel ile adlandırılır: s16 = 16px
 abstract final class AppSpacing {
   static const double s4 = 4;
   static const double s6 = 6;

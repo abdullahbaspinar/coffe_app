@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Tüm projelerde kullanılabilir tipografi sabitleri.
-/// Boyutlar piksel değeriyle adlandırılır: size16 = 16px
 abstract final class AppTypography {
   static const double size8 = 8;
   static const double size12 = 12;

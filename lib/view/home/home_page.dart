@@ -539,7 +539,7 @@ class _HomePageState extends State<HomePage> {
         color: Colors.transparent,
         borderRadius: AppRadius.border(AppRadius.size30),
         border: Border.all(
-          color: context.appTextPrimary, // hep beyaz
+          color: context.appTextPrimary,
           width: 1,
         ),
       ),
