@@ -81,7 +81,7 @@ class _ProductsState extends State<Products> {
                           child: Padding(
                             padding: AppSpacing.padding20,
                             child: Text(
-                              state.errorMessage, // state.errorMessage! yerine doğrudan erişim
+                              state.errorMessage, 
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: AppColors.error),
                             ),
@@ -229,4 +229,5 @@ class _ProductsState extends State<Products> {
       ),
     );
   }
-}
+  
+  }
