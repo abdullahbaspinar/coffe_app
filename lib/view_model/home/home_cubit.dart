@@ -35,7 +35,7 @@ class HomeCubit extends Cubit<HomeState> {
 
       emit(
         HomeLoaded(
-          categories: categories.take(8).toList(),
+          categories: categories,
           featuredProducts: featured,
           searchQuery: state.searchQuery,
           searchResults: state.searchResults,

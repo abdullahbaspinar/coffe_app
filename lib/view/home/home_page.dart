@@ -2,6 +2,7 @@ import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/model/category.dart';
 import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view/auth/auth_choice_page.dart';
+import 'package:coffe_app/view/categories/all_categories.dart';
 import 'package:coffe_app/view/orders/orders.dart';
 import 'package:coffe_app/view/product/product_detail_page.dart';
 import 'package:coffe_app/view/product/product_detail_page_api.dart';
@@ -212,7 +213,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildFeaturedBeverages(HomeState state) {
-    final categories = _categoriesFromState(state);
+    final categories = _categoriesFromState(state).take(8).toList();
     final featuredProducts = _featuredProductsFromState(state);
 
     return Column(
@@ -274,37 +275,41 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- Widget _featuredMoreButton(List<Category> categories, List<Product> featuredProducts) {
-  final featuredCategoryIds = featuredProducts.map((p) => p.categoryId).toSet();
+  Widget _featuredMoreButton(
+    List<Category> categories,
+    List<Product> featuredProducts,
+  ) {
+    final featuredCategoryIds = featuredProducts
+        .map((p) => p.categoryId)
+        .toSet();
 
-  if (featuredCategoryIds.isEmpty) {
-    return TextButton(onPressed: null, child: Text("More"));
+    if (featuredCategoryIds.isEmpty) {
+      return TextButton(onPressed: null, child: Text("More"));
+    }
+
+    final targetCategoryId = featuredCategoryIds.length == 1
+        ? featuredCategoryIds.first
+        : featuredProducts.first.categoryId;
+
+    final targetCategory = categories.cast<Category?>().firstWhere(
+      (c) => c!.id == targetCategoryId,
+      orElse: () => null,
+    );
+
+    return TextButton(
+      onPressed: targetCategory == null
+          ? null
+          : () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => Products(category: targetCategory),
+                ),
+              );
+            },
+      child: Text("More",style: TextStyle(fontWeight: AppTypography.bold),),
+    );
   }
-
-  final targetCategoryId = featuredCategoryIds.length == 1
-      ? featuredCategoryIds.first
-      : featuredProducts.first.categoryId;
-
-  final targetCategory = categories.cast<Category?>().firstWhere(
-        (c) => c!.id == targetCategoryId,
-        orElse: () => null,
-      );
-
-  return TextButton(
-    onPressed: targetCategory == null
-        ? null
-        : () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => Products(category: targetCategory),
-              ),
-            );
-          },
-    child: Text("More"),
-  );
-}
-
 
   Widget _buildCategories(HomeState state) {
     final categories = _categoriesFromState(state);
@@ -312,14 +317,21 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Categories",
-          style: TextStyle(
-            fontSize: AppTypography.size16,
-            color: context.appTextPrimary,
-            fontWeight: AppTypography.bold,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Categories",
+              style: TextStyle(
+                fontSize: AppTypography.size16,
+                color: context.appTextPrimary,
+                fontWeight: AppTypography.bold,
+              ),
+            ),
+            _allCategoriesButton(),
+          ],
         ),
+
         const SizedBox(height: AppSpacing.s12),
         if (state is HomeLoading || state is HomeInitial)
           const SizedBox(
@@ -374,6 +386,18 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
       ],
+    );
+  }
+
+  Widget _allCategoriesButton() {
+    return TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => AllCategories()),
+        );
+      },
+      child: Text("All Categories",style: TextStyle(fontWeight: AppTypography.bold),),
     );
   }
 
