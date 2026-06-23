@@ -66,5 +66,14 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Yakındaki Starbucks şubelerini göstermek için konumunuza ihtiyacımız var.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>comgooglemaps</string>
+		<string>maps</string>
+		<string>http</string>
+		<string>https</string>
+	</array>
 </dict>
 </plist>
