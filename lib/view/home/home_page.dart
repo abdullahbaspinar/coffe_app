@@ -8,6 +8,7 @@ import 'package:coffe_app/view/product/product_detail_page.dart';
 import 'package:coffe_app/view/product/product_detail_page_api.dart';
 import 'package:coffe_app/view/product/products.dart';
 import 'package:coffe_app/view/profile/profile_page.dart';
+import 'package:coffe_app/view/store_location/store_loaction.dart';
 import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
@@ -307,7 +308,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             },
-      child: Text("More",style: TextStyle(fontWeight: AppTypography.bold),),
+      child: Text("More", style: TextStyle(fontWeight: AppTypography.bold)),
     );
   }
 
@@ -397,7 +398,10 @@ class _HomePageState extends State<HomePage> {
           MaterialPageRoute(builder: (_) => AllCategories()),
         );
       },
-      child: Text("All Categories",style: TextStyle(fontWeight: AppTypography.bold),),
+      child: Text(
+        "All Categories",
+        style: TextStyle(fontWeight: AppTypography.bold),
+      ),
     );
   }
 
@@ -538,10 +542,7 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: AppRadius.border(AppRadius.size30),
-        border: Border.all(
-          color: context.appTextPrimary,
-          width: 1,
-        ),
+        border: Border.all(color: context.appTextPrimary, width: 1),
       ),
       child: Row(
         children: [
@@ -655,7 +656,10 @@ class _HomePageState extends State<HomePage> {
         }),
         _menuItem(Icons.store_outlined, "Store Location", 2, () {
           setState(() => selectedIndex = 0);
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const StoreLocationPage()),
+          );
         }),
         _menuItem(Icons.person_outline, "Profile", 3, () async {
           setState(() => selectedIndex = 3);
