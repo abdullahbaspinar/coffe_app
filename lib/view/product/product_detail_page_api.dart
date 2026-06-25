@@ -41,12 +41,19 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
                     color: context.appPrimary,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.check, color: AppColors.white, size: 42),
+                  child: const Icon(
+                    Icons.check,
+                    color: AppColors.white,
+                    size: 42,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.s18),
                 const Text(
                   "Successfully Added to Cart",
-                  style: TextStyle(fontSize: AppTypography.size22, fontWeight: AppTypography.extraBold),
+                  style: TextStyle(
+                    fontSize: AppTypography.size22,
+                    fontWeight: AppTypography.extraBold,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.s8),
                 Text(
@@ -124,8 +131,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       actions: [
         IconButton(
           onPressed: () {},
-          icon: Icon(Icons.favorite_border, color: context.appBackground
-          ),
+          icon: Icon(Icons.favorite_border, color: context.appBackground),
         ),
       ],
     );
@@ -253,7 +259,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         const SizedBox(height: AppSpacing.s10),
         Text(
           widget.product.description,
-          style:  TextStyle(
+          style: TextStyle(
             color: context.appTextPrimary,
             fontSize: AppTypography.size15,
             height: 1.5,
@@ -276,56 +282,52 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           ),
         ),
         const Spacer(),
-        _buildQuantityButton(
-          icon: Icons.remove,
-          onTap: () {
-            if (quantity > 1) {
-              setState(() {
-                quantity--;
-              });
-            }
-          },
-        ),
-        SizedBox(width: AppSpacing.s16),
-        Text(
-          quantity.toString(),
-          style: TextStyle(
-            color: context.appTextPrimary,
-            fontSize: AppTypography.size20,
-            fontWeight: AppTypography.extraBold,
+         Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: context.appBackground,
+        borderRadius: AppRadius.border(AppRadius.size30),
+        border: Border.all(color: context.appTextMuted),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            onPressed: () {
+              if (quantity > 0) {
+                setState(() {
+                  quantity--;
+                });
+              }
+            },
+            icon: Icon(Icons.remove, color: context.appPrimary),
           ),
-        ),
-        const SizedBox(width: AppSpacing.s16),
-        _buildQuantityButton(
-          icon: Icons.add,
-          onTap: () {
-            setState(() {
-              quantity++;
-            });
-          },
-        ),
+          Text(
+            "$quantity",
+            style: TextStyle(
+              fontSize: AppTypography.size22,
+              fontWeight: AppTypography.bold,
+              color: context.appTextPrimary,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                quantity++;
+              });
+            },
+            icon: Icon(Icons.add, color: context.appPrimary),
+          ),
+        ],
+      ),
+    )
       ],
     );
+
+   
   }
 
-  Widget _buildQuantityButton({
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: AppRadius.border(AppRadius.size14),
-      child: Container(
-        width: 42,
-        height: 42,
-        decoration: BoxDecoration(
-          color: context.appPrimary,
-          borderRadius: AppRadius.border(AppRadius.size14),
-        ),
-        child: Icon(icon, color: AppColors.white, size: 22),
-      ),
-    );
-  }
+  
 
   Widget get _buildAddToCartButton {
     return SizedBox(
