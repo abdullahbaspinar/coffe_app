@@ -1,9 +1,16 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/view/widgets/most_ordered_card.dart';
-import 'package:coffe_app/view/widgets/personal_information_card.dart';
-import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
+import 'package:coffe_app/core/services/profile_service.dart';
+import 'package:coffe_app/model/user_profile.dart';
+import 'package:coffe_app/view/profile/profile_edit.dart';
+import 'package:coffe_app/view/widgets/most_ordered_card.dart';
+import 'package:coffe_app/view/widgets/personal_information_card.dart';
+import 'package:coffe_app/view_model/profile/profile_cubit.dart';
+import 'package:coffe_app/view_model/profile/profile_state.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,31 +20,61 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final ProfileCubit _cubit = ProfileCubit(service: ProfileService());
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit.loadProfile();
+  }
+
+  @override
+  void dispose() {
+    _cubit.close();
+    super.dispose();
+  }
+
+  void _openEditPage(UserProfile profile) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: _cubit,
+          child: ProfileEditPage(profile: profile),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-            appBar: _buildAppBar,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsetsGeometry.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTopSection,
-              SizedBox(height: AppSpacing.s8),
-              _buildMidSection,
-              SizedBox(height: AppSpacing.s16),
-              Text(
-                "MOST ORDERED",
-                style: TextStyle(
-                  color: context.appTextPrimary,
-                  fontSize: AppTypography.size16,
-                  fontWeight: AppTypography.bold,
-                ),
-              ),
-              SizedBox(height: AppSpacing.s8),
-              _buildBottomSection,
-            ],
+    return BlocProvider.value(
+      value: _cubit,
+      child: Scaffold(
+        backgroundColor: context.appBackground,
+        appBar: _buildAppBar,
+        body: SafeArea(
+          child: BlocBuilder<ProfileCubit, ProfileState>(
+            builder: (context, state) {
+              if (state is ProfileLoading || state is ProfileInitial) {
+                return Center(
+                  child: CircularProgressIndicator(color: context.appPrimary),
+                );
+              }
+
+              if (state is ProfileError) {
+                return _buildErrorState(state.message);
+              }
+
+              if (state is ProfileLoaded || state is ProfileUpdating) {
+                final profile = state is ProfileLoaded
+                    ? state.profile
+                    : (state as ProfileUpdating).profile;
+                return _buildLoadedContent(profile);
+              }
+
+              return const SizedBox.shrink();
+            },
           ),
         ),
       ),
@@ -46,19 +83,18 @@ class _ProfilePageState extends State<ProfilePage> {
 
   PreferredSizeWidget get _buildAppBar {
     return AppBar(
-            elevation: 0,
+      elevation: 0,
       centerTitle: true,
+      backgroundColor: context.appBackground,
       leading: Padding(
-        padding: EdgeInsetsGeometry.only(left: 12),
+        padding: const EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
       title: Text(
-        "Profile",
+        'Profile',
         style: TextStyle(
           color: context.appTextPrimary,
           fontSize: AppTypography.size22,
@@ -66,36 +102,123 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.edit, color: context.appTextPrimary),
+        BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) {
+            final profile = switch (state) {
+              ProfileLoaded(:final profile) => profile,
+              ProfileUpdating(:final profile) => profile,
+              _ => null,
+            };
+
+            return IconButton(
+              onPressed: profile != null ? () => _openEditPage(profile) : null,
+              icon: Icon(Icons.edit, color: context.appTextPrimary),
+            );
+          },
         ),
       ],
     );
   }
 
-  Widget get _buildTopSection {
+  Widget _buildErrorState(String message) {
+    return Center(
+      child: Padding(
+        padding: AppSpacing.padding20,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 56,
+              color: context.appTextMuted,
+            ),
+            const SizedBox(height: AppSpacing.s16),
+            Text(
+              message.replaceFirst('Exception: ', ''),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: context.appTextPrimary,
+                fontSize: AppTypography.size16,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s20),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton(
+                onPressed: _cubit.loadProfile,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.appPrimary,
+                  foregroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: AppRadius.border(AppRadius.size30),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  'Tekrar Dene',
+                  style: TextStyle(fontWeight: AppTypography.bold),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadedContent(UserProfile profile) {
+    return SingleChildScrollView(
+      padding: AppSpacing.padding20,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildTopSection(profile),
+          const SizedBox(height: AppSpacing.s8),
+          _buildMidSection(profile),
+          const SizedBox(height: AppSpacing.s16),
+          Text(
+            'MOST ORDERED',
+            style: TextStyle(
+              color: context.appTextPrimary,
+              fontSize: AppTypography.size16,
+              fontWeight: AppTypography.bold,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.s8),
+          SizedBox(height: 100, child: _buildBottomSection),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTopSection(UserProfile profile) {
     return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
             radius: 75,
-            backgroundImage: AssetImage("assets/profile/profile_picture.png"),
+            backgroundColor: context.appPrimaryTint,
+            child: Icon(
+              Icons.person_rounded,
+              size: 72,
+              color: context.appPrimary,
+            ),
           ),
-          SizedBox(height: AppSpacing.s16),
+          const SizedBox(height: AppSpacing.s16),
           Text(
-            "Abdullah Başpınar",
+            profile.name.isNotEmpty ? profile.name : 'Misafir',
             style: TextStyle(
               color: context.appTextPrimary,
               fontSize: AppTypography.size22,
               fontWeight: AppTypography.bold,
             ),
           ),
-          SizedBox(height: AppSpacing.s16),
+          const SizedBox(height: AppSpacing.s16),
           Text(
-            "Ankara, Turkey",
+            profile.address?.isNotEmpty == true
+                ? profile.address!
+                : 'Adres eklenmedi',
             style: TextStyle(
               color: context.appPrimary,
               fontSize: AppTypography.size16,
@@ -107,25 +230,31 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget get _buildMidSection {
+  Widget _buildMidSection(UserProfile profile) {
     return Column(
       children: [
         PersonalInformationCard(
           icon_name: Icons.phone_iphone,
-          title: "Mobile Phone",
-          description: "+90 551 343 29 10",
+          title: 'Mobile Phone',
+          description: profile.phone != null
+              ? profile.phone.toString()
+              : 'Telefon eklenmedi',
         ),
-        SizedBox(height: AppSpacing.s8),
+        const SizedBox(height: AppSpacing.s8),
         PersonalInformationCard(
           icon_name: Icons.email_outlined,
-          title: "Email Adress",
-          description: "abdullahbaspinarr@gmail.com",
+          title: 'Email Adress',
+          description: profile.email.isNotEmpty
+              ? profile.email
+              : 'Email eklenmedi',
         ),
-        SizedBox(height: AppSpacing.s8),
+        const SizedBox(height: AppSpacing.s8),
         PersonalInformationCard(
           icon_name: Icons.location_on_outlined,
-          title: "Adress",
-          description: "Ankara, Turkey",
+          title: 'Adress',
+          description: profile.address?.isNotEmpty == true
+              ? profile.address!
+              : 'Adres eklenmedi',
         ),
       ],
     );
@@ -136,24 +265,23 @@ class _ProfilePageState extends State<ProfilePage> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: [
+          children: const [
             MostOrderedCard(
-              imagePath: "assets/product/product1.png",
-              title: "Iced Latte",
-              category: "Beverages",
+              imagePath: 'assets/product/product1.png',
+              title: 'Iced Latte',
+              category: 'Beverages',
             ),
             SizedBox(width: AppSpacing.s8),
             MostOrderedCard(
-              imagePath: "assets/product/product1.png",
-              title: "Iced Latte",
-              category: "Beverages",
+              imagePath: 'assets/product/product1.png',
+              title: 'Iced Latte',
+              category: 'Beverages',
             ),
             SizedBox(width: AppSpacing.s8),
-
             MostOrderedCard(
-              imagePath: "assets/product/product1.png",
-              title: "Iced Latte",
-              category: "Beverages",
+              imagePath: 'assets/product/product1.png',
+              title: 'Iced Latte',
+              category: 'Beverages',
             ),
           ],
         ),
