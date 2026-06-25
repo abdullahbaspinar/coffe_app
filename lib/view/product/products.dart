@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/core/services/product_service.dart';
 import 'package:coffe_app/model/category.dart';

@@ -1,10 +1,4 @@
-import 'dart:collection';
-
-import 'package:coffe_app/core/services/product_service.dart';
 import 'package:coffe_app/model/product.dart';
-import 'package:coffe_app/view/product/products.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 abstract class ProductsState {
     final List<Product> items;

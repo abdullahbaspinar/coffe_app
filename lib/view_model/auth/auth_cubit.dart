@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:coffe_app/core/services/auth_service.dart';
+import 'package:coffe_app/core/services/profile_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'auth_state.dart';
@@ -76,6 +77,11 @@ class AuthCubit extends Cubit<AuthState> {
         name: name.trim(),
         email: email.trim(),
         password: password.trim(),
+      );
+
+      await ProfileService().createProfile(
+        name: name.trim(),
+        email: email.trim(),
       );
 
       emit(state.copyWith(
