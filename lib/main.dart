@@ -1,7 +1,7 @@
 import 'package:coffe_app/core/constants/theme/app_theme.dart';
 import 'package:coffe_app/core/constants/theme/theme_cubit.dart';
 import 'package:coffe_app/core/constants/theme/theme_state.dart';
-import 'package:coffe_app/view/splash/splash_screen.dart';
+import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,13 +39,13 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, themeState) {
-          return MaterialApp(
+          return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'Coffe App',
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
             themeMode: themeState.themeMode,
-            home: const SplashScreen(),
+            routerConfig: AppRouter.router,
           );
         },
       ),

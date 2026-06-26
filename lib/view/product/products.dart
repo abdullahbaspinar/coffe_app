@@ -1,7 +1,7 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
+import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/core/services/product_service.dart';
 import 'package:coffe_app/model/category.dart';
-import 'package:coffe_app/view/product/product_detail_page_api.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
 import 'package:coffe_app/view_model/products/products_cubit.dart';
 import 'package:coffe_app/view_model/products/products_state.dart';
@@ -111,15 +111,7 @@ class _ProductsState extends State<Products> {
                                   category: p.category,
                                   price: p.price,
                                   rating: p.displayRating,
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) =>
-                                            ProductDetailPageApi(product: p),
-                                      ),
-                                    );
-                                  },
+                                  onTap: () => AppRouter.openProductDetail(p),
                                 );
                               }
 
@@ -169,7 +161,7 @@ class _ProductsState extends State<Products> {
       leading: Padding(
         padding: EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => AppRouter.pop(),
           icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),

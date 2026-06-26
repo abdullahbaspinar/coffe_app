@@ -1,5 +1,6 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/view/orders/orders.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_radius.dart';
@@ -51,9 +52,7 @@ class _ProductDetailState extends State<ProductDetail> {
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
+        onPressed: () => AppRouter.pop(),
         icon: Icon(Icons.arrow_back, color: context.appBackground),
       ),
       title: Text(
@@ -287,8 +286,7 @@ class _ProductDetailState extends State<ProductDetail> {
       height: 60,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> Orders())
-          );
+          AppRouter.navigatePushNamed(AppRoutes.orders.path);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: context.appPrimary,

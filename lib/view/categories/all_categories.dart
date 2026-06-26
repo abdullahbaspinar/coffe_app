@@ -3,9 +3,9 @@ import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_size.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
+import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/core/services/product_service.dart';
 import 'package:coffe_app/model/category.dart';
-import 'package:coffe_app/view/product/products.dart';
 import 'package:coffe_app/view/widgets/category_card_grid.dart';
 import 'package:coffe_app/view_model/categories/categories_cubit.dart';
 import 'package:coffe_app/view_model/categories/categories_state.dart';
@@ -37,12 +37,7 @@ class _AllCategoriesState extends State<AllCategories> {
   }
 
   void _openCategory(Category category) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => Products(category: category),
-      ),
-    );
+    AppRouter.openProductsByCategory(category);
   }
 
   @override
@@ -130,7 +125,7 @@ class _AllCategoriesState extends State<AllCategories> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => AppRouter.pop(),
           icon: Icon(
             Icons.arrow_back_ios_new,
             color: context.appTextPrimary,
