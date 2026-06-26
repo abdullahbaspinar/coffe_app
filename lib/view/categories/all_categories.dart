@@ -45,7 +45,7 @@ class _AllCategoriesState extends State<AllCategories> {
     return BlocProvider.value(
       value: _cubit,
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appBackground,
         appBar: _buildAppBar,
         body: SafeArea(
           child: Column(
