@@ -1,5 +1,6 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/view/auth/sign_in_page.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:coffe_app/view/widgets/social_login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
@@ -101,12 +102,7 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
         backgroundColor: context.appPrimary,
         textColor: AppColors.backgroundColor,
         onTap: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignInPage(),
-            ),
-          );
+          AppRouter.goNamed(AppRoutes.signIn.path);
         },
       ),
     );
@@ -122,12 +118,7 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
         backgroundColor: AppColors.facebookColor,
         textColor: AppColors.backgroundColor,
         onTap: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignInPage(),
-            ),
-          );
+          AppRouter.goNamed(AppRoutes.signIn.path);
         },
       ),
     );
@@ -143,12 +134,7 @@ class _AuthChoicePageState extends State<AuthChoicePage> {
         backgroundColor: context.appBackground,
         textColor: context.appPrimary,
         onTap: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignInPage(),
-            ),
-          );
+          AppRouter.goNamed(AppRoutes.signIn.path);
         },
         borderColor: AppColors.border,
       ),

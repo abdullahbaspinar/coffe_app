@@ -1,4 +1,5 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
+import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:flutter/material.dart';
@@ -115,9 +116,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
+        onPressed: () => AppRouter.pop(),
         icon: Icon(Icons.arrow_back_ios_new, color: context.appBackground),
       ),
       title: Text(

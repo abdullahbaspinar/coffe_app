@@ -1,5 +1,6 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/view/auth/sign_in_page.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +38,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     if (result == null) {
       _showSnackBar("Şifre sıfırlama maili gönderildi.");
 
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const SignInPage()),
-        (route) => false,
-      );
+      AppRouter.goNamed(AppRoutes.signIn.path);
     } else {
       _showSnackBar(result);
     }
@@ -54,10 +51,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   void _goToSignInPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const SignInPage()),
-    );
+    AppRouter.navigatePushNamed(AppRoutes.signIn.path);
   }
 
   @override

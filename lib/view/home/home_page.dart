@@ -1,14 +1,8 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:coffe_app/model/category.dart';
 import 'package:coffe_app/model/product.dart';
-import 'package:coffe_app/view/auth/auth_choice_page.dart';
-import 'package:coffe_app/view/categories/all_categories.dart';
-import 'package:coffe_app/view/orders/orders.dart';
-import 'package:coffe_app/view/product/product_detail_page.dart';
-import 'package:coffe_app/view/product/product_detail_page_api.dart';
-import 'package:coffe_app/view/product/products.dart';
-import 'package:coffe_app/view/profile/profile_page.dart';
-import 'package:coffe_app/view/store_location/store_loaction.dart';
 import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
@@ -201,10 +195,7 @@ class _HomePageState extends State<HomePage> {
               price: product.price,
               oldPrice: product.oldPrice,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProductDetail()),
-                );
+                AppRouter.navigatePushNamed(AppRoutes.productDetailLocal.path);
               },
             ),
           );
@@ -261,14 +252,7 @@ class _HomePageState extends State<HomePage> {
                 price: "\$${product.price.toStringAsFixed(2)}",
                 points: "50 pts",
                 rating: product.displayRating.toStringAsFixed(1),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ProductDetailPageApi(product: product),
-                    ),
-                  );
-                },
+                onTap: () => AppRouter.openProductDetail(product),
               );
             },
           ),
@@ -300,14 +284,7 @@ class _HomePageState extends State<HomePage> {
     return TextButton(
       onPressed: targetCategory == null
           ? null
-          : () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => Products(category: targetCategory),
-                ),
-              );
-            },
+          : () => AppRouter.openProductsByCategory(targetCategory),
       child: Text("More", style: TextStyle(fontWeight: AppTypography.bold)),
     );
   }
@@ -373,14 +350,7 @@ class _HomePageState extends State<HomePage> {
                     title: item.name,
                     imageUrl: item.image,
                     menuCount: null,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => Products(category: item),
-                        ),
-                      );
-                    },
+                    onTap: () => AppRouter.openProductsByCategory(item),
                   ),
                 );
               },
@@ -393,10 +363,7 @@ class _HomePageState extends State<HomePage> {
   Widget _allCategoriesButton() {
     return TextButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => AllCategories()),
-        );
+        AppRouter.navigatePushNamed(AppRoutes.categories.path);
       },
       child: Text(
         "All Categories",
@@ -468,14 +435,7 @@ class _HomePageState extends State<HomePage> {
           category: product.category,
           price: product.price,
           rating: product.displayRating,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ProductDetailPageApi(product: product),
-              ),
-            );
-          },
+          onTap: () => AppRouter.openProductDetail(product),
         );
       },
     );
@@ -514,10 +474,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const Orders()),
-                );
+                AppRouter.navigatePushNamed(AppRoutes.orders.path);
               },
               icon: Icon(
                 Icons.shopping_bag_outlined,
@@ -648,26 +605,17 @@ class _HomePageState extends State<HomePage> {
         }),
         _menuItem(Icons.shopping_bag_outlined, "My Order", 1, () {
           setState(() => selectedIndex = 1);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const Orders()),
-          );
+          AppRouter.navigatePushNamed(AppRoutes.orders.path);
           setState(() => selectedIndex = 0);
         }),
         _menuItem(Icons.store_outlined, "Store Location", 2, () {
           setState(() => selectedIndex = 0);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const StoreLocationPage()),
-          );
+          AppRouter.navigatePushNamed(AppRoutes.storeLocation.path);
         }),
         _menuItem(Icons.person_outline, "Profile", 3, () async {
           setState(() => selectedIndex = 3);
           Navigator.pop(context);
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ProfilePage()),
-          );
+          await AppRouter.navigatePushNamed(AppRoutes.profile.path);
           setState(() => selectedIndex = 0);
         }),
         const Divider(color: AppColors.borderLight),
@@ -683,11 +631,7 @@ class _HomePageState extends State<HomePage> {
           onTap: () async {
             await context.read<AuthCubit>().signOut();
             if (!context.mounted) return;
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => const AuthChoicePage()),
-              (route) => false,
-            );
+            AppRouter.goNamed(AppRoutes.auth.path);
           },
         ),
       ],

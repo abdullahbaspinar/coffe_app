@@ -1,7 +1,6 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/view/auth/reset_password_page.dart';
-import 'package:coffe_app/view/auth/sign_up_page.dart';
-import 'package:coffe_app/view/home/home_page.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -43,11 +42,7 @@ class _SignInPageState extends State<SignInPage> {
     if (!mounted) return;
 
     if (result == null) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const HomePage()),
-        (route) => false,
-      );
+      AppRouter.goNamed(AppRoutes.home.path);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result)),
@@ -335,10 +330,7 @@ class _SignInPageState extends State<SignInPage> {
         ),
         TextButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ResetPasswordPage()),
-            );
+            AppRouter.navigatePushNamed(AppRoutes.resetPassword.path);
           },
           child: Text(
             "Reset Password",
@@ -372,10 +364,7 @@ class _SignInPageState extends State<SignInPage> {
       height: 56,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const SignUpPage()),
-          );
+          AppRouter.navigatePushNamed(AppRoutes.signUp.path);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.createAccountBackgroundColor,

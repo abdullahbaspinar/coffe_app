@@ -1,5 +1,6 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/view/auth/auth_choice_page.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_radius.dart';
@@ -45,10 +46,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
     if (!mounted) return;
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const AuthChoicePage()),
-    );
+    AppRouter.goNamed(AppRoutes.auth.path);
   }
 
   void nextPage() {

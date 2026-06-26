@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/view/auth/auth_choice_page.dart';
-import 'package:coffe_app/view/onboarding/onboarding_page.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
@@ -29,12 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!mounted) return;
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            isFirstLaunch ? const OnboardingPage() : const AuthChoicePage(),
-      ),
+    AppRouter.goNamed(
+      isFirstLaunch ? AppRoutes.onboarding.path : AppRoutes.auth.path,
     );
   }
 

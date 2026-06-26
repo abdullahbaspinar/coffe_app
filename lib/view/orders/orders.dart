@@ -1,5 +1,5 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/view/product/product_detail_page_api.dart';
+import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/total_amount.dart';
 import 'package:coffe_app/model/cart_item.dart';
@@ -65,7 +65,7 @@ class _OrdersState extends State<Orders> {
       leading: Padding(
         padding: EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => AppRouter.pop(),
           icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
@@ -165,14 +165,7 @@ class _OrdersState extends State<Orders> {
 
   Widget _buildCartItem(CartItem item) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ProductDetailPageApi(product: item.product),
-          ),
-        );
-      },child: Card(
+      onTap: () => AppRouter.openProductDetail(item.product),child: Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: Padding(
         padding: AppSpacing.padding12,

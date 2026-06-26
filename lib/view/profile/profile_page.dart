@@ -2,9 +2,10 @@ import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:coffe_app/core/services/profile_service.dart';
 import 'package:coffe_app/model/user_profile.dart';
-import 'package:coffe_app/view/profile/profile_edit.dart';
 import 'package:coffe_app/view/widgets/most_ordered_card.dart';
 import 'package:coffe_app/view/widgets/personal_information_card.dart';
 import 'package:coffe_app/view_model/profile/profile_cubit.dart';
@@ -35,14 +36,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _openEditPage(UserProfile profile) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: _cubit,
-          child: ProfileEditPage(profile: profile),
-        ),
-      ),
+    AppRouter.navigatePushNamed(
+      AppRoutes.profileEdit.path,
+      extra: ProfileEditExtra(profile: profile, cubit: _cubit),
     );
   }
 
@@ -89,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => AppRouter.pop(),
           icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),

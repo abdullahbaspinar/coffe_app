@@ -1,4 +1,5 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
+import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
@@ -70,7 +71,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     if (!mounted) return;
 
     if (error == null) {
-      Navigator.pop(context);
+      AppRouter.pop();
       return;
     }
 
@@ -144,7 +145,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => AppRouter.pop(),
           icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),

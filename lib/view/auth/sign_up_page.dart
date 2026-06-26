@@ -1,5 +1,6 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/view/auth/sign_in_page.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -67,11 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
     if (!mounted) return;
 
     if (result == null) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const SignInPage()),
-        (route) => false,
-      );
+      AppRouter.goNamed(AppRoutes.signIn.path);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result)),
