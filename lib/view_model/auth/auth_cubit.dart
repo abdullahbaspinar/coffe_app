@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:coffe_app/core/services/auth_service.dart';
 import 'package:coffe_app/core/services/profile_service.dart';
@@ -7,156 +9,150 @@ import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthService _authService;
+  final ProfileService _profileService;
+  StreamSubscription<User?>? _authSubscription;
 
   AuthCubit({
     AuthService? authService,
+    ProfileService? profileService,
   })  : _authService = authService ?? AuthService(),
-        super(AuthState.initial());
+        _profileService = profileService ?? ProfileService(),
+        super(AuthState.initial()) {
+    _listenAuthChanges();
+  }
 
-  User? get currentUser => _authService.currentUser;
+  User? get currentUser => state.user ?? _authService.currentUser;
 
   Stream<User?> get authStateChanges => _authService.authStateChanges;
 
-  String get currentUserName => currentUser?.displayName ?? "Misafir";
+  String get currentUserName => currentUser?.displayName ?? 'Misafir';
+
+  void _listenAuthChanges() {
+    _authSubscription = _authService.authStateChanges.listen((user) {
+      if (user == null) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.unauthenticated,
+            clearUser: true,
+            isLoading: false,
+            clearError: true,
+          ),
+        );
+        return;
+      }
+
+      emit(
+        state.copyWith(
+          status: AuthStatus.authenticated,
+          user: user,
+          isLoading: false,
+          clearError: true,
+        ),
+      );
+    });
+  }
 
   Future<String?> signIn({
     required String email,
     required String password,
-  }) async {
-    try {
-      emit(state.copyWith(
-        isLoading: true,
-        errorMessage: null,
-      ));
-
-      await _authService.signIn(
+  }) {
+    return _runAuthAction(
+      action: () => _authService.signIn(
         email: email.trim(),
         password: password.trim(),
-      );
-
-      emit(state.copyWith(
-        isLoading: false,
-        user: _authService.currentUser,
-        errorMessage: null,
-      ));
-
-      return null;
-    } on FirebaseAuthException catch (e) {
-      final message = _mapFirebaseError(e);
-
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: message,
-      ));
-
-      return message;
-    } catch (_) {
-      const message = 'Beklenmeyen bir hata oluştu.';
-
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: message,
-      ));
-
-      return message;
-    }
+      ),
+    );
   }
 
   Future<String?> signUp({
     required String name,
     required String email,
     required String password,
-  }) async {
-    try {
-      emit(state.copyWith(
-        isLoading: true,
-        errorMessage: null,
-      ));
+  }) {
+    return _runAuthAction(
+      action: () async {
+        await _authService.signUp(
+          name: name.trim(),
+          email: email.trim(),
+          password: password.trim(),
+        );
 
-      await _authService.signUp(
-        name: name.trim(),
-        email: email.trim(),
-        password: password.trim(),
-      );
-
-      await ProfileService().createProfile(
-        name: name.trim(),
-        email: email.trim(),
-      );
-
-      emit(state.copyWith(
-        isLoading: false,
-        user: _authService.currentUser,
-        errorMessage: null,
-      ));
-
-      return null;
-    } on FirebaseAuthException catch (e) {
-      final message = _mapFirebaseError(e);
-
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: message,
-      ));
-
-      return message;
-    } catch (_) {
-      const message = 'Beklenmeyen bir hata oluştu.';
-
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: message,
-      ));
-
-      return message;
-    }
+        await _profileService.createProfile(
+          name: name.trim(),
+          email: email.trim(),
+        );
+      },
+    );
   }
 
   Future<String?> resetPassword({
     required String email,
-  }) async {
-    try {
-      emit(state.copyWith(
-        isLoading: true,
-        errorMessage: null,
-      ));
-
-      await _authService.resetPassword(
+  }) {
+    return _runAuthAction(
+      action: () => _authService.resetPassword(
         email: email.trim(),
-      );
+      ),
+    );
+  }
 
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: null,
-      ));
+  Future<void> signOut() async {
+    await _authService.signOut();
+    emit(AuthState.initial().copyWith(status: AuthStatus.unauthenticated));
+  }
+
+  void clearError() {
+    emit(state.copyWith(clearError: true));
+  }
+
+  Future<String?> _runAuthAction({
+    required Future<void> Function() action,
+  }) async {
+    emit(
+      state.copyWith(
+        isLoading: true,
+        clearError: true,
+      ),
+    );
+
+    try {
+      await action();
+
+      emit(
+        state.copyWith(
+          isLoading: false,
+          status: AuthStatus.authenticated,
+          user: _authService.currentUser,
+          clearError: true,
+        ),
+      );
 
       return null;
     } on FirebaseAuthException catch (e) {
       final message = _mapFirebaseError(e);
 
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: message,
-      ));
+      emit(
+        state.copyWith(
+          isLoading: false,
+          status: AuthStatus.unauthenticated,
+          errorMessage: message,
+        ),
+      );
 
       return message;
     } catch (_) {
       const message = 'Beklenmeyen bir hata oluştu.';
 
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: message,
-      ));
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: message,
+        ),
+      );
 
       return message;
     }
   }
 
-  Future<void> signOut() async {
-    await _authService.signOut();
-
-    emit(AuthState.initial());
-  }
   String _mapFirebaseError(FirebaseAuthException e) {
     switch (e.code) {
       case 'invalid-email':
@@ -175,5 +171,11 @@ class AuthCubit extends Cubit<AuthState> {
       default:
         return e.message ?? 'Bir hata oluştu.';
     }
+  }
+
+  @override
+  Future<void> close() {
+    _authSubscription?.cancel();
+    return super.close();
   }
 }
