@@ -157,7 +157,6 @@ class AuthCubit extends Cubit<AuthState> {
 
     emit(AuthState.initial());
   }
-
   String _mapFirebaseError(FirebaseAuthException e) {
     switch (e.code) {
       case 'invalid-email':
