@@ -1,20 +1,18 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/core/router/app_router.dart';
-import 'package:coffe_app/core/router/app_routes.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
+import 'package:coffe_app/core/constants/app_size.dart';
+import 'package:coffe_app/core/constants/app_spacing.dart';
+import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:coffe_app/model/category.dart';
 import 'package:coffe_app/model/product.dart';
+import 'package:coffe_app/view/home/mixin/home_page_mixin.dart';
 import 'package:coffe_app/view/widgets/categories_card.dart';
 import 'package:coffe_app/view/widgets/featured_beverages.dart';
 import 'package:coffe_app/view/widgets/product_card.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
-import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/home/home_cubit.dart';
 import 'package:coffe_app/view_model/home/home_state.dart';
 import 'package:flutter/material.dart';
-import 'package:coffe_app/core/constants/app_size.dart';
-import 'package:coffe_app/core/constants/app_spacing.dart';
-import 'package:coffe_app/core/constants/app_radius.dart';
-import 'package:coffe_app/core/constants/app_typography.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,110 +22,17 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class HomeProduct {
-  final String imagePath;
-  final String title;
-  final String price;
-  final String oldPrice;
-
-  HomeProduct({
-    required this.imagePath,
-    required this.title,
-    required this.price,
-    required this.oldPrice,
-  });
-}
-
-class _HomePageState extends State<HomePage> {
-  late final HomeCubit _homeCubit;
-
-  int selectedIndex = 0;
-  AuthCubit get authCubit => context.watch<AuthCubit>();
-
-  final List<HomeProduct> products = [
-    HomeProduct(
-      imagePath: "assets/product/product1.png",
-      title: "Ice Latte",
-      price: "\$5.8",
-      oldPrice: "\$9.9",
-    ),
-    HomeProduct(
-      imagePath: "assets/product/product2.png",
-      title: "Caramel Latte",
-      price: "\$6.2",
-      oldPrice: "\$8.5",
-    ),
-    HomeProduct(
-      imagePath: "assets/product/product1.png",
-      title: "Mocha Frappe",
-      price: "\$7.1",
-      oldPrice: "\$10.0",
-    ),
-    HomeProduct(
-      imagePath: "assets/product/product2.png",
-      title: "Mocha Frappe",
-      price: "\$7.1",
-      oldPrice: "\$10.0",
-    ),
-  ];
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController _searchController = TextEditingController();
-  final FocusNode _searchFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _homeCubit = HomeCubit()..loadHomeData();
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _searchFocusNode.dispose();
-    _homeCubit.close();
-    super.dispose();
-  }
-
-  void _closeSearchOverlay() {
-    final state = _homeCubit.state;
-    if (state.searchQuery.trim().isEmpty && state.searchResults.isEmpty) {
-      return;
-    }
-
-    _searchFocusNode.unfocus();
-    _searchController.clear();
-    _homeCubit.clearSearch();
-  }
-
-  List<Category> _categoriesFromState(HomeState state) {
-    if (state is HomeLoaded) return state.categories;
-    return state.categories;
-  }
-
-  List<Product> _featuredProductsFromState(HomeState state) {
-    return state.featuredProducts;
-  }
-
-  bool _isSearchLoading(HomeState state) {
-    return state is HomeLoaded && state.isSearchLoading;
-  }
-
-  String? _searchError(HomeState state) {
-    if (state is HomeLoaded) return state.searchError;
-    return null;
-  }
-
+class _HomePageState extends State<HomePage> with HomePageMixin {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _homeCubit,
+      value: homeCubit,
       child: Scaffold(
-        key: _scaffoldKey,
+        key: scaffoldKey,
         drawer: _buildSideBar,
         body: GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onTap: _closeSearchOverlay,
+          onTap: closeSearchOverlay,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
@@ -188,15 +93,13 @@ class _HomePageState extends State<HomePage> {
           final product = products[index];
 
           return Padding(
-            padding: EdgeInsets.only(right: 12),
+            padding: const EdgeInsets.only(right: 12),
             child: ProductCard(
               imagePath: product.imagePath,
               title: product.title,
               price: product.price,
               oldPrice: product.oldPrice,
-              onTap: () {
-                AppRouter.navigatePushNamed(AppRoutes.productDetailLocal.path);
-              },
+              onTap: openProductDetailLocal,
             ),
           );
         },
@@ -205,8 +108,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildFeaturedBeverages(HomeState state) {
-    final categories = _categoriesFromState(state).take(8).toList();
-    final featuredProducts = _featuredProductsFromState(state);
+    final categories = categoriesFromState(state).take(8).toList();
+    final featuredProducts = featuredProductsFromState(state);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +118,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Featured Beverages",
+              'Featured Beverages',
               style: TextStyle(
                 color: context.appTextPrimary,
                 fontSize: AppTypography.size20,
@@ -234,7 +137,7 @@ class _HomePageState extends State<HomePage> {
         else if (featuredProducts.isEmpty)
           const SizedBox(
             height: 120,
-            child: Center(child: Text("Öne çıkan ürün bulunamadı")),
+            child: Center(child: Text('Öne çıkan ürün bulunamadı')),
           )
         else
           ListView.separated(
@@ -249,10 +152,10 @@ class _HomePageState extends State<HomePage> {
               return FeaturedBeverageItem(
                 imageUrl: product.imageUrl,
                 title: product.title,
-                price: "\$${product.price.toStringAsFixed(2)}",
-                points: "50 pts",
+                price: '\$${product.price.toStringAsFixed(2)}',
+                points: '50 pts',
                 rating: product.displayRating.toStringAsFixed(1),
-                onTap: () => AppRouter.openProductDetail(product),
+                onTap: () => openProductDetail(product),
               );
             },
           ),
@@ -264,33 +167,19 @@ class _HomePageState extends State<HomePage> {
     List<Category> categories,
     List<Product> featuredProducts,
   ) {
-    final featuredCategoryIds = featuredProducts
-        .map((p) => p.categoryId)
-        .toSet();
-
-    if (featuredCategoryIds.isEmpty) {
-      return TextButton(onPressed: null, child: Text("More"));
-    }
-
-    final targetCategoryId = featuredCategoryIds.length == 1
-        ? featuredCategoryIds.first
-        : featuredProducts.first.categoryId;
-
-    final targetCategory = categories.cast<Category?>().firstWhere(
-      (c) => c!.id == targetCategoryId,
-      orElse: () => null,
-    );
+    final targetCategory =
+        targetCategoryForFeatured(categories, featuredProducts);
 
     return TextButton(
       onPressed: targetCategory == null
           ? null
-          : () => AppRouter.openProductsByCategory(targetCategory),
-      child: Text("More", style: TextStyle(fontWeight: AppTypography.bold)),
+          : () => openProductsByCategory(targetCategory),
+      child: Text('More', style: TextStyle(fontWeight: AppTypography.bold)),
     );
   }
 
   Widget _buildCategories(HomeState state) {
-    final categories = _categoriesFromState(state);
+    final categories = categoriesFromState(state);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,7 +188,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Categories",
+              'Categories',
               style: TextStyle(
                 fontSize: AppTypography.size16,
                 color: context.appTextPrimary,
@@ -309,7 +198,6 @@ class _HomePageState extends State<HomePage> {
             _allCategoriesButton(),
           ],
         ),
-
         const SizedBox(height: AppSpacing.s12),
         if (state is HomeLoading || state is HomeInitial)
           const SizedBox(
@@ -323,15 +211,13 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const Expanded(
                   child: Text(
-                    "Kategoriler yüklenemedi.",
+                    'Kategoriler yüklenemedi.',
                     style: TextStyle(color: AppColors.error),
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    _homeCubit.loadHomeData();
-                  },
-                  child: const Text("Tekrar Dene"),
+                  onPressed: reloadHomeData,
+                  child: const Text('Tekrar Dene'),
                 ),
               ],
             ),
@@ -345,12 +231,12 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 final item = categories[index];
                 return Padding(
-                  padding: EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.only(right: 8),
                   child: CategoriesCard(
                     title: item.name,
                     imageUrl: item.image,
                     menuCount: null,
-                    onTap: () => AppRouter.openProductsByCategory(item),
+                    onTap: () => openProductsByCategory(item),
                   ),
                 );
               },
@@ -362,11 +248,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget _allCategoriesButton() {
     return TextButton(
-      onPressed: () {
-        AppRouter.navigatePushNamed(AppRoutes.categories.path);
-      },
+      onPressed: openAllCategories,
       child: Text(
-        "All Categories",
+        'All Categories',
         style: TextStyle(fontWeight: AppTypography.bold),
       ),
     );
@@ -393,19 +277,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSearchResultsContent(HomeState state) {
-    if (_isSearchLoading(state)) {
+    if (isSearchLoading(state)) {
       return const SizedBox(
         height: 120,
         child: Center(child: CircularProgressIndicator()),
       );
     }
 
-    if (_searchError(state) != null) {
+    if (searchError(state) != null) {
       return const SizedBox(
         height: 120,
         child: Center(
           child: Text(
-            "Arama başarısız",
+            'Arama başarısız',
             style: TextStyle(color: AppColors.error),
           ),
         ),
@@ -415,7 +299,7 @@ class _HomePageState extends State<HomePage> {
     if (state.searchResults.isEmpty) {
       return const SizedBox(
         height: 120,
-        child: Center(child: Text("Sonuç bulunamadı")),
+        child: Center(child: Text('Sonuç bulunamadı')),
       );
     }
 
@@ -429,13 +313,13 @@ class _HomePageState extends State<HomePage> {
         final product = state.searchResults[index];
 
         return ProductsCard(
-          imagePath: "assets/product/product2/mocha.png",
+          imagePath: 'assets/product/product2/mocha.png',
           imageUrl: product.imageUrl,
           title: product.title,
           category: product.category,
           price: product.price,
           rating: product.displayRating,
-          onTap: () => AppRouter.openProductDetail(product),
+          onTap: () => openProductDetail(product),
         );
       },
     );
@@ -450,13 +334,13 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Good Morning",
+                'Good Morning',
                 style: TextStyle(
                   fontSize: AppTypography.size14,
                   color: context.appTextPrimary,
                 ),
               ),
-              SizedBox(height: AppSpacing.s6),
+              const SizedBox(height: AppSpacing.s6),
               Text(
                 authCubit.currentUserName,
                 maxLines: 1,
@@ -473,9 +357,7 @@ class _HomePageState extends State<HomePage> {
         Row(
           children: [
             IconButton(
-              onPressed: () {
-                AppRouter.navigatePushNamed(AppRoutes.orders.path);
-              },
+              onPressed: openOrders,
               icon: Icon(
                 Icons.shopping_bag_outlined,
                 size: 28,
@@ -483,7 +365,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             IconButton(
-              onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+              onPressed: openDrawer,
               icon: Icon(Icons.menu, size: 30, color: context.appTextPrimary),
             ),
           ],
@@ -505,30 +387,26 @@ class _HomePageState extends State<HomePage> {
         children: [
           Expanded(
             child: TextField(
-              controller: _searchController,
-              focusNode: _searchFocusNode,
-              onChanged: (value) {
-                _homeCubit.onSearchChanged(value);
-              },
+              controller: searchController,
+              focusNode: searchFocusNode,
+              onChanged: onSearchChanged,
               style: TextStyle(
                 color: context.appTextPrimary,
                 fontSize: AppTypography.size16,
               ),
               cursorColor: context.appTextPrimary,
               decoration: InputDecoration(
-                hintText: "Search",
+                hintText: 'Search',
                 hintStyle: TextStyle(
                   fontSize: AppTypography.size16,
                   color: context.appTextMuted,
                 ),
-
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
                 focusedErrorBorder: InputBorder.none,
-
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
                 filled: false,
@@ -571,14 +449,14 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: [
               Image.asset(
-                "assets/images/logo.png",
+                'assets/images/logo.png',
                 width: 50,
                 height: 50,
                 fit: BoxFit.contain,
               ),
-              SizedBox(width: AppSpacing.s10),
+              const SizedBox(width: AppSpacing.s10),
               Text(
-                "Ombe",
+                'Ombe',
                 style: TextStyle(
                   fontSize: AppTypography.size24,
                   fontWeight: AppTypography.bold,
@@ -588,7 +466,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: closeDrawer,
             icon: Icon(Icons.close, color: context.appTextMuted, size: 28),
           ),
         ],
@@ -599,40 +477,21 @@ class _HomePageState extends State<HomePage> {
   Widget get _buildMenuItems {
     return Column(
       children: [
-        _menuItem(Icons.home_outlined, "Home", 0, () {
-          setState(() => selectedIndex = 0);
-          Navigator.pop(context);
-        }),
-        _menuItem(Icons.shopping_bag_outlined, "My Order", 1, () {
-          setState(() => selectedIndex = 1);
-          AppRouter.navigatePushNamed(AppRoutes.orders.path);
-          setState(() => selectedIndex = 0);
-        }),
-        _menuItem(Icons.store_outlined, "Store Location", 2, () {
-          setState(() => selectedIndex = 0);
-          AppRouter.navigatePushNamed(AppRoutes.storeLocation.path);
-        }),
-        _menuItem(Icons.person_outline, "Profile", 3, () async {
-          setState(() => selectedIndex = 3);
-          Navigator.pop(context);
-          await AppRouter.navigatePushNamed(AppRoutes.profile.path);
-          setState(() => selectedIndex = 0);
-        }),
+        _menuItem(Icons.home_outlined, 'Home', 0, onDrawerHomeTap),
+        _menuItem(Icons.shopping_bag_outlined, 'My Order', 1, onDrawerOrderTap),
+        _menuItem(Icons.store_outlined, 'Store Location', 2, onDrawerShopTap),
+        _menuItem(Icons.person_outline, 'Profile', 3, onDrawerProfileTap),
         const Divider(color: AppColors.borderLight),
         ListTile(
           leading: const Icon(Icons.logout, color: AppColors.error),
           title: const Text(
-            "Log Out",
+            'Log Out',
             style: TextStyle(
               color: AppColors.error,
               fontWeight: AppTypography.semiBold,
             ),
           ),
-          onTap: () async {
-            await context.read<AuthCubit>().signOut();
-            if (!context.mounted) return;
-            AppRouter.goNamed(AppRoutes.auth.path);
-          },
+          onTap: onLogoutTap,
         ),
       ],
     );
