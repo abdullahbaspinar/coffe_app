@@ -1,6 +1,8 @@
 import 'package:coffe_app/core/router/app_route_effect.dart';
 import 'package:coffe_app/core/router/app_routes.dart';
+import 'package:coffe_app/core/router/router_refresh.dart';
 import 'package:coffe_app/core/router/transition_builder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:coffe_app/model/category.dart';
 import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/model/user_profile.dart';
@@ -38,11 +40,14 @@ class ProfileEditExtra {
 class AppRouter {
   AppRouter._();
 
+  static final RouterRefresh _routerRefresh = RouterRefresh();
+
   static final GoRouter router = GoRouter(
     initialLocation: AppRoutes.splash.path,
     debugLogDiagnostics: true,
+    refreshListenable: _routerRefresh,
+    redirect: _redirect,
     routes: [
-      // ─── Başlangıç & Auth ───────────────────────────────────
       _generateGoRoute(
         route: AppRoutes.splash.path,
         view: (_) => const SplashScreen(),
@@ -112,7 +117,6 @@ class AppRouter {
         routeEffect: AppRouteEffect.fade,
       ),
 
-      // ─── Ürünler ──────────────────────────────────────────────
       _generateGoRoute(
         route: AppRoutes.productsByCategory.path,
         view: (parameter) {
@@ -141,6 +145,38 @@ class AppRouter {
       ),
     ],
   );
+
+  static String? _redirect(BuildContext context, GoRouterState state) {
+    final location = state.matchedLocation;
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (location == AppRoutes.splash.path) {
+      return null;
+    }
+
+    if (location == AppRoutes.onboarding.path) {
+      return null;
+    }
+
+    final isAuthRoute = _isAuthRoute(location);
+
+    if (user == null && !isAuthRoute) {
+      return AppRoutes.signIn.path;
+    }
+
+    if (user != null && isAuthRoute) {
+      return AppRoutes.home.path;
+    }
+
+    return null;
+  }
+
+  static bool _isAuthRoute(String location) {
+    return location == AppRoutes.auth.path ||
+        location == AppRoutes.signIn.path ||
+        location == AppRoutes.signUp.path ||
+        location == AppRoutes.resetPassword.path;
+  }
 
   static GoRoute _generateGoRoute({
     required String route,
@@ -202,7 +238,6 @@ class AppRouter {
     );
   }
 
-  // ─── Navigasyon yardımcıları ────────────────────────────────
 
   static void goNamed(
     String routeName, {
@@ -268,4 +303,6 @@ class AppRouter {
   static void pop<T extends Object?>({T? value}) {
     router.pop(value);
   }
+
+  
 }
