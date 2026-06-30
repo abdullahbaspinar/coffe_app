@@ -122,10 +122,22 @@ class _OrdersState extends State<Orders> with OrdersPageMixin {
     }
 
     if (state is CartError) {
-      return Center(
-        child: Text(
-          state.errorMessage,
-          style: const TextStyle(color: AppColors.error),
+      return RefreshIndicator(
+        onRefresh: refreshCart,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.5,
+              child: Center(
+                child: Text(
+                  state.errorMessage,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppColors.error),
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -134,18 +146,46 @@ class _OrdersState extends State<Orders> with OrdersPageMixin {
     final items = filterCartItems(loadedState);
 
     if (loadedState.items.isEmpty) {
-      return const Center(child: Text("Sepet Boş"));
+      return RefreshIndicator(
+        onRefresh: refreshCart,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.5,
+              child: const Center(child: Text('Sepet Boş')),
+            ),
+          ],
+        ),
+      );
     }
 
     if (items.isEmpty) {
-      return const Center(child: Text("Sepette böyle bir ürün yok"));
+      return RefreshIndicator(
+        onRefresh: refreshCart,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.5,
+              child: const Center(
+                child: Text('Sepette böyle bir ürün yok'),
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return _buildCartItem(items[index]);
-      },
+    return RefreshIndicator(
+      onRefresh: refreshCart,
+      child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return _buildCartItem(items[index]);
+        },
+      ),
     );
   }
 

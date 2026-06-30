@@ -84,4 +84,8 @@ mixin OrdersPageMixin on State<Orders> {
   void incrementQuantity(Product product) {
     context.read<CartCubit>().quantityPlus(product);
   }
+
+  Future<void> refreshCart() {
+    return context.read<CartCubit>().loadCart();
+  }
 }

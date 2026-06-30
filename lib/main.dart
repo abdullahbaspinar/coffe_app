@@ -3,6 +3,7 @@ import 'package:coffe_app/core/constants/theme/theme_cubit.dart';
 import 'package:coffe_app/core/constants/theme/theme_state.dart';
 import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
+import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -37,17 +38,44 @@ class MyApp extends StatelessWidget {
           create: (_) => CartCubit()..loadCart(),
         ),
       ],
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, themeState) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: 'Coffe App',
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            themeMode: themeState.themeMode,
-            routerConfig: AppRouter.router,
-          );
+      child: BlocListener<AuthCubit, AuthState>(
+        listenWhen: (previous, current) {
+          if (current.status == AuthStatus.authenticated &&
+              previous.status == AuthStatus.unauthenticated) {
+            return true;
+          }
+
+          if (current.status == AuthStatus.unauthenticated &&
+              previous.status == AuthStatus.authenticated) {
+            return true;
+          }
+
+          return false;
         },
+        listener: (context, state) {
+          final cartCubit = context.read<CartCubit>();
+
+          if (state.isAuthenticated) {
+            cartCubit.onUserSignedIn();
+            return;
+          }
+
+          if (state.isUnauthenticated) {
+            cartCubit.onUserSignedOut();
+          }
+        },
+        child: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, themeState) {
+            return MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              title: 'Coffe App',
+              theme: AppTheme.light,
+              darkTheme: AppTheme.dark,
+              themeMode: themeState.themeMode,
+              routerConfig: AppRouter.router,
+            );
+          },
+        ),
       ),
     );
   }
