@@ -1,7 +1,7 @@
-import 'dart:async';
 import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/core/router/app_routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
@@ -29,8 +29,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!mounted) return;
 
+    if (isFirstLaunch) {
+      AppRouter.goNamed(AppRoutes.onboarding.path);
+      return;
+    }
+
+    final user = FirebaseAuth.instance.currentUser;
+
     AppRouter.goNamed(
-      isFirstLaunch ? AppRoutes.onboarding.path : AppRoutes.auth.path,
+      user != null ? AppRoutes.home.path : AppRoutes.auth.path,
     );
   }
 
