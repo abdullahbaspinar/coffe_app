@@ -1,7 +1,6 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/core/router/app_router.dart';
-import 'package:coffe_app/core/services/product_service.dart';
 import 'package:coffe_app/model/category.dart';
+import 'package:coffe_app/view/product/mixin/products_page_mixin.dart';
 import 'package:coffe_app/view/widgets/products_card.dart';
 import 'package:coffe_app/view_model/products/products_cubit.dart';
 import 'package:coffe_app/view_model/products/products_state.dart';
@@ -20,40 +19,11 @@ class Products extends StatefulWidget {
   State<Products> createState() => _ProductsState();
 }
 
-class _ProductsState extends State<Products> {
-  final ScrollController _scrollController = ScrollController();
-  final TextEditingController _searchController = TextEditingController();
-  late final ProductsCubit _cubit;
-
-  @override
-  void initState() {
-    super.initState();
-    _cubit = ProductsCubit(ProductService());
-    _cubit.fetchProducts(categoryId: widget.category.id);
-
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (!_scrollController.hasClients) return;
-    final threshold = _scrollController.position.maxScrollExtent - 200;
-    if (_scrollController.position.pixels >= threshold) {
-      _cubit.loadMoreProducts();
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    _searchController.dispose();
-    _cubit.close();
-    super.dispose();
-  }
-
+class _ProductsState extends State<Products> with ProductsPageMixin {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _cubit,
+      value: productsCubit,
       child: Builder(
         builder: (context) {
           return Scaffold(
@@ -95,10 +65,9 @@ class _ProductsState extends State<Products> {
 
                       if (state is ProductsLoaded) {
                         return RefreshIndicator(
-                          onRefresh: () async =>
-                              context.read<ProductsCubit>().fetchProducts(categoryId: widget.category.id),
+                          onRefresh: refreshProducts,
                           child: ListView.builder(
-                            controller: _scrollController,
+                            controller: scrollController,
                             physics: const AlwaysScrollableScrollPhysics(),
                             itemCount: state.items.length + 1,
                             itemBuilder: (context, index) {
@@ -111,7 +80,7 @@ class _ProductsState extends State<Products> {
                                   category: p.category,
                                   price: p.price,
                                   rating: p.displayRating,
-                                  onTap: () => AppRouter.openProductDetail(p),
+                                  onTap: () => openProductDetail(p),
                                 );
                               }
 
@@ -161,7 +130,7 @@ class _ProductsState extends State<Products> {
       leading: Padding(
         padding: EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => AppRouter.pop(),
+          onPressed: closePage,
           icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
@@ -195,10 +164,8 @@ class _ProductsState extends State<Products> {
         children: [
           Expanded(
             child: TextField(
-              controller: _searchController,
-              onChanged: (value) {
-                context.read<ProductsCubit>().searchProducts(query: value);
-              },
+              controller: searchController,
+              onChanged: onSearchChanged,
               decoration: InputDecoration(
                 hintText: "Search in this category",
                 border: InputBorder.none,

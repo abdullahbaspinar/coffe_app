@@ -3,9 +3,7 @@ import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_size.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
-import 'package:coffe_app/core/router/app_router.dart';
-import 'package:coffe_app/core/services/product_service.dart';
-import 'package:coffe_app/model/category.dart';
+import 'package:coffe_app/view/categories/mixin/all_categories_page_mixin.dart';
 import 'package:coffe_app/view/widgets/category_card_grid.dart';
 import 'package:coffe_app/view_model/categories/categories_cubit.dart';
 import 'package:coffe_app/view_model/categories/categories_state.dart';
@@ -19,31 +17,12 @@ class AllCategories extends StatefulWidget {
   State<AllCategories> createState() => _AllCategoriesState();
 }
 
-class _AllCategoriesState extends State<AllCategories> {
-  final TextEditingController _searchController = TextEditingController();
-  final CategoriesCubit _cubit = CategoriesCubit(ProductService());
-
-  @override
-  void initState() {
-    super.initState();
-    _cubit.fetchCategories();
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _cubit.close();
-    super.dispose();
-  }
-
-  void _openCategory(Category category) {
-    AppRouter.openProductsByCategory(category);
-  }
-
+class _AllCategoriesState extends State<AllCategories>
+    with AllCategoriesPageMixin {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _cubit,
+      value: categoriesCubit,
       child: Scaffold(
         backgroundColor: context.appBackground,
         appBar: _buildAppBar,
@@ -101,7 +80,7 @@ class _AllCategoriesState extends State<AllCategories> {
 
                           return CategoryGridCard(
                             category: category,
-                            onTap: () => _openCategory(category),
+                            onTap: () => openCategory(category),
                           );
                         },
                       );
@@ -125,7 +104,7 @@ class _AllCategoriesState extends State<AllCategories> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => AppRouter.pop(),
+          onPressed: closePage,
           icon: Icon(
             Icons.arrow_back_ios_new,
             color: context.appTextPrimary,
@@ -156,8 +135,8 @@ class _AllCategoriesState extends State<AllCategories> {
         children: [
           Expanded(
             child: TextField(
-              controller: _searchController,
-              onChanged: _cubit.searchCategories,
+              controller: searchController,
+              onChanged: onSearchChanged,
               decoration: InputDecoration(
                 hintText: "Search categories",
                 border: InputBorder.none,

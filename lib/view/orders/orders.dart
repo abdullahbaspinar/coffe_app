@@ -1,5 +1,5 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/view/orders/mixin/orders_page_mixin.dart';
 import 'package:coffe_app/view/widgets/complete_orders_button.dart';
 import 'package:coffe_app/view/widgets/total_amount.dart';
 import 'package:coffe_app/model/cart_item.dart';
@@ -19,16 +19,7 @@ class Orders extends StatefulWidget {
   State<Orders> createState() => _OrdersState();
 }
 
-class _OrdersState extends State<Orders> {
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
+class _OrdersState extends State<Orders> with OrdersPageMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +56,7 @@ class _OrdersState extends State<Orders> {
       leading: Padding(
         padding: EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => AppRouter.pop(),
+          onPressed: closePage,
           icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
@@ -99,8 +90,8 @@ class _OrdersState extends State<Orders> {
         children: [
           Expanded(
             child: TextField(
-              controller: _searchController,
-              onChanged: (value) => setState(() => _searchQuery = value),
+              controller: searchController,
+              onChanged: onSearchChanged,
               decoration: InputDecoration(
                 hintText: "Search",
                 border: InputBorder.none,
@@ -139,33 +130,29 @@ class _OrdersState extends State<Orders> {
       );
     }
 
-    final query = _searchQuery.trim().toLowerCase();
     final loadedState = state as CartLoaded;
-
-    final filteredItems = loadedState.items.where((item) {
-      final title = item.product.title.toLowerCase();
-      return title.contains(query);
-    }).toList();
+    final items = filterCartItems(loadedState);
 
     if (loadedState.items.isEmpty) {
       return const Center(child: Text("Sepet Boş"));
     }
 
-    if (filteredItems.isEmpty) {
+    if (items.isEmpty) {
       return const Center(child: Text("Sepette böyle bir ürün yok"));
     }
 
     return ListView.builder(
-      itemCount: filteredItems.length,
+      itemCount: items.length,
       itemBuilder: (context, index) {
-        return _buildCartItem(filteredItems[index]);
+        return _buildCartItem(items[index]);
       },
     );
   }
 
   Widget _buildCartItem(CartItem item) {
     return InkWell(
-      onTap: () => AppRouter.openProductDetail(item.product),child: Card(
+      onTap: () => openProductDetail(item.product),
+      child: Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: Padding(
         padding: AppSpacing.padding12,
@@ -226,7 +213,7 @@ class _OrdersState extends State<Orders> {
             Row(
               children: [
                 IconButton(
-                  onPressed: () => _handleDecreaseAction(item),
+                  onPressed: () => handleDecreaseAction(item),
                   icon: const Icon(
                     Icons.remove_circle_outline,
                     color: AppColors.error,
@@ -240,9 +227,7 @@ class _OrdersState extends State<Orders> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {
-                    context.read<CartCubit>().quantityPlus(item.product);
-                  },
+                  onPressed: () => incrementQuantity(item.product),
                   icon: Icon(
                     Icons.add_circle_outline,
                     color: context.appPrimary,
@@ -255,45 +240,5 @@ class _OrdersState extends State<Orders> {
       ),
     ),
     );
-
-    
-  }
-
-  void _handleDecreaseAction(CartItem item) {
-    if (item.quantity > 1) {
-      context.read<CartCubit>().quantityDecrease(item.product);
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext dialogContext) {
-          return AlertDialog(
-            title: const Text("Ürünü Sil"),
-            content: Text("${item.product.title} sepetten silinsin mi?"),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext),
-                child: Text(
-                  "Hayır",
-                  style: TextStyle(color: context.appPrimary),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.read<CartCubit>().deleteFromCart(item.product);
-                  Navigator.pop(dialogContext);
-                },
-                child: const Text(
-                  "Evet",
-                  style: TextStyle(
-                    color: AppColors.error,
-                    fontWeight: AppTypography.bold,
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
   }
 }

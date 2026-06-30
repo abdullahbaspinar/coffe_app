@@ -1,6 +1,5 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/core/router/app_router.dart';
-import 'package:coffe_app/core/router/app_routes.dart';
+import 'package:coffe_app/view/auth/mixin/reset_password_page_mixin.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -16,44 +15,8 @@ class ResetPasswordPage extends StatefulWidget {
   State<ResetPasswordPage> createState() => _ResetPasswordPageState();
 }
 
-class _ResetPasswordPageState extends State<ResetPasswordPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _handleResetPassword() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    final result = await context.read<AuthCubit>().resetPassword(
-      email: _emailController.text.trim(),
-    );
-
-    if (!mounted) return;
-
-    if (result == null) {
-      _showSnackBar("Şifre sıfırlama maili gönderildi.");
-
-      AppRouter.goNamed(AppRoutes.signIn.path);
-    } else {
-      _showSnackBar(result);
-    }
-  }
-
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  void _goToSignInPage() {
-    AppRouter.navigatePushNamed(AppRoutes.signIn.path);
-  }
-
+class _ResetPasswordPageState extends State<ResetPasswordPage>
+    with ResetPasswordPageMixin {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
@@ -63,7 +26,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             child: SingleChildScrollView(
               padding: AppSpacing.padding24,
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -147,7 +110,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   Widget _buildEmailField() {
     return TextFormField(
-      controller: _emailController,
+      controller: emailController,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
@@ -174,22 +137,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ),
         ),
       ),
-      validator: _validateEmail,
+      validator: validateEmail,
     );
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return "Email boş bırakılamaz";
-    }
-
-    final email = value.trim();
-
-    if (!email.contains("@") || !email.contains(".")) {
-      return "Geçerli email adresi giriniz";
-    }
-
-    return null;
   }
 
   Widget _buildSubmitButton(AuthState state) {
@@ -197,7 +146,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: state.isLoading ? null : _handleResetPassword,
+        onPressed: state.isLoading ? null : handleResetPassword,
         style: ElevatedButton.styleFrom(
           backgroundColor: context.appPrimary,
           disabledBackgroundColor: AppColors.primaryDisabled,
@@ -242,7 +191,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ),
         ),
         TextButton(
-          onPressed: _goToSignInPage,
+          onPressed: openSignIn,
           child: Text(
             "Login here",
             style: TextStyle(

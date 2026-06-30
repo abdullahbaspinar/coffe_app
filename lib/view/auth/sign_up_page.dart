@@ -1,6 +1,5 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/core/router/app_router.dart';
-import 'package:coffe_app/core/router/app_routes.dart';
+import 'package:coffe_app/view/auth/mixin/sign_up_page_mixin.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -16,66 +15,7 @@ class SignUpPage extends StatefulWidget {
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  bool isPasswordHidden = true;
-  bool isFormValid = false;
-
-  @override
-  void initState() {
-    super.initState();
-    nameController.addListener(checkForm);
-    emailController.addListener(checkForm);
-    passwordController.addListener(checkForm);
-  }
-
-  void checkForm() {
-    setState(() {
-      isFormValid =
-          nameController.text.trim().isNotEmpty &&
-          emailController.text.trim().isNotEmpty &&
-          passwordController.text.trim().isNotEmpty;
-    });
-  }
-
-  @override
-  void dispose() {
-    nameController.removeListener(checkForm);
-    emailController.removeListener(checkForm);
-    passwordController.removeListener(checkForm);
-
-    nameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-
-    super.dispose();
-  }
-
-  Future<void> _handleSignUp() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    final result = await context.read<AuthCubit>().signUp(
-          name: nameController.text,
-          email: emailController.text,
-          password: passwordController.text,
-        );
-
-    if (!mounted) return;
-
-    if (result == null) {
-      AppRouter.goNamed(AppRoutes.signIn.path);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result)),
-      );
-    }
-  }
-
+class _SignUpPageState extends State<SignUpPage> with SignUpPageMixin {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
@@ -85,7 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Padding(
               padding: AppSpacing.padding24,
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -321,11 +261,7 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: InputDecoration(
               hintText: "Password",
               suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    isPasswordHidden = !isPasswordHidden;
-                  });
-                },
+                onPressed: togglePasswordVisibility,
                 icon: Icon(
                   isPasswordHidden ? Icons.visibility_off : Icons.visibility,
                   color: context.appPrimary,
@@ -375,7 +311,7 @@ class _SignUpPageState extends State<SignUpPage> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: state.isLoading || !isFormValid ? null : _handleSignUp,
+        onPressed: state.isLoading || !isFormValid ? null : handleSignUp,
         style: ElevatedButton.styleFrom(
           backgroundColor: isFormValid ? context.appPrimary : AppColors.textMuted,
           shape: RoundedRectangleBorder(

@@ -1,6 +1,5 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/core/router/app_router.dart';
-import 'package:coffe_app/core/router/app_routes.dart';
+import 'package:coffe_app/view/product/mixin/product_detail_local_page_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_radius.dart';
@@ -13,16 +12,8 @@ class ProductDetail extends StatefulWidget {
   State<ProductDetail> createState() => _ProductDetailState();
 }
 
-class _ProductDetailState extends State<ProductDetail> {
-  int quantity = 1;
-  double selectedSize = 1;
-  double productPrice = 5.8;
-  double oldPrice = 8.0;
-
-  double get totalPrice => productPrice * quantity;
-
-  bool isBookMarked = false;
-
+class _ProductDetailState extends State<ProductDetail>
+    with ProductDetailLocalPageMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +43,7 @@ class _ProductDetailState extends State<ProductDetail> {
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
-        onPressed: () => AppRouter.pop(),
+        onPressed: closePage,
         icon: Icon(Icons.arrow_back, color: context.appBackground),
       ),
       title: Text(
@@ -65,11 +56,7 @@ class _ProductDetailState extends State<ProductDetail> {
       ),
       actions: [
         IconButton(
-          onPressed: () {
-            setState(() {
-              isBookMarked = !isBookMarked;
-            });
-          },
+          onPressed: toggleBookmark,
           icon:  Icon(
             isBookMarked ? Icons.bookmark : Icons.bookmark_border,
             color: context.appBackground,
@@ -166,11 +153,7 @@ class _ProductDetailState extends State<ProductDetail> {
             min: 0,
             max: 3,
             divisions: 3,
-            onChanged: (value) {
-              setState(() {
-                selectedSize = value;
-              });
-            },
+            onChanged: onSizeChanged,
           ),
         ),
         const SizedBox(height: AppSpacing.s12),
@@ -250,13 +233,7 @@ class _ProductDetailState extends State<ProductDetail> {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            onPressed: () {
-              if (quantity > 0) {
-                setState(() {
-                  quantity--;
-                });
-              }
-            },
+            onPressed: decrementQuantity,
             icon: Icon(Icons.remove, color: context.appPrimary),
           ),
           Text(
@@ -268,11 +245,7 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           ),
           IconButton(
-            onPressed: () {
-              setState(() {
-                quantity++;
-              });
-            },
+            onPressed: incrementQuantity,
             icon: Icon(Icons.add, color: context.appPrimary),
           ),
         ],
@@ -285,9 +258,7 @@ class _ProductDetailState extends State<ProductDetail> {
       width: double.infinity,
       height: 60,
       child: ElevatedButton(
-        onPressed: () {
-          AppRouter.navigatePushNamed(AppRoutes.orders.path);
-        },
+        onPressed: placeOrder,
         style: ElevatedButton.styleFrom(
           backgroundColor: context.appPrimary,
           shape: RoundedRectangleBorder(

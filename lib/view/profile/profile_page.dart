@@ -2,10 +2,8 @@ import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
-import 'package:coffe_app/core/router/app_router.dart';
-import 'package:coffe_app/core/router/app_routes.dart';
-import 'package:coffe_app/core/services/profile_service.dart';
 import 'package:coffe_app/model/user_profile.dart';
+import 'package:coffe_app/view/profile/mixin/profile_page_mixin.dart';
 import 'package:coffe_app/view/widgets/most_ordered_card.dart';
 import 'package:coffe_app/view/widgets/personal_information_card.dart';
 import 'package:coffe_app/view_model/profile/profile_cubit.dart';
@@ -20,32 +18,11 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  final ProfileCubit _cubit = ProfileCubit(service: ProfileService());
-
-  @override
-  void initState() {
-    super.initState();
-    _cubit.loadProfile();
-  }
-
-  @override
-  void dispose() {
-    _cubit.close();
-    super.dispose();
-  }
-
-  void _openEditPage(UserProfile profile) {
-    AppRouter.navigatePushNamed(
-      AppRoutes.profileEdit.path,
-      extra: ProfileEditExtra(profile: profile, cubit: _cubit),
-    );
-  }
-
+class _ProfilePageState extends State<ProfilePage> with ProfilePageMixin {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _cubit,
+      value: profileCubit,
       child: Scaffold(
         backgroundColor: context.appBackground,
         appBar: _buildAppBar,
@@ -85,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => AppRouter.pop(),
+          onPressed: () => closePage(),
           icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
@@ -100,14 +77,10 @@ class _ProfilePageState extends State<ProfilePage> {
       actions: [
         BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
-            final profile = switch (state) {
-              ProfileLoaded(:final profile) => profile,
-              ProfileUpdating(:final profile) => profile,
-              _ => null,
-            };
+            final profile = profileFromState(state);
 
             return IconButton(
-              onPressed: profile != null ? () => _openEditPage(profile) : null,
+              onPressed: profile != null ? () => openEditPage(profile) : null,
               icon: Icon(Icons.edit, color: context.appTextPrimary),
             );
           },
@@ -142,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: double.infinity,
               height: 52,
               child: ElevatedButton(
-                onPressed: _cubit.loadProfile,
+                onPressed: reloadProfile,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.appPrimary,
                   foregroundColor: AppColors.white,

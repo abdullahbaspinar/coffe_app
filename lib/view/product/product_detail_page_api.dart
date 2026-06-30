@@ -1,13 +1,12 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/core/router/app_router.dart';
-import 'package:coffe_app/model/product.dart';
-import 'package:coffe_app/view_model/cart/cart_cubit.dart';
-import 'package:flutter/material.dart';
+import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_size.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
-import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:coffe_app/core/router/app_router.dart';
+import 'package:coffe_app/model/product.dart';
+import 'package:coffe_app/view/product/mixin/product_detail_api_page_mixin.dart';
+import 'package:flutter/material.dart';
 
 class ProductDetailPageApi extends StatefulWidget {
   final Product product;
@@ -17,88 +16,8 @@ class ProductDetailPageApi extends StatefulWidget {
   State<ProductDetailPageApi> createState() => _ProductDetailPageApiState();
 }
 
-class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
-  int quantity = 1;
-
-  double get rating => widget.product.displayRating;
-
-  void _showAddedToCartDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: AppRadius.border(AppRadius.size24),
-          ),
-          child: Padding(
-            padding: AppSpacing.padding24,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 72,
-                  height: 72,
-                  decoration: BoxDecoration(
-                    color: context.appPrimary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.check,
-                    color: AppColors.white,
-                    size: 42,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.s18),
-                const Text(
-                  "Successfully Added to Cart",
-                  style: TextStyle(
-                    fontSize: AppTypography.size22,
-                    fontWeight: AppTypography.extraBold,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.s8),
-                Text(
-                  "${widget.product.title} successfully added to cart.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: AppTypography.size14,
-                    height: 1.4,
-                  ),
-                ),
-                SizedBox(height: AppSpacing.s18),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: context.appPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: AppRadius.border(AppRadius.size16),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: Text(
-                        "OK",
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: AppTypography.size16,
-                          fontWeight: AppTypography.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
+class _ProductDetailPageApiState extends State<ProductDetailPageApi>
+    with ProductDetailApiPageMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,7 +39,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         icon: Icon(Icons.arrow_back_ios_new, color: context.appBackground),
       ),
       title: Text(
-        "Details",
+        'Details',
         style: TextStyle(
           color: context.appBackground,
           fontSize: AppTypography.size22,
@@ -143,11 +62,11 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       child: Padding(
         padding: AppSpacing.padding24,
         child: Image.network(
-          widget.product.imageUrl,
+          product.imageUrl,
           fit: BoxFit.contain,
           errorBuilder: (context, error, stackTrace) {
             return Image.asset(
-              "assets/product/product2/mocha.png",
+              'assets/product/product2/mocha.png',
               fit: BoxFit.contain,
             );
           },
@@ -162,7 +81,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       padding: AppSpacing.padding24,
       decoration: BoxDecoration(
         color: context.appBackground,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(36),
           topRight: Radius.circular(36),
         ),
@@ -190,7 +109,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       children: [
         Expanded(
           child: Text(
-            widget.product.title,
+            product.title,
             style: TextStyle(
               color: context.appTextPrimary,
               fontSize: AppTypography.size24,
@@ -199,7 +118,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           ),
         ),
         Text(
-          "\$${widget.product.price.toStringAsFixed(2)}",
+          '\$${product.price.toStringAsFixed(2)}',
           style: TextStyle(
             color: context.appPrimary,
             fontSize: AppTypography.size24,
@@ -220,7 +139,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
             borderRadius: AppRadius.border(AppRadius.size20),
           ),
           child: Text(
-            widget.product.category,
+            product.category,
             style: TextStyle(
               color: context.appPrimary,
               fontSize: AppTypography.size14,
@@ -229,7 +148,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           ),
         ),
         const Spacer(),
-        Icon(Icons.star, color: AppColors.star, size: 22),
+        const Icon(Icons.star, color: AppColors.star, size: 22),
         SizedBox(width: AppSpacing.s4),
         Text(
           rating.toStringAsFixed(1),
@@ -248,7 +167,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Description",
+          'Description',
           style: TextStyle(
             color: context.appTextPrimary,
             fontSize: AppTypography.size20,
@@ -257,7 +176,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
         ),
         const SizedBox(height: AppSpacing.s10),
         Text(
-          widget.product.description,
+          product.description,
           style: TextStyle(
             color: context.appTextPrimary,
             fontSize: AppTypography.size15,
@@ -273,7 +192,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
     return Row(
       children: [
         Text(
-          "Quantity",
+          'Quantity',
           style: TextStyle(
             color: context.appTextPrimary,
             fontSize: AppTypography.size20,
@@ -281,67 +200,45 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           ),
         ),
         const Spacer(),
-         Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: context.appBackground,
-        borderRadius: AppRadius.border(AppRadius.size30),
-        border: Border.all(color: context.appTextMuted),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            onPressed: () {
-              if (quantity > 0) {
-                setState(() {
-                  quantity--;
-                });
-              }
-            },
-            icon: Icon(Icons.remove, color: context.appPrimary),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: context.appBackground,
+            borderRadius: AppRadius.border(AppRadius.size30),
+            border: Border.all(color: context.appTextMuted),
           ),
-          Text(
-            "$quantity",
-            style: TextStyle(
-              fontSize: AppTypography.size22,
-              fontWeight: AppTypography.bold,
-              color: context.appTextPrimary,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: decrementQuantity,
+                icon: Icon(Icons.remove, color: context.appPrimary),
+              ),
+              Text(
+                '$quantity',
+                style: TextStyle(
+                  fontSize: AppTypography.size22,
+                  fontWeight: AppTypography.bold,
+                  color: context.appTextPrimary,
+                ),
+              ),
+              IconButton(
+                onPressed: incrementQuantity,
+                icon: Icon(Icons.add, color: context.appPrimary),
+              ),
+            ],
           ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                quantity++;
-              });
-            },
-            icon: Icon(Icons.add, color: context.appPrimary),
-          ),
-        ],
-      ),
-    )
+        ),
       ],
     );
-
-   
   }
-
-  
 
   Widget get _buildAddToCartButton {
     return SizedBox(
       width: double.infinity,
       height: AppSizes.searchBarHeight,
       child: ElevatedButton(
-        onPressed: () async {
-          await context.read<CartCubit>().addToCart(
-            widget.product,
-            quantity: quantity,
-          );
-
-          if (!mounted) return;
-          _showAddedToCartDialog();
-        },
+        onPressed: addToCart,
         style: ElevatedButton.styleFrom(
           backgroundColor: context.appPrimary,
           shape: RoundedRectangleBorder(
@@ -350,7 +247,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi> {
           elevation: 0,
         ),
         child: Text(
-          "Add to Cart - \$${(widget.product.price * quantity).toStringAsFixed(2)}",
+          'Add to Cart - \$${(product.price * quantity).toStringAsFixed(2)}',
           style: const TextStyle(
             color: AppColors.white,
             fontSize: AppTypography.size18,
