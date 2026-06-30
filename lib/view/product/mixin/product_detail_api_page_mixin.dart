@@ -2,40 +2,17 @@ import 'package:coffe_app/core/constants/app_colors.dart';
 import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
+import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view/product/product_detail_page_api.dart';
-import 'package:coffe_app/view_model/cart/cart_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 mixin ProductDetailApiPageMixin on State<ProductDetailPageApi> {
-  int quantity = 1;
-
-  Product get product => widget.product;
-
-  double get rating => product.displayRating;
-
-  void incrementQuantity() {
-    setState(() => quantity++);
+  void closePage() {
+    AppRouter.pop();
   }
 
-  void decrementQuantity() {
-    if (quantity > 0) {
-      setState(() => quantity--);
-    }
-  }
-
-  Future<void> addToCart() async {
-    await context.read<CartCubit>().addToCart(
-          product,
-          quantity: quantity,
-        );
-
-    if (!mounted) return;
-    showAddedToCartDialog();
-  }
-
-  void showAddedToCartDialog() {
+  void showAddedToCartDialog(Product product) {
     showDialog(
       context: context,
       builder: (dialogContext) {

@@ -5,6 +5,8 @@ import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
 
 class CategoriesCard extends StatelessWidget {
+  static const String fallbackImagePath = 'assets/image_coming_soon.png';
+
   final String title;
   final String? menuCount;
   final String? imageUrl;
@@ -82,25 +84,21 @@ class CategoriesCard extends StatelessWidget {
           width: 38,
           height: 38,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => _fallbackIcon(context),
+          errorBuilder: (_, __, ___) => _fallbackImage(),
         ),
       );
     }
-    return _fallbackIcon(context);
+    return _fallbackImage();
   }
 
-  Widget _fallbackIcon(BuildContext context) {
-    return Container(
-      width: 38,
-      height: 38,
-      decoration: BoxDecoration(
-        color: context.appPrimaryTint,
-        borderRadius: AppRadius.border(AppRadius.size10),
-      ),
-      child: Icon(
-        Icons.category_outlined,
-        color: context.appPrimary,
-        size: 20,
+  Widget _fallbackImage() {
+    return ClipRRect(
+      borderRadius: AppRadius.border(AppRadius.size10),
+      child: Image.asset(
+        fallbackImagePath,
+        width: 38,
+        height: 38,
+        fit: BoxFit.cover,
       ),
     );
   }

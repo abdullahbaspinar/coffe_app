@@ -21,7 +21,7 @@ class FeaturedBeverageItem extends StatelessWidget {
     required this.points,
     required this.rating,
     required this.onTap,
-    this.fallbackImagePath = "assets/product/product2/mocha.png",
+    this.fallbackImagePath = "assets/image_coming_soon.png",
   });
 
   @override

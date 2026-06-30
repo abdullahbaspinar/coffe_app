@@ -207,7 +207,7 @@ class _OrdersState extends State<Orders> with OrdersPageMixin {
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Image.asset(
-                    "assets/product/product2/mocha.png",
+                    "assets/image_coming_soon.png",
                     width: 70,
                     height: 70,
                     fit: BoxFit.cover,
