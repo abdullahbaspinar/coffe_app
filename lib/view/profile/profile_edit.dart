@@ -1,8 +1,8 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
+import 'package:coffe_app/view/profile/mixin/profile_edit_page_mixin.dart';
 import 'package:coffe_app/model/user_profile.dart';
 import 'package:coffe_app/view_model/profile/profile_cubit.dart';
 import 'package:coffe_app/view_model/profile/profile_state.dart';
@@ -21,65 +21,8 @@ class ProfileEditPage extends StatefulWidget {
   State<ProfileEditPage> createState() => _ProfileEditPageState();
 }
 
-class _ProfileEditPageState extends State<ProfileEditPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  late final TextEditingController _nameController;
-  late final TextEditingController _emailController;
-  late final TextEditingController _phoneController;
-  late final TextEditingController _addressController;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(text: widget.profile.name);
-    _emailController = TextEditingController(text: widget.profile.email);
-    _phoneController = TextEditingController(
-      text: widget.profile.phone?.toString() ?? '',
-    );
-    _addressController =
-        TextEditingController(text: widget.profile.address ?? '');
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _addressController.dispose();
-    super.dispose();
-  }
-
-  int? _parsePhone(String value) {
-    final digits = value.replaceAll(RegExp(r'\D'), '');
-    if (digits.isEmpty) return null;
-    return int.tryParse(digits);
-  }
-
-  Future<void> _handleSave() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    final cubit = context.read<ProfileCubit>();
-
-    final error = await cubit.updateProfile(
-      name: _nameController.text.trim(),
-      email: _emailController.text.trim(),
-      phone: _parsePhone(_phoneController.text),
-      address: _addressController.text.trim(),
-    );
-
-    if (!mounted) return;
-
-    if (error == null) {
-      AppRouter.pop();
-      return;
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(error)),
-    );
-  }
-
+class _ProfileEditPageState extends State<ProfileEditPage>
+    with ProfileEditPageMixin {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProfileCubit, ProfileState>(
@@ -103,7 +46,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               return SingleChildScrollView(
                 padding: AppSpacing.padding24,
                 child: Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -145,7 +88,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 12),
         child: IconButton(
-          onPressed: () => AppRouter.pop(),
+          onPressed: closePage,
           icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
@@ -195,7 +138,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   Widget get _buildNameField {
     return TextFormField(
-      controller: _nameController,
+      controller: nameController,
       textInputAction: TextInputAction.next,
       decoration: _inputDecoration('Full Name'),
       validator: (value) {
@@ -209,7 +152,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   Widget get _buildEmailField {
     return TextFormField(
-      controller: _emailController,
+      controller: emailController,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       readOnly: true,
@@ -228,7 +171,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   Widget get _buildPhoneField {
     return TextFormField(
-      controller: _phoneController,
+      controller: phoneController,
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.next,
       decoration: _inputDecoration('Mobile Phone'),
@@ -249,7 +192,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   Widget get _buildAddressField {
     return TextFormField(
-      controller: _addressController,
+      controller: addressController,
       keyboardType: TextInputType.streetAddress,
       textInputAction: TextInputAction.done,
       maxLines: 2,
@@ -289,7 +232,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: isSaving ? null : _handleSave,
+        onPressed: isSaving ? null : handleSave,
         style: ElevatedButton.styleFrom(
           backgroundColor: context.appPrimary,
           shape: RoundedRectangleBorder(

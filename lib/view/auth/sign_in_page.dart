@@ -1,6 +1,5 @@
 import 'package:coffe_app/core/constants/app_colors.dart';
-import 'package:coffe_app/core/router/app_router.dart';
-import 'package:coffe_app/core/router/app_routes.dart';
+import 'package:coffe_app/view/auth/mixin/sign_in_page_mixin.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';
 import 'package:coffe_app/view_model/auth/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -16,40 +15,7 @@ class SignInPage extends StatefulWidget {
   State<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  bool isPasswordHidden = true;
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _handleSignIn() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    final result = await context.read<AuthCubit>().signIn(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-
-    if (!mounted) return;
-
-    if (result == null) {
-      AppRouter.goNamed(AppRoutes.home.path);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result)),
-      );
-    }
-  }
-
+class _SignInPageState extends State<SignInPage> with SignInPageMixin {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
@@ -59,7 +25,7 @@ class _SignInPageState extends State<SignInPage> {
             child: Padding(
               padding: AppSpacing.padding24,
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -240,11 +206,7 @@ class _SignInPageState extends State<SignInPage> {
                 vertical: 18,
               ),
               suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    isPasswordHidden = !isPasswordHidden;
-                  });
-                },
+                onPressed: togglePasswordVisibility,
                 icon: Icon(
                   isPasswordHidden ? Icons.visibility_off : Icons.visibility,
                   color: context.appPrimary,
@@ -288,7 +250,7 @@ class _SignInPageState extends State<SignInPage> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: state.isLoading ? null : _handleSignIn,
+        onPressed: state.isLoading ? null : handleSignIn,
         style: ElevatedButton.styleFrom(
           backgroundColor: context.appPrimary,
           shape: RoundedRectangleBorder(
@@ -329,9 +291,7 @@ class _SignInPageState extends State<SignInPage> {
           ),
         ),
         TextButton(
-          onPressed: () {
-            AppRouter.navigatePushNamed(AppRoutes.resetPassword.path);
-          },
+          onPressed: openResetPassword,
           child: Text(
             "Reset Password",
             style: TextStyle(
@@ -363,9 +323,7 @@ class _SignInPageState extends State<SignInPage> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: () {
-          AppRouter.navigatePushNamed(AppRoutes.signUp.path);
-        },
+        onPressed: openSignUp,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.createAccountBackgroundColor,
           shape: RoundedRectangleBorder(
