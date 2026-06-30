@@ -27,7 +27,7 @@ class _ProductsState extends State<Products> with ProductsPageMixin {
       child: Builder(
         builder: (context) {
           return Scaffold(
-                        appBar: _buildAppBar,
+            appBar: _buildAppBar,
             body: Column(
               children: [
                 const SizedBox(height: AppSpacing.s12),
@@ -39,7 +39,6 @@ class _ProductsState extends State<Products> with ProductsPageMixin {
                 Expanded(
                   child: BlocBuilder<ProductsCubit, ProductsState>(
                     builder: (context, state) {
-                      
                       if (state is ProductsLoading) {
                         return const Center(child: CircularProgressIndicator());
                       }
@@ -49,7 +48,7 @@ class _ProductsState extends State<Products> with ProductsPageMixin {
                           child: Padding(
                             padding: AppSpacing.padding20,
                             child: Text(
-                              state.errorMessage, 
+                              state.errorMessage,
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: AppColors.error),
                             ),
@@ -74,7 +73,7 @@ class _ProductsState extends State<Products> with ProductsPageMixin {
                               if (index < state.items.length) {
                                 final p = state.items[index];
                                 return ProductsCard(
-                                  imagePath: "assets/product/product2/mocha.png",
+                                  imagePath: "assets/image_coming_soon.png",
                                   imageUrl: p.imageUrl,
                                   title: p.title,
                                   category: p.category,
@@ -99,7 +98,9 @@ class _ProductsState extends State<Products> with ProductsPageMixin {
                                   child: Center(
                                     child: Text(
                                       "Tum urunler yuklendi.",
-                                      style: TextStyle(color: context.appTextMuted),
+                                      style: TextStyle(
+                                        color: context.appTextMuted,
+                                      ),
                                     ),
                                   ),
                                 );
@@ -125,7 +126,7 @@ class _ProductsState extends State<Products> with ProductsPageMixin {
 
   PreferredSizeWidget get _buildAppBar {
     return AppBar(
-            elevation: 0,
+      elevation: 0,
       centerTitle: true,
       leading: Padding(
         padding: EdgeInsets.only(left: 12),
@@ -169,15 +170,18 @@ class _ProductsState extends State<Products> with ProductsPageMixin {
               decoration: InputDecoration(
                 hintText: "Search in this category",
                 border: InputBorder.none,
-                hintStyle: TextStyle(fontSize: AppTypography.size16, color: context.appTextMuted),
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              errorBorder: InputBorder.none,
-              focusedErrorBorder: InputBorder.none,
+                hintStyle: TextStyle(
+                  fontSize: AppTypography.size16,
+                  color: context.appTextMuted,
+                ),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                focusedErrorBorder: InputBorder.none,
                 isDense: true,
-              contentPadding: EdgeInsets.zero,
-              filled: false,
+                contentPadding: EdgeInsets.zero,
+                filled: false,
               ),
             ),
           ),
@@ -186,5 +190,4 @@ class _ProductsState extends State<Products> with ProductsPageMixin {
       ),
     );
   }
-  
-  }
+}

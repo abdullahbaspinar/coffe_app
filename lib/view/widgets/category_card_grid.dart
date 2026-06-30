@@ -6,6 +6,8 @@ import 'package:coffe_app/model/category.dart';
 import 'package:flutter/material.dart';
 
 class CategoryGridCard extends StatelessWidget {
+  static const String fallbackImagePath = 'assets/image_coming_soon.png';
+
   final Category category;
   final VoidCallback onTap;
 
@@ -89,7 +91,7 @@ class CategoryGridCard extends StatelessWidget {
 
   Widget _buildImage(BuildContext context) {
     if (category.image.trim().isEmpty) {
-      return _fallbackIcon(context);
+      return _fallbackImage();
     }
 
     return Image.network(
@@ -97,20 +99,16 @@ class CategoryGridCard extends StatelessWidget {
       fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,
-      errorBuilder: (_, __, ___) => _fallbackIcon(context),
+      errorBuilder: (_, __, ___) => _fallbackImage(),
     );
   }
 
-  Widget _fallbackIcon(BuildContext context) {
-    return Container(
-      color: context.appPrimaryTint,
-      child: Center(
-        child: Icon(
-          Icons.category_outlined,
-          color: context.appPrimary,
-          size: 32,
-        ),
-      ),
+  Widget _fallbackImage() {
+    return Image.asset(
+      fallbackImagePath,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
     );
   }
 }

@@ -30,19 +30,14 @@ class _AllCategoriesState extends State<AllCategories>
           child: Column(
             children: [
               const SizedBox(height: AppSpacing.s12),
-              Padding(
-                padding: AppSpacing.paddingH20,
-                child: _buildSearchBar(),
-              ),
+              Padding(padding: AppSpacing.paddingH20, child: _buildSearchBar()),
               const SizedBox(height: AppSpacing.s12),
               Expanded(
                 child: BlocBuilder<CategoriesCubit, CategoriesState>(
                   builder: (context, state) {
                     if (state is CategoriesInitial ||
                         state is CategoriesLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     if (state is CategoriesError) {
@@ -60,30 +55,9 @@ class _AllCategoriesState extends State<AllCategories>
 
                     if (state is CategoriesLoaded) {
                       if (state.categories.isEmpty) {
-                        return const Center(
-                          child: Text("Kategori bulunamadı"),
-                        );
+                        return const Center(child: Text("Kategori bulunamadı"));
                       }
-
-                      return GridView.builder(
-                        padding: AppSpacing.paddingH20,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
-                          childAspectRatio: 0.82,
-                        ),
-                        itemCount: state.categories.length,
-                        itemBuilder: (context, index) {
-                          final category = state.categories[index];
-
-                          return CategoryGridCard(
-                            category: category,
-                            onTap: () => openCategory(category),
-                          );
-                        },
-                      );
+                      return _gridView(state);
                     }
 
                     return const SizedBox.shrink();
@@ -105,10 +79,7 @@ class _AllCategoriesState extends State<AllCategories>
         padding: const EdgeInsets.only(left: 12),
         child: IconButton(
           onPressed: closePage,
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: context.appTextPrimary,
-          ),
+          icon: Icon(Icons.arrow_back_ios_new, color: context.appTextPrimary),
         ),
       ),
       title: Text(
@@ -158,6 +129,27 @@ class _AllCategoriesState extends State<AllCategories>
           Icon(Icons.search, color: context.appTextPrimary, size: 30),
         ],
       ),
+    );
+  }
+
+  Widget _gridView(CategoriesLoaded state) {
+    return GridView.builder(
+      padding: AppSpacing.paddingH20,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.82,
+      ),
+      itemCount: state.categories.length,
+      itemBuilder: (context, index) {
+        final category = state.categories[index];
+
+        return CategoryGridCard(
+          category: category,
+          onTap: () => openCategory(category),
+        );
+      },
     );
   }
 }

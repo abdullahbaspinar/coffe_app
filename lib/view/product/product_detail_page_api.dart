@@ -3,10 +3,13 @@ import 'package:coffe_app/core/constants/app_radius.dart';
 import 'package:coffe_app/core/constants/app_size.dart';
 import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
-import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view/product/mixin/product_detail_api_page_mixin.dart';
+import 'package:coffe_app/view_model/cart/cart_cubit.dart';
+import 'package:coffe_app/view_model/products/product_detail/product_detail_cubit.dart';
+import 'package:coffe_app/view_model/products/product_detail/product_detail_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetailPageApi extends StatefulWidget {
   final Product product;
@@ -20,11 +23,36 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
     with ProductDetailApiPageMixin {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.appPrimary,
-      appBar: _buildAppBar,
-      body: SingleChildScrollView(
-        child: Column(children: [_buildTopSection, _buildBottomSection]),
+    return BlocProvider(
+      create: (context) => ProductDetailCubit(
+        product: widget.product,
+        cartCubit: context.read<CartCubit>(),
+      ),
+      child: BlocConsumer<ProductDetailCubit, ProductDetailState>(
+        listener: (context, state) {
+          if (state is ProductDetailLoaded && state.showAddedDialog) {
+            showAddedToCartDialog(state.product);
+            context.read<ProductDetailCubit>().clearAddedDialog();
+          }
+        },
+        builder: (context, state) {
+          if (state is! ProductDetailLoaded) {
+            return const SizedBox.shrink();
+          }
+
+          return Scaffold(
+            backgroundColor: context.appPrimary,
+            appBar: _buildAppBar,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildTopSection(state.product),
+                  _buildBottomSection(context, state),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -35,7 +63,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
-        onPressed: () => AppRouter.pop(),
+        onPressed: closePage,
         icon: Icon(Icons.arrow_back_ios_new, color: context.appBackground),
       ),
       title: Text(
@@ -55,27 +83,38 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
     );
   }
 
-  Widget get _buildTopSection {
+  Widget _buildTopSection(Product product) {
     return SizedBox(
       height: 280,
       width: double.infinity,
       child: Padding(
         padding: AppSpacing.padding24,
-        child: Image.network(
-          product.imageUrl,
-          fit: BoxFit.contain,
-          errorBuilder: (context, error, stackTrace) {
-            return Image.asset(
-              'assets/product/product2/mocha.png',
-              fit: BoxFit.contain,
-            );
-          },
-        ),
+        child: product.imageUrl.trim().isNotEmpty
+            ? Image.network(
+                product.imageUrl,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/image_coming_soon.png',
+                    fit: BoxFit.contain,
+                  );
+                },
+              )
+            : Image.asset(
+                'assets/image_coming_soon.png',
+                fit: BoxFit.contain,
+              ),
       ),
     );
   }
 
-  Widget get _buildBottomSection {
+  Widget _buildBottomSection(
+    BuildContext context,
+    ProductDetailLoaded state,
+  ) {
+    final product = state.product;
+    final cubit = context.read<ProductDetailCubit>();
+
     return Container(
       width: double.infinity,
       padding: AppSpacing.padding24,
@@ -89,21 +128,21 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTitleAndPrice,
+          _buildTitleAndPrice(product),
           const SizedBox(height: AppSpacing.s12),
-          _buildCategoryAndRating,
+          _buildCategoryAndRating(product, state.rating),
           const SizedBox(height: AppSpacing.s24),
-          _buildDescription,
+          _buildDescription(product),
           const SizedBox(height: AppSpacing.s24),
-          _buildQuantitySelector,
+          _buildQuantitySelector(state, cubit),
           const SizedBox(height: AppSpacing.s24),
-          _buildAddToCartButton,
+          _buildAddToCartButton(state, cubit),
         ],
       ),
     );
   }
 
-  Widget get _buildTitleAndPrice {
+  Widget _buildTitleAndPrice(Product product) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -129,7 +168,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
     );
   }
 
-  Widget get _buildCategoryAndRating {
+  Widget _buildCategoryAndRating(Product product, double rating) {
     return Row(
       children: [
         Container(
@@ -162,7 +201,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
     );
   }
 
-  Widget get _buildDescription {
+  Widget _buildDescription(Product product) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -188,7 +227,10 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
     );
   }
 
-  Widget get _buildQuantitySelector {
+  Widget _buildQuantitySelector(
+    ProductDetailLoaded state,
+    ProductDetailCubit cubit,
+  ) {
     return Row(
       children: [
         Text(
@@ -211,11 +253,11 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: decrementQuantity,
+                onPressed: cubit.decrementQuantity,
                 icon: Icon(Icons.remove, color: context.appPrimary),
               ),
               Text(
-                '$quantity',
+                '${state.quantity}',
                 style: TextStyle(
                   fontSize: AppTypography.size22,
                   fontWeight: AppTypography.bold,
@@ -223,7 +265,7 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
                 ),
               ),
               IconButton(
-                onPressed: incrementQuantity,
+                onPressed: cubit.incrementQuantity,
                 icon: Icon(Icons.add, color: context.appPrimary),
               ),
             ],
@@ -233,12 +275,15 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
     );
   }
 
-  Widget get _buildAddToCartButton {
+  Widget _buildAddToCartButton(
+    ProductDetailLoaded state,
+    ProductDetailCubit cubit,
+  ) {
     return SizedBox(
       width: double.infinity,
       height: AppSizes.searchBarHeight,
       child: ElevatedButton(
-        onPressed: addToCart,
+        onPressed: state.isAddingToCart ? null : cubit.addToCart,
         style: ElevatedButton.styleFrom(
           backgroundColor: context.appPrimary,
           shape: RoundedRectangleBorder(
@@ -246,14 +291,23 @@ class _ProductDetailPageApiState extends State<ProductDetailPageApi>
           ),
           elevation: 0,
         ),
-        child: Text(
-          'Add to Cart - \$${(product.price * quantity).toStringAsFixed(2)}',
-          style: const TextStyle(
-            color: AppColors.white,
-            fontSize: AppTypography.size18,
-            fontWeight: AppTypography.extraBold,
-          ),
-        ),
+        child: state.isAddingToCart
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.white,
+                ),
+              )
+            : Text(
+                'Add to Cart - \$${state.totalPrice.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  color: AppColors.white,
+                  fontSize: AppTypography.size18,
+                  fontWeight: AppTypography.extraBold,
+                ),
+              ),
       ),
     );
   }

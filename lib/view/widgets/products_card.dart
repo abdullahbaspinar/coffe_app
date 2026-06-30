@@ -47,9 +47,6 @@ class ProductsCard extends StatelessWidget {
   }
 
   Widget _buildImageSection() {
-    final ImageProvider imageProvider = imageUrl.isNotEmpty
-        ? NetworkImage(imageUrl)
-        : AssetImage(imagePath);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -58,7 +55,31 @@ class ProductsCard extends StatelessWidget {
           height: 110,
           decoration: BoxDecoration(
             borderRadius: AppRadius.border(AppRadius.size24),
-            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+            color: AppColors.surfaceMuted,
+          ),
+          child: ClipRRect(
+            borderRadius: AppRadius.border(AppRadius.size24),
+            child: imageUrl.trim().isNotEmpty
+                ? Image.network(
+                    imageUrl,
+                    width: 110,
+                    height: 110,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        imagePath,
+                        width: 110,
+                        height: 110,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  )
+                : Image.asset(
+                    imagePath,
+                    width: 110,
+                    height: 110,
+                    fit: BoxFit.cover,
+                  ),
           ),
         ),
 

@@ -313,7 +313,7 @@ class _HomePageState extends State<HomePage> with HomePageMixin {
         final product = state.searchResults[index];
 
         return ProductsCard(
-          imagePath: 'assets/product/product2/mocha.png',
+          imagePath: 'assets/image_coming_soon.png',
           imageUrl: product.imageUrl,
           title: product.title,
           category: product.category,
