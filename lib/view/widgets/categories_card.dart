@@ -84,7 +84,7 @@ class CategoriesCard extends StatelessWidget {
           width: 38,
           height: 38,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => _fallbackImage(),
+          errorBuilder: (_, _,_) => _fallbackImage(),
         ),
       );
     }

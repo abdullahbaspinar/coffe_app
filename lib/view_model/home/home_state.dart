@@ -34,14 +34,12 @@ class HomeLoading extends HomeState {
 }
 
 class HomeLoaded extends HomeState {
-  final List<Category> categories;
-  final List<Product> featuredProducts;
   final bool isSearchLoading;
   final String? searchError;
 
   const HomeLoaded({
-    required this.categories,
-    required this.featuredProducts,
+    required super.categories,
+    required super.featuredProducts,
     this.isSearchLoading = false,
     this.searchError,
     super.searchQuery,

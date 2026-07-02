@@ -20,14 +20,7 @@ class CartLoaded extends CartState {
   const CartLoaded({required this.items});
 
   double get grandTotal {
-    double toplam = 0.0;
-
-    for (var item in items) {
-      if (item.total != null) {
-        toplam = toplam + item.total!;
-      }
-    }
-    return toplam;
+    return items.fold(0.0, (sum, item) => sum + item.total);
   }
 
   CartLoaded copyWith({List<CartItem>? items}) {

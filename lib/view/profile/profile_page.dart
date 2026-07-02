@@ -203,7 +203,7 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageMixin {
     return Column(
       children: [
         PersonalInformationCard(
-          icon_name: Icons.phone_iphone,
+          iconName: Icons.phone_iphone,
           title: 'Mobile Phone',
           description: profile.phone != null
               ? profile.phone.toString()
@@ -211,7 +211,7 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageMixin {
         ),
         const SizedBox(height: AppSpacing.s8),
         PersonalInformationCard(
-          icon_name: Icons.email_outlined,
+          iconName: Icons.email_outlined,
           title: 'Email Adress',
           description: profile.email.isNotEmpty
               ? profile.email
@@ -219,7 +219,7 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageMixin {
         ),
         const SizedBox(height: AppSpacing.s8),
         PersonalInformationCard(
-          icon_name: Icons.location_on_outlined,
+          iconName: Icons.location_on_outlined,
           title: 'Adress',
           description: profile.address?.isNotEmpty == true
               ? profile.address!

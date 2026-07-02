@@ -28,7 +28,7 @@ class _ProductDetailState extends State<ProductDetail>
               children: [
                 _buildBottomCard,
 
-                Positioned(child: _buildRatingBadge, top: -42, right: 24),
+                Positioned(top: -42, right: 24, child: _buildRatingBadge),
               ],
             ),
           ),
@@ -57,7 +57,7 @@ class _ProductDetailState extends State<ProductDetail>
       actions: [
         IconButton(
           onPressed: toggleBookmark,
-          icon:  Icon(
+          icon: Icon(
             isBookMarked ? Icons.bookmark : Icons.bookmark_border,
             color: context.appBackground,
           ),
@@ -157,24 +157,36 @@ class _ProductDetailState extends State<ProductDetail>
           ),
         ),
         const SizedBox(height: AppSpacing.s12),
-         Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               "Small",
-              style: TextStyle(fontSize: AppTypography.size18, color: context.appTextPrimary),
+              style: TextStyle(
+                fontSize: AppTypography.size18,
+                color: context.appTextPrimary,
+              ),
             ),
             Text(
               "Medium",
-              style: TextStyle(fontSize: AppTypography.size18, color: context.appTextPrimary),
+              style: TextStyle(
+                fontSize: AppTypography.size18,
+                color: context.appTextPrimary,
+              ),
             ),
             Text(
               "Large",
-              style: TextStyle(fontSize: AppTypography.size18, color: context.appTextPrimary),
+              style: TextStyle(
+                fontSize: AppTypography.size18,
+                color: context.appTextPrimary,
+              ),
             ),
             Text(
               "Xtra Large",
-              style: TextStyle(fontSize: AppTypography.size18, color: context.appTextPrimary),
+              style: TextStyle(
+                fontSize: AppTypography.size18,
+                color: context.appTextPrimary,
+              ),
             ),
           ],
         ),

@@ -99,7 +99,7 @@ class CategoryGridCard extends StatelessWidget {
       fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,
-      errorBuilder: (_, __, ___) => _fallbackImage(),
+      errorBuilder: (_,_,_) => _fallbackImage(),
     );
   }
 

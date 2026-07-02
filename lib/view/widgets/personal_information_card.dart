@@ -4,13 +4,13 @@ import 'package:coffe_app/core/constants/app_spacing.dart';
 import 'package:coffe_app/core/constants/app_typography.dart';
 
 class PersonalInformationCard extends StatelessWidget {
-  final IconData icon_name;
+  final IconData iconName;
   final String title;
   final String description;
 
   const PersonalInformationCard({
     super.key,
-    required this.icon_name,
+    required this.iconName,
     required this.title,
     required this.description,
   });
@@ -25,7 +25,7 @@ class PersonalInformationCard extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
           ),
-          child: Icon(icon_name, color: context.appPrimary, size: 30),
+          child: Icon(iconName, color: context.appPrimary, size: 30),
         ),
         SizedBox(height: AppSpacing.s16),
 
