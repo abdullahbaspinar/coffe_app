@@ -1,7 +1,7 @@
 import 'package:coffe_app/core/router/app_router.dart';
 import 'package:coffe_app/core/router/app_routes.dart';
 import 'package:coffe_app/model/category.dart';
-import 'package:coffe_app/model/home-product.dart';
+import 'package:coffe_app/model/home_product.dart';
 import 'package:coffe_app/model/product.dart';
 import 'package:coffe_app/view/home/home_page.dart';
 import 'package:coffe_app/view_model/auth/auth_cubit.dart';

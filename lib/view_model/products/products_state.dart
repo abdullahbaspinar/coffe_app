@@ -1,32 +1,45 @@
 import 'package:coffe_app/model/product.dart';
 
 abstract class ProductsState {
-    final List<Product> items;
+  final List<Product> items;
   final int categoryId;
   final int offset;
   final String query;
 
-  const ProductsState({this.categoryId = 0, this.offset = 0, this.query = "",this.items=const []});
+  const ProductsState({
+    this.items = const [],
+    this.categoryId = 0,
+    this.offset = 0,
+    this.query = '',
+  });
 }
 
 class ProductsInitial extends ProductsState {
-  const ProductsInitial({super.categoryId, super.offset, super.query, super.items});
+  const ProductsInitial({
+    super.items,
+    super.categoryId,
+    super.offset,
+    super.query,
+  });
 }
 
 class ProductsLoading extends ProductsState {
-  const ProductsLoading({super.categoryId, super.offset, super.query, super.items});
+  const ProductsLoading({
+    super.items,
+    super.categoryId,
+    super.offset,
+    super.query,
+  });
 }
 
-
 class ProductsLoaded extends ProductsState {
-  final List<Product> items;
   final bool isLoadingMore;
-  final bool hashMore;
+  final bool hasMore;
 
   const ProductsLoaded({
-    required this.items,
+    required super.items,
     this.isLoadingMore = false,
-    this.hashMore = true,
+    this.hasMore = true,
     super.categoryId,
     super.offset,
     super.query,
@@ -35,7 +48,7 @@ class ProductsLoaded extends ProductsState {
   ProductsLoaded copyWith({
     List<Product>? items,
     bool? isLoadingMore,
-    bool? hashMore,
+    bool? hasMore,
     int? categoryId,
     int? offset,
     String? query,
@@ -43,20 +56,20 @@ class ProductsLoaded extends ProductsState {
     return ProductsLoaded(
       items: items ?? this.items,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-      hashMore: hashMore ?? this.hashMore,
-      categoryId: categoryId ?? this.categoryId, 
+      hasMore: hasMore ?? this.hasMore,
+      categoryId: categoryId ?? this.categoryId,
       offset: offset ?? this.offset,
       query: query ?? this.query,
     );
   }
 }
 
-
 class ProductsError extends ProductsState {
   final String errorMessage;
 
   const ProductsError({
     required this.errorMessage,
+    super.items,
     super.categoryId,
     super.offset,
     super.query,

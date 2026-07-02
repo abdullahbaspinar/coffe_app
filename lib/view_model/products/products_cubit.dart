@@ -27,7 +27,7 @@ class ProductsCubit extends Cubit<ProductsState> {
       emit(
         ProductsLoaded(
           items: products,
-          hashMore: products.length >= 10,
+          hasMore: products.length >= 10,
           categoryId: state.categoryId,
           query: state.query,
           offset: state.offset + products.length,
@@ -46,7 +46,7 @@ class ProductsCubit extends Cubit<ProductsState> {
   }
 
   Future<void> loadMoreProducts() async {
-    if (state is! ProductsLoaded || !(state as ProductsLoaded).hashMore) return;
+    if (state is! ProductsLoaded || !(state as ProductsLoaded).hasMore) return;
 
     final currentState = state as ProductsLoaded;
 
@@ -68,7 +68,7 @@ class ProductsCubit extends Cubit<ProductsState> {
         ProductsLoaded(
           items: updatedProducts,
           isLoadingMore: false,
-          hashMore: newProducts.length > 10,
+          hasMore: newProducts.length > 10,
           categoryId: currentState.categoryId,
           query: currentState.query,
           offset: currentState.offset + newProducts.length,

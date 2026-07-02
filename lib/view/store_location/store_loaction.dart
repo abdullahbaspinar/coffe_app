@@ -186,7 +186,7 @@ class _StoreLocationPageState extends State<StoreLocationPage>
                   controller: listScrollController,
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                   itemCount: stores.length,
-                  separatorBuilder: (_, __) =>
+                  separatorBuilder: (_,_) =>
                       const SizedBox(height: AppSpacing.s12),
                   itemBuilder: (context, index) {
                     final store = stores[index];

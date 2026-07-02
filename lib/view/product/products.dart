@@ -92,7 +92,7 @@ class _ProductsState extends State<Products> with ProductsPageMixin {
                                 );
                               }
 
-                              if (!state.hashMore) {
+                              if (!state.hasMore) {
                                 return Padding(
                                   padding: AppSpacing.paddingV20,
                                   child: Center(
